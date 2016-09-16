@@ -1,0 +1,145 @@
+﻿@model IEnumerable<MWV.Models.Customer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address1)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.agent_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address3)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.city)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.pincode)
+        </th>*@
+        @*<th>
+            @Html.DisplayNameFor(model => model.state)
+        </th>*@
+        @*<th>
+            @Html.DisplayNameFor(model => model.country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fax)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.aspnetusers_id_approvedby)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.approved_on)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.created_on)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.created_by)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.modified_on)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.modified_by)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address1)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.agent_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address3)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.city)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.pincode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.state)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.country)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fax)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.aspnetusers_id_approvedby)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.approved_on)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.created_on)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.created_by)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.modified_on)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.modified_by)
+        </td>*@
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.customer_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.customer_id }) 
+            @*@Html.ActionLink("Delete", "Delete", new { id = item.customer_id })*@
+            
+            @*@Html.ActionLink("Delete", "Delete", new { id=item.customer_id })*@
+        </td>
+    </tr>
+}
+
+</table>
+s

@@ -1,0 +1,13 @@
+﻿
+<ul class="individual_orders">
+    @foreach (var item in ViewBag.Curitems)
+{
+    <li id="@item.order_product_id">
+
+        <p class="details"><strong><input type="checkbox" class="input-checkbox" value="@item.order_product_id" name="@item.order_id">@item.width cm x @item.BF BF @item.GSM GSM @item.shade</strong><a href="#downloadOrder" class="download_order" data-id="@item.order_id"><img src="/images/download.png"></a> </p>
+        <p class="details"> Qty. Ordered: @item.qty MT</p>
+        <p class="details"> Requested Delivery Date: @item.RequestedDate.ToShortDateString() </p>
+        <p><a href="#seeOrderDetails" class="see-details" data-id="@item.order_id">See Po Details</a></p>
+    </li>
+}
+</ul>

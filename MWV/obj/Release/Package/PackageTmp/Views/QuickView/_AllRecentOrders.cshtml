@@ -1,0 +1,104 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+
+<div class="fix-overflow">
+    <a href="#closeOrdersResultsPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+
+
+
+@*<a href="#" class="next"><img src="images/pagination-next.png"></a>
+    <a href="#" class="prev"><img src="images/pagination-prev.png"></a>
+
+    <a href="#" class="page">1</a>
+    <a href="#" class="page">2</a>
+    <a href="#" class="page current">3</a>
+    <a href="#" class="page">4</a>
+    <a href="#" class="page">5</a>
+    <a href="#" class="page">6</a>
+    <a href="#" class="page">7</a>*@
+
+<ul>
+    @if ((ViewBag.OrderDetails).Count == 0)
+    {
+        <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+    }
+
+    else
+    {   <li>
+        @{
+            if (ViewBag.Pagesize > 5)
+            {
+                 <div id="SeeAllRecentOrders">
+                @Html.PagedListPager((IPagedList)ViewBag.OrderDetails, page => Url.Action("seeAllRecentOrders", new { page, @class = "pagination" }), new PagedListRenderOptions { DisplayEllipsesWhenNotShowingAllPageNumbers = false, DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never })
+            </div>
+            }
+         }
+     
+           
+        </li>
+        foreach (var item in ViewBag.OrderDetails)
+        {
+            <li>
+                <div class="fix-overflow">
+                    <p class="title"><strong>PO: @item.order_id</strong></p>
+
+                    @*<a href="#downloadOrder" class="download_order" data-id="mwv-1234-123456-1234"><img src="/images/download.png"></a>*@
+                    <a href="#downloadOrder" class="download_order" data-id="@item.order_id"><img src="/images/download.png"></a>
+                </div>
+
+                <p><a href="#seeOrderDetails" class="see-details" data-order-id="@item.order_id">See Details</a></p>
+
+                <p class="details">Placed On: @item.order_date.ToString("dd MMM yyy hh:mm tt")</p>
+
+                @*<p class="details"> Status : @item.status</p>*@
+                @{
+            if (item.status == "Under Planning") // Open = "Under Planning"
+            {
+                <span class="order-status os-open" data-status="open">@item.status</span>
+            }
+            else if (item.status == "Created") // Used internally by the application
+            {
+                <span class="order-status os-created">@item.status</span>
+                @*<a href="#filterOrderStatus" class="order-stat  us os-complete" data-status="complete">@item.status</a>*@
+            }
+            else if (item.status == "In Warehouse") //Dispatch Ready = "In Warehouse"
+            {
+                <span class="order-status os-dispatch-ready">@item.status</span>
+                @*<a href="#filterOrderStatus" class="order-status os-dispatch-ready" data-status="dispatch-ready">@item.status</a>*@
+            }
+            else if (item.status == "Planned")
+            {
+                <div class="order-status up_top os-schedule-ready">@item.status</div> // schedule ready = "Planned"
+                @*<a href="#filterOrderStatus" class="order-status os-dispatch-ready" data-status="dispatch-ready">@item.status</a>*@
+            }
+                }
+            </li>
+
+        }
+    }
+</ul>
+
+<script type="text/javascript">
+    $('#SeeAllRecentOrders').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#customersPanel').hide();
+                                    $('#transportationPanel').hide();
+                                    $('.order_details').hide();
+                                    $('#ordersPanel').show();
+                                    $('#ordersResultsPanel').show();
+                                    $('#ordersResultsPanel').html(result);
+                                    $('#ordersPanel').show();
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+</script>

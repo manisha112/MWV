@@ -1,0 +1,57 @@
+﻿@model MWV.Models.Product
+@{
+
+}
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<h2><b> Create New Product -> @Html.ActionLink("Goto Home", "Index")</b></h2><br />
+ &nbsp;<span id="ErrorMsgs"></span><br />
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary("", new { @class = "text-error" })
+
+<div class="form-group">
+    <p class="form-label">&nbsp;Product Code</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.product_code, new { @class = "text-input", id = "product_code", @placeholder = "Enter Product Code(upto 15 char)", @maxlength = "15", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Product Code(upto 15 char)'" })
+    </div>
+</div>
+<p class="form-label">&nbsp;BF Code</p>
+@Html.DropDownList("BFCode", (SelectList)ViewBag.Bf_list, "Select Bf", new { @class = "select-input" })
+
+<p class="form-label">&nbsp;Gsm Code</p>
+@Html.DropDownList("GSMCode", (SelectList)ViewBag.Gsm_list, "Select Gsm", new { @class = "select-input" })
+
+<div class="form-group">
+    <p class="form-label">&nbsp; Product Description</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "ProductDescription", @placeholder = "Enter Product Description(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Product Description(upto 100 char)'" })
+    </div>
+</div>
+<br /><br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" class="btn btn-default" id="btnAddProduct" value="Create" />
+    </div>
+</div>
+<br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "ProductAdmin")'" />
+    </div>
+</div>
+<br />
+<br />
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,20 @@
+﻿
+
+<div class="fix-overflow">
+    <h3>Recent Approvals</h3>
+    @if (ViewBag.NoRecordMsg == null)
+    {
+         <a href="#seeAllRecentApprovals" class="see_all">See All</a>  
+    }
+</div>
+<ul>
+    <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+    @foreach (var item in ViewBag.SeePendingApproval)
+    {
+        <li>
+            <p class="title"><strong> @item.AgentName</strong></p>
+            <p class="details"> @item.CustomerName</p>
+            <p><a href="#seeApprovalsDetails" class="see-details" data-id="@item.customer_id">See Details</a></p>
+        </li>
+    }
+</ul>

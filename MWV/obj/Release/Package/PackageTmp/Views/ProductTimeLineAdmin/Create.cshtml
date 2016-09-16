@@ -1,0 +1,73 @@
+﻿@model MWV.Models.ProductionTimeline
+@{
+
+}
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<h2><b> Create New ProductionTimeline -> @Html.ActionLink("Goto Home", "Index")</b></h2><br />
+
+
+<br /><br />
+  &nbsp;<span id="ErrorMsgs"></span>
+<br />
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary("", new { @class = "text-error" })
+
+<p class="form-label">&nbsp;PaperMill</p>
+@Html.DropDownList("PaperMill", (SelectList)ViewBag.papermill_list, "Select PaperMill", new { @class = "select-input" })
+
+<p class="form-label">&nbsp;BF Code</p>
+@Html.DropDownList("BFCode", (SelectList)ViewBag.bf_list, "Select BF", new { @class = "select-input" })
+
+<p class="form-label">&nbsp;GSM Code</p>
+@Html.DropDownList("GSMCode", (SelectList)ViewBag.gsm_list, "Select GSM", new { @class = "select-input" })
+
+<p class="form-label">&nbsp;Shade Code</p>
+@Html.DropDownList("ShadeCode", (SelectList)ViewBag.shadecode_list, "Select Shade", new { @class = "select-input" })
+
+<div class="form-group">
+    <p class="form-label">&nbsp; Speed</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.speed, new { @class = "text-input", id = "speed", @placeholder = "Enter speed", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Speed'", @type = "number", @step = "any" })
+    </div>
+</div>
+
+<div class="form-group">
+    <p class="form-label">&nbsp; Ton Per Hr</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.ton_per_hour, new { @class = "text-input", id = "TonPrHr", @placeholder = "Enter Ton Per Hr", @maxlength = "7", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Ton Per Hr'", @type = "number", @step = "any" })
+    </div>
+</div>
+
+<div class="form-group">
+    <p class="form-label">&nbsp; Time Per Ton(Min)</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.time_per_ton, new { @class = "text-input", id = "TimePrTon", @placeholder = "Enter Time Per Ton in Minutes", @maxlength = "9", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Time Per Ton in Minutes'", @type = "number", @step = "any" })
+    </div>
+</div>
+<br /><br /> 
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" class="btn btn-default" id="btnAddProductTimeLine" value="Create" />
+    </div>
+</div>
+<br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "ProductTimeLineAdmin")'" />
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

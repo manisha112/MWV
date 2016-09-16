@@ -1,0 +1,133 @@
+﻿@model MWV.Models.Order
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Order</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.order_id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.agent_id, "agent_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model=>model.agent_id)
+                @Html.ValidationMessageFor(model => model.agent_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.customer_id, "customer_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.customer_id)
+                @Html.ValidationMessageFor(model => model.customer_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.requested_delivery_date, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.requested_delivery_date)
+                @Html.ValidationMessageFor(model => model.requested_delivery_date)
+            </div>
+        </div>
+
+        <div class="form-group">
+                @Html.LabelFor(model => model.status, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <select name="lstStatus"><option>Created</option><option>Open</option></select>
+                    @Html.ValidationMessageFor(model => model.status)
+                </div>
+            </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.papermill_id, "papermill_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+               @Html.DropDownListFor(model=>model.papermill_id, new SelectList(ViewBag.lstPapermills, "papermill_id", "name", "select Papermill"))
+                @*@Html.DropDownList("papermill_id", String.Empty)*@
+                @Html.ValidationMessageFor(model => model.papermill_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+
+        
+
+        @*<ul id="prodEditor" style="list-style-type: none">
+            @foreach (var prods in Model.OrderProducts)
+            {
+                Html.RenderPartial("Partial1", prods);
+            }
+        </ul>*@
+        @*<p>
+            @Html.ActionLink("Add Products", "Create", "Order_product",new { id = Model.order_id }, null)
+        </p>*@
+            @*<a id="addAnother" href="#">Add another</a>*@
+            @* dropdown to show the list of order products starts *@
+            @*<div class="form-group">
+                @Html.Label("Product List", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("prodlist", "All Products")
+                    @Html.ValidationMessageFor(model => model.amount)
+                </div>
+            </div>*@
+            @* dropdown to show the list of order products ends *@
+
+
+            @* list to show the list of order products starts *@
+        @if (Model.OrderProducts.Count != 0)
+        {
+            <h4>Order Products</h4>
+            <table class="table">
+                <tr>
+                    <th>Order Product ID</th>
+                    <th>Product Code</th>
+                    <th>Shade Code</th>
+                    <th>Width</th>
+                    <th>Quantity</th>
+                    @*<th>Amount</th>*@
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.OrderProducts)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.order_product_id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.product_code)</td>
+                        <td>@Html.DisplayFor(modelItem => item.shade_code)</td>
+                        <td>@Html.DisplayFor(modelItem => item.width)</td>
+                        <td>@Html.DisplayFor(modelItem => item.qty)</td>
+                        @*<td>@Html.DisplayFor(modelItem => item.amount)</td>*@
+                        <td>
+                            @*@Html.ActionLink("Edit", "Edit", "Order_product", new { id = item.order_product_id }, null) |*@
+                            @Html.ActionLink("View Product Details", "ViewDetails", "Order_product", new { id = item.order_product_id }, null) 
+                            @*|
+                            @Html.ActionLink("Delete", "Delete", "Order_product", new { id = item.order_product_id }, null)
+                        </td>*@
+                    </tr>
+                }
+            </table>
+        }
+            @* list to show the list of order products ends *@
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "GetAllCreatedOrders")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

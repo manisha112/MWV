@@ -1,0 +1,157 @@
+﻿@model MWV.Models.Bf
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+   
+</style>
+<div style="margin-top: 80px !important;">
+    <h2><b> Create New BF -> @Html.ActionLink("Goto Home", "Index")</b></h2><br />
+</div>
+ &nbsp;<span id="ErrorMsgs"></span><br />
+@*@using (Html.BeginForm("Create", "BfAdmin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {*@
+@Html.AntiForgeryToken()
+@Html.ValidationSummary("", new { @class = "text-error" })
+
+
+@*<table style="border: none; border-collapse: collapse;"  cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div class="form-group">
+                    <p class="form-label"> BF Description</p>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.description, new { @class = "text-input", @placeholder = "Enter BF Description" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default" id="btnCreate" value="Create" />
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+    </table>*@
+
+<div class="form-group">
+    <p class="form-label">&nbsp;BF Code</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.bf_code, new { @class = "text-input", id = "BFCode", @placeholder = "Enter BF Code(upto 15 char)", @maxlength = "15", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter BF Code(upto 15 char)'" })
+    </div>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; BF Description</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "BFDescription", @placeholder = "Enter BF Description(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter BF Description(upto 100 char)'" })
+    </div>
+</div>
+<br /><br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" class="btn btn-default" id="btnAddBF" value="Create" />
+    </div>
+</div>
+<br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "BfAdmin")'" />
+    </div>
+</div><br /><br />
+
+
+@*}*@
+<br /><br />
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
+
+<script type="text/javascript">
+
+    function CheckBFValidation() {
+        var BFCode = $('#BFCode').val();
+        var BFDescription = $('#BFDescription').val();
+
+        if ($('#BFCode').val() == "Enter BF Code(upto 15 char)" || $('#BFCode').val().trim() == "" || $('#BFCode').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter BFCode!</p>");
+            return false;
+        }
+        else if ($('#BFCode').val().length > 15) {
+            $('#ErrorMsgs').html("<p class='error-msg'>BFCode should contain 15 characters.!</p>");
+            return false;
+        }
+        else if ($('#BFDescription').val() == "Enter BF Description(upto 100 char)" || $('#BFDescription').val().trim() == "" || $('#BFDescription').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter BF Description!</p>");
+            return false;
+        }
+        else if ($('#BFDescription').val().length > 100) {
+            $('#ErrorMsgs').html("<p class='error-msg'>BF Description should contain 100 characters.!</p>");
+            return false;
+        }
+
+        else {
+            return true;
+        }
+    }
+
+
+    ///// ------------------FOR ADD BF-----------------------
+
+
+
+    $('#btnAddBF').click(function () {
+        debugger;
+        var BFCode = $('#BFCode').val();
+        var BFDescription = $('#BFDescription').val();
+        var msg = "";
+
+        if (CheckBFValidation() == true) {
+            var datatosend = {
+                BFCode: BFCode,
+                BFDescription: BFDescription
+            }
+
+            $.ajax({
+                url: "/BfAdmin/AddBF/",
+                data: datatosend,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html'
+            })
+                      .success(function (result) {
+                          // alert(result);
+                          if (result == "True") {
+                              msg = 'BF details added successfully.!';
+                              window.location.href = "/BfAdmin/Index?msg=" + msg;
+                          }
+                          else {
+                              msg = "BF Code already exists.!";
+                              window.location.href = "/BfAdmin/Index?msg=" + msg;
+                          }
+
+                      })
+                     .error(function (xhr, ajaxOptions, thrownError) {
+                     })
+        }
+
+    });
+
+
+</script>

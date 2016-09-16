@@ -1,0 +1,110 @@
+﻿
+
+<div class="fix-overflow">
+    <a href="#closePlanDetails" class="close-panel"><img src="images/close-panel.png"></a>
+</div>
+@if (ViewBag.NoRecordMsg != null)
+{
+    @ViewBag.NoRecordMsg
+}
+else
+{
+    foreach (var item in ViewBag.ProPlanDetails)
+    {
+        <div class="details_header">
+            <div class="fix-overflow">
+                <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                <p class="title"><strong>Plan No : @item.srNo )</strong></p>
+
+            </div>
+
+            <p class="details">
+                Estimated Start Time : @item.estimated_start<br />
+                Estimated End Time : @item.EstimatedEndDate
+            </p>
+            <p class="details">Total Estimated RunTime : @item.EstimatedRunTime mins</p>
+            <p class="details">Planned Qty : @item.plannedQty Ton</p>
+            <p class="details">Total No. of Jumboes : xxx</p>
+
+        </div>
+
+        <ul>
+            <li>
+                @{
+        var itemlots = ViewBag.LotsDetails;
+
+        for (var i = 0; i <= itemlots.Count - 1; i++)
+        {
+
+            if (itemlots[i].srNo == @item.srNo)
+            {
+
+                foreach (var items in ViewBag.JumbosDetails)
+                {
+                    <p class="title">
+                        <strong>
+                            Jumbo No. : @items.jumboNo
+                        </strong>
+                    </p>
+                    <p class="details">
+                        @items.BF BF, @items.GSM GSM, @items.shade<br>
+                        Planned Qty: @items.plannedQty MT
+                    </p>
+
+                    var item1 = ViewBag.Lots;
+                    string size = "";
+                    string sizeWithName = "";
+                    decimal Decklesize = 0;
+                    decimal Qty = 0;
+                    int sequ = 0;
+                    for (var j = 0; j <= item1.Count - 1; j++)
+                    {
+                        if (item1[j].jumboNo == @items.jumboNo)
+                        {
+                            if (item1[j].Sequence == sequ || sequ == 0)
+                            {
+                                size = size + item1[j].Width.ToString() + " cm + ";
+                                sizeWithName = item1[j].Width.ToString() + " - " + @item1[j].CustomerName + "<br />" + sizeWithName;
+                                Decklesize += item1[j].Width;
+                                Qty += item1[j].DeckleQty;
+                            }
+                            else if (sequ != 0)
+                            {
+                                <p class="title"><strong>Lot. No: @sequ </strong></p>
+                                <p class="details">
+                                    @size.Remove(size.Length - 2)<br />
+                                    Deckle:@Decklesize cm ,  Qty: @Qty = Qty Ton<br>
+                                    @Html.Raw(@sizeWithName)
+                                </p>
+
+                                size = "";
+                                sizeWithName = "";
+                                Decklesize = 0;
+                                Qty = 0;
+                                size = size + item1[j].Width.ToString() + " cm + ";
+                                sizeWithName = item1[j].Width.ToString() + " - " + @item1[j].CustomerName + "<br />" + sizeWithName;
+                                Decklesize += item1[j].Width;
+                                Qty += item1[j].DeckleQty;
+                            }
+                            sequ = item1[j].Sequence;
+
+                        }
+
+                    }
+                    <p class="title"><strong>Lot. No: @sequ </strong></p>
+                    <p class="details">
+                        @*@size.Remove(size.Length - 2)<br />*@
+                        @size
+                        Deckle:@Decklesize cm ,  Qty: @Qty = Qty Ton<br>
+                        @Html.Raw(@sizeWithName)
+                    </p>
+                }
+
+            }
+        }
+                }
+            </li>
+
+        </ul>
+    }
+}

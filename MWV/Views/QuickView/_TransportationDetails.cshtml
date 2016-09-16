@@ -1,0 +1,424 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+
+
+<div class="fix-overflow">
+    <a href="#closeTransportationDetails" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+
+<div class="transportation_details_full">
+    @{
+        int pmlocationid = 0;
+        string vehicle_num;
+        decimal vehicle_capacity;
+        DateTime agent_disp_on;
+        DateTime estimated_arr_date;
+    }
+
+    @foreach (var item in ViewBag.Truck_dispatches)
+    {
+        pmlocationid = @item.pmlocationid;
+        vehicle_num = @item.truck_no;
+        vehicle_capacity = @item.estimated_capacity;
+        agent_disp_on = @item.agent_dispatched_on;
+        estimated_arr_date = @item.estimated_arrival;
+
+        <input type="hidden" id="vehicle_num" value="@item.truck_no" />
+        <input type="hidden" id="pmlocationid" value="@item.pmlocationid" />
+        <input type="hidden" id="estimated_capacity" value="@item.estimated_capacity" />
+        <input type="hidden" id="agent_dispatched_on" value="@item.agent_dispatched_on" />
+        <input type="hidden" id="estimated_arrival" value="@item.estimated_arrival" />
+
+        <p>Transportation Details For:</p>
+        <div class="vehicle_number">
+            <p class="title"><strong>Vehicle # @item.truck_no</strong></p>
+
+            @if (@item.actual_arrival_at_gate == null)
+            {
+                <div class="transportation_details_icons">
+                    <a href="#editVehicle" class="edit_vehicle" data-id="@item.truck_dispatch_id"><img src="/images/edit.png"></a>
+                    <a href="#removeVehicle" class="remove_vehicle" data-id="@item.truck_dispatch_id"><img src="/images/delete.png"></a>
+                </div>
+            }
+
+        </div>
+
+        <p class="title"><strong>Location: @item.location</strong></p>
+
+        <p class="details">
+            @item.address
+            @*Survey No. : <br>
+                Village - <br>*@
+            @*Dist. Valsad 396191*@
+        </p>
+
+        <p class="details">
+            Scheduled on: @item.created_on.ToString("dd MMM yyy hh:mm tt")<br />
+            Vehicle Capacity: @item.estimated_capacity MT<br />
+            Scheduled Start: @item.agent_dispatched_on.ToString("dd MMM yyy hh:mm tt") <br>
+            Expected Arrival: @item.estimated_arrival.ToString("dd MMM yyy hh:mm tt")<br>
+            @{string status = "";}
+            @{string statusDep = "";}
+            @if (@item.actual_arrival_at_gate == null)
+            {
+                status = "Arrived: " + "Pending";
+            }
+            else
+            {
+                status = "Arrived: " + @item.actual_arrival_at_gate.ToString("dd MMM yyy hh:mm tt");
+            }
+            @if (@item.left_factory_on == null)
+            {
+                statusDep = "Departed: " + "Pending";
+            }
+            else
+            {
+                statusDep = "Departed: " + @item.left_factory_on.ToString("dd MMM yyy hh:mm tt");
+            }
+            @status<br />
+            @statusDep<br />
+        </p>
+
+        <h2>Cargo List</h2>
+        <div class="product_attention hidden" id="tmpProdAttn" style="display: none;">
+            <div class="fix-overflow">
+                <a href="#closeProductAttention" class="close-panel" data-id="@item.truck_dispatch_id"><img src="/images/close-panel.png"></a>
+            </div>
+
+            <p class="alert_title"><strong>Attention!</strong></p>
+
+            <p class="alert_details">Are you sure you want to remove this transportation?</p>
+
+            <a href="#closeProductAttention" class="btn" data-id="@item.truck_dispatch_id">Cancel</a>
+            <a href="#confirmRemoveVehicle" data-id="@item.truck_dispatch_id" class="btn">Remove</a>
+        </div>
+    }
+    <div class="cargo_list">
+      
+        <ul>
+            <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+            @foreach (var item in Model.Truck_dispatch_details)
+            {
+                <li>
+                    <div class="fix-overflow">
+                        <p class="po_number"><strong>PO: @item.order_id</strong></p>
+                        @*<a href="#removeCargo" class="remove"><img src="images/delete.png"></a>*@
+                    </div>
+
+                    <p class="title"><strong>@item.Order.Customer.name</strong></p>
+                    @*<p class="details">@item.Order_products.product_code</p>*@
+                    <p class="details">@string.Format("{0:#.00}", item.Order_products.width) cm x @item.Order_products.Product.bf_code BF @item.Order_products.Product.gsm_code GSM @item.Order_products.shade_code</p>
+
+                    <p class="details">Qty. For Loading: @item.qty MT</p>
+                    @*<p class="details">Qty. For Loading: @item.qty_loaded</p>*@
+                </li>
+            }
+        </ul>
+        @* the add cargo is commented because we are allowing the edit vehicle with the image button on right top  *@
+        @*<div class="fix-overflow">
+                <a href="#addCargoToCargoList" class="add_cargo" data-id="@pmlocationid"><img src="images/add.png"> <span>Add Cargo</span></a>
+            </div>*@
+
+        <div class="add_cargo_panel hidden">
+            <div class="fix-overflow">
+                <a href="#closeAddCargoPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+                @*<a href="#closeAddCargoPanel" class="close-panel"><img src="images/close-panel.png"></a>*@
+            </div>
+
+            <h2>Add Cargo Item</h2>
+
+            <div class="add_cargo_panel_details">
+                <select class="select-input" id="tdOrderddl">
+                    <option>Select PO #</option>
+                </select>
+
+                <select class="select-input" id="tdProductddl">
+                    <option>Select Product</option>
+                </select>
+
+                <input type="text" class="text-input" value="Enter Quantity (MT)" id="transportationDetailsAddCargoPanelEnterQuantity">
+                <span id="tmptdAvailableQty"></span>
+                <a href="#addNewCargoItem" class="btn">Add Cargo</a>
+            </div>
+        </div>
+        @*</div>*@ <!-- .cargo_list -->
+    </div> <!-- .cargo_list -->
+</div>
+
+
+
+<script language="javascript">
+
+    $('.transportation_details').on('click', 'a[href="#removeVehicle"]', function () {
+        $('.transportation_button').show();
+        var id = $(this).attr("data-id");
+        //$('.product_attention-' + id).show();
+        $('#tmpProdAttn').show();
+    });
+    $('.transportation_details ').on('click', 'a[href="#confirmRemoveVehicle"]', function () {
+        $('.product_attention').show();
+        
+        // alert("hrhkjhkj");
+        var truck_dispatch_id = $(this).attr("data-id");
+
+        //alert("Selected bf is " + selectedItem);
+        $.ajax(
+                   {
+                       cache: false,
+                       type: "POST",
+                       url: "/Truck_dispatch/RemoveVehicle/" + truck_dispatch_id,
+                       contentType: "application/html; charset=utf-8",
+                       success: function (data) {
+                           if (data == true) {
+
+                           }
+                           else {
+
+                           }
+                       },
+                       error: function (xhr, ajaxOptions, thrownError) {
+                           //alert("ajaxOptions " + ajaxOptions);
+                           // alert('Failed to retrieve states.');
+                       }
+                   });
+        $('#transportationDetails').hide();
+        $.ajaxSetup({ cache: false });
+        $.ajax({
+            url: "/QuickView/QuickViewDetails/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                          .success(function (result) {
+                              $('#quickViewRecentOrders').html(result);
+                          })
+                         .error(function (xhr, ajaxOptions, thrownError) {
+                         })
+
+
+    });
+    $('.transportation_details').on('click', 'a[href="#closeProductAttention"]', function () {
+        
+        var id = $(this).attr("data-id");
+        //$('.product_attention-' + id).hide();
+        //  $(this).closest('.product_attention').hide();
+        $('#tmpProdAttn').hide();
+        $('html,body').animate({
+            scrollTop: $(window).scrollTop() - 120
+        });
+        return false;
+    });
+
+    $('.transportation_details').on('click', 'a[href="#editVehicle"]', function () {
+        
+        // make an ajax call to get the record of the vehicle selected
+      
+        var truck_dispatch_id = $(this).attr("data-id");
+        $.ajax(
+              {
+                  cache: false,
+                  type: "GET",
+                  url: "/Truck_dispatch/GetVehicleForEdit/" + truck_dispatch_id,
+                  context: document.body,
+                  contentType: "application/json; charset=utf-8",
+                  success: function (data) {
+                      //alert("success");
+                      $('#arrangeNewTransportation').find('#tmpArrangeNewTransportation').html(data);
+                      //alert("success " + data);
+                  },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                      //alert("ajaxOptions " + ajaxOptions);
+                      //alert('Failed to retrieve Orders for this location.');
+                  }
+              });
+
+        // alert("selectedPapermillid " + selectedPapermillid);
+        // GetDispatchInSession
+
+        var datatosend = {
+
+            truck_dispatch_id: truck_dispatch_id
+
+        };
+        // alert("location id: " + $('#newTransportationLocation').val());
+
+        $.ajax({
+            type: "POST",
+            url: "/Truck_dispatch/GetDispatchAndCargoInSession/",
+            context: document.body,
+            data: datatosend,
+            dataType: "html",
+            context: document.body,
+        })
+                         .success(function (result) {
+                             //alert("Successfully Created in session, data is  " + result);
+                             $('#ArrangeNewTransportation').show();
+                             $('.cargo_list').show();
+                             $('#showCargoList').show();
+                             $('#showCargoList').html(result);
+                             // $('#ArrangeNewTransportation .cargo_list').find('#showCargoList').html(result);
+                         })
+                        .error(function (xhr, ajaxOptions, thrownError) {
+                        })
+
+        //add the temp dispatch to session ends
+        //alert("pm location id" +$(this).attr('data-id'));
+
+        //alert("here populate the Purchase orders");
+        // make the ajax call to populate the PO drop down starts
+        
+        var pmlocationid = $('#pmlocationid').val();
+        var selectedItem = pmlocationid;
+
+        var ddlOrders = $('#arrangeNewTransportation').find("#Orderddl");
+
+        $.ajax(
+               {
+                   cache: false,
+                   type: "GET",
+                   url: "/Order/GetAllOrdersForLocation/" + truck_dispatch_id,
+                   contentType: "application/json; charset=utf-8",
+                   success: function (data) {
+
+                       ddlOrders.html('');
+                       ddlOrders.append($('<option>Select Purchase Order</option>'));
+                       $.each(data, function (id, option) {
+
+                           ddlOrders.append($('<option></option>').val(option.id).html(option.id + ", " + option.name));
+
+                       });
+                       //alert("success " + data);
+                   },
+                   error: function (xhr, ajaxOptions, thrownError) {
+                       //alert("ajaxOptions " + ajaxOptions);
+                       //alert('Failed to retrieve Orders for this location.');
+                   }
+               });
+        //$('#tmpTransportationDetailsMaster').hide();
+        //$('#transportationDetails').show();
+        $('#transportationDetails').hide();
+        $(' submitTransportation').show();
+        $('#arrangeNewTransportation').show();
+
+
+
+        //$('html,body').animate({
+        //    scrollTop: $('#createOrderPanel').position().top - 50
+        //}, 400);
+
+        // this was on this form itself, i ahve to fill the
+        //var tdOrderddl = $('.transportation_details').find('#tdOrderddl');
+
+        //$.ajax(
+        //       {
+        //           cache: false,
+        //           type: "GET",
+        //           url: "/Home/GetAllOrdersbyAgentandLocation/" + pmlocationid,
+        //           context: document.body,
+        //           contentType: "application/json; charset=utf-8",
+        //           success: function (data) {
+        //               //alert("success");
+        //               tdOrderddl.html('');
+        //               tdOrderddl.append($('<option>Select Purchase Order</option>'));
+        //               $.each(data, function (id, option) {
+
+        //                   tdOrderddl.append($('<option></option>').val(option.id).html(option.name));
+
+        //               });
+        //               //alert("success " + data);
+        //           },
+        //           error: function (xhr, ajaxOptions, thrownError) {
+        //               //alert("ajaxOptions " + ajaxOptions);
+        //               //alert('Failed to retrieve Orders for this location.');
+        //           }
+        //       });
+        // $('.transportation_button').hide();
+
+
+
+    });
+
+    //$('#arrangeNewTransportation').on('click', 'a[href="#addCargoToTransportation"]', function () {
+    //    alert("dfsdf");
+    //    // resetting the fields
+    //    $('#tdOrderddl').find('option:first').attr('selected', 'selected');
+    //    $('#tdProductddl').find('option:first').attr('selected', 'selected');
+    //    $('#transportationDetailsAddCargoPanelEnterQuantity').val('Enter Quantity (MT)');
+    //    $('#tmptdAvailableQty').html('');
+    //    
+
+
+    //    // make the ajax call to populate the PO drop down ends
+    //    $(this).closest('.cargo_list').find('.add_cargo_panel').show();
+
+    //    //$('html,body').animate({
+    //    //    scrollTop: $(this).closest('.transportation_details').find('.transportation_details_full').height() + $(this).closest('.cargo_list').height() + 275
+    //    //}, 400);
+    //    $('html,body').animate({
+    //        scrollTop: $(this).closest('.transportation_details').find('.transportation_details_full').height() + $(this).closest('.cargo_list').height() + 2
+    //    }, 4);
+
+    //    return false;
+    //});
+
+    $('.transportation_details').on('change', '#tdOrderddl', function () {
+        //alert("inside change of PO");
+        var selectedItem = $(this).val();
+        var tdProductddl = $('.transportation_details').find('#tdProductddl');
+
+        //alert("Selected Order is " + selectedItem);
+
+        $.ajax(
+                   {
+                       cache: false,
+                       type: "GET",
+                       url: "/Home/GetProductsByOrderId/" + selectedItem,
+                       contentType: "application/json; charset=utf-8",
+                       success: function (data) {
+
+                           tdProductddl.html('');
+                           tdProductddl.append($('<option>Select Product</option>'));
+                           $.each(data, function (id, option) {
+
+                               tdProductddl.append($('<option></option>').val(option.id).html((option.id) + ", " + parseFloat(option.width).toFixed(2) + " cm x " + option.name));
+
+                           });
+                       },
+                       error: function (xhr, ajaxOptions, thrownError) {
+                           //alert("ajaxOptions " + ajaxOptions);
+                           //alert('Failed to retrieve products for this order.');
+                       }
+                   });
+    });
+    $('.transportation_details').find('#tdProductddl').on('change', function () {
+
+        ///code to get the available quantity
+        var selectedItem = $(this).val();
+        $.ajax(
+                   {
+                       cache: false,
+                       type: "GET",
+                       url: "/Order/GetProductsAvailableQty/" + selectedItem,
+                       contentType: "application/html; charset=utf-8",
+                       success: function (data) {
+                           //alert(data);
+                           $('#tmptdAvailableQty').html("Available Quantity: " + data);
+                       },
+                       error: function (xhr, ajaxOptions, thrownError) {
+                           //alert("ajaxOptions " + ajaxOptions);
+                           //alert('Failed to retrieve products for this order.');
+                       }
+                   });
+
+
+    });
+    $('.add_cargo_panel').on('click', 'a[href="#closeAddCargoPanel"]', function () {
+        //alert("add cargo panel --> close add cargo button");
+        debugger;
+        $(this).closest('.add_cargo_panel').hide();
+
+
+    });
+</script>

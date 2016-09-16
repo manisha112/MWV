@@ -1,0 +1,134 @@
+﻿@model MWV.Models.Bf
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@*<script src="~/Scripts/Admin/BfAdmin.js"></script>*@
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<br />
+
+<h2 style="margin-top: 85px;"><b> Edit BF ->@Html.ActionLink("Goto Home", "Index")</b></h2>
+
+<br /><br />
+  &nbsp;<span id="ErrorMsgs"></span>
+<br />
+
+
+@*@using (Html.BeginForm())
+    {*@
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    @Html.ValidationSummary(true)
+
+    <input type="hidden" value="@Model.bf_code" id="BFCodeToEdit" />
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;BF Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.bf_code, new { @class = "text-input", id = "BFCode", @placeholder = "Enter BF Code(upto 15 char)", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp; BF Description</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "BFDescription", @placeholder = "Enter BF Description(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter BF Description(upto 100 char)'" })
+        </div>
+    </div>
+    <br /><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" id="btnEditBF" value="Save" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "BfAdmin")'" />
+        </div>
+    </div><br /><br />
+</div>
+@*}*@
+
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
+
+<script type="text/javascript">
+    function CheckBFValidation() {
+        var BFCode = $('#BFCode').val();
+        var BFDescription = $('#BFDescription').val();
+
+        if ($('#BFCode').val() == "Enter BF Code(upto 15 char)" || $('#BFCode').val().trim() == "" || $('#BFCode').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter BFCode!</p>");
+            return false;
+        }
+        else if ($('#BFCode').val().length > 15) {
+            $('#ErrorMsgs').html("<p class='error-msg'>BFCode should contain 15 characters.!</p>");
+            return false;
+        }
+        else if ($('#BFDescription').val() == "Enter BF Description(upto 100 char)" || $('#BFDescription').val().trim() == "" || $('#BFDescription').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter BF Description!</p>");
+            return false;
+        }
+        else if ($('#BFDescription').val().length > 100) {
+            $('#ErrorMsgs').html("<p class='error-msg'>BF Description should contain 100 characters.!</p>");
+            return false;
+        }
+
+        else {
+            return true;
+        }
+    }
+    $('#btnEditBF').click(function () {
+        debugger;
+        var BFCodeToEdit = $('#BFCodeToEdit').val();
+        var BFCode = $('#BFCode').val();
+        var BFDescription = $('#BFDescription').val();
+        var msg = "";
+
+        if (CheckBFValidation() == true) {
+            var datatosend = {
+                BFCodeToEdit: BFCodeToEdit,
+                BFCode: BFCode,
+                BFDescription: BFDescription
+            }
+
+            $.ajax({
+                url: "/BfAdmin/EditBF/",
+                data: datatosend,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html'
+            })
+                      .success(function (result) {
+                          if (result == "True") {
+                              msg = 'BF details Updated successfully.!';
+                              window.location.href = "/BfAdmin/Index?msg=" + msg;
+                          }
+                          else {
+                              $("#ErrorMsgs").html("<p class='error-msg'>" + 'Can not edit.BF Code is already in use.!' + "</p>");
+                          }
+
+                      })
+                     .error(function (xhr, ajaxOptions, thrownError) {
+                     })
+        }
+
+    });
+
+</script>
+
+
+
+

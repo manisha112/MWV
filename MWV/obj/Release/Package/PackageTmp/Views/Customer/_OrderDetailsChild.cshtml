@@ -1,0 +1,104 @@
+﻿
+<div class="order_details_full">
+    <ul class="order_products">
+        @foreach (var item in Model.Order_Products)
+        {
+            <li>
+                <p class="product_code"><strong>@item.product_code</strong></p>@*order_product_id = 134*@
+                <p class="details">
+                    @string.Format("{0:#.00}", item.width) cm x @item.Product.bf_code BF @item.Product.gsm_code GSM @item.shade_code<br />
+                    Qty. Ordered: @item.qty MT<br>
+                    Rate: INR @string.Format("{0:#.00}", item.unit_price)<br>
+                    Amount: INR @string.Format("{0:#.00}", item.amount)<br>
+                    Requested Delivery Date: @item.requested_delivery_date.ToString("dd MMM yyy") <br>
+                    @* Added by sagar *@
+
+                    @{
+            var Users = (List<MWV.Models.TempPendingApproval>)ViewBag.EstQtySch;
+            var id = item.order_product_id;
+            string dbdate = "";
+            if (Users != null)
+            {
+                var finalquery = (from u in Users where u.order_id == id select new { u.ActualQty, u.estimated_start }).ToList();
+                if (finalquery != null || finalquery.Count <= 0)
+                {
+                <p class="details">Est. Prod Schedule:</p>
+                    foreach (var viewItems in finalquery)
+                    {
+                        <div class="qtyProduction details">
+                            @{
+                        dbdate = Convert.ToString(viewItems.estimated_start);
+                        string format = "dd MMM yyyy HH:mm tt";
+                        DateTime dt = DateTime.ParseExact(dbdate,
+               "dd/MM/yyyy HH:mm:ss",
+              null);
+                        var newdate = dt.ToString("dd MMM yyyy HH:mm tt");
+                            }
+                            @Math.Round(Convert.ToDecimal(viewItems.ActualQty), 3) MT ON @newdate
+
+                        </div>
+                    }
+                }
+            }
+                    }
+
+                    @if (item.status != "Created")
+                    {
+                        var QtySch = (List<MWV.Models.TempPendingApproval>)ViewBag.qtyforsch;
+                        var opid = item.order_product_id;
+                        if (QtySch != null)
+                        {
+                            var finalqtyQuery = (from u in QtySch where u.order_id == opid select new { u.plannedQty, u.ActualQty }).ToList();
+                            if (finalqtyQuery != null || finalqtyQuery.Count <= 0)
+                            {
+                                foreach (var viewqtyItems in finalqtyQuery)
+                                {
+                                    var qtydispFormat = "";
+                                    var qtyDisTodate = string.Format("{0:#.00}", viewqtyItems.plannedQty);
+                                    var atcualQty = string.Format("{0:#.00}", viewqtyItems.ActualQty);
+                                    if (qtyDisTodate != null && qtyDisTodate != "")
+                                    {
+                                        var qtyDispatch = Convert.ToDecimal(qtyDisTodate) - Convert.ToDecimal(atcualQty);
+                                        if (qtyDispatch != 0 || qtyDispatch != null)
+                                        {
+                                            qtydispFormat = string.Format("{0:#.00}", qtyDispatch);
+                                        }
+                                        else { qtydispFormat = "0"; }
+                                    }
+                                    <span class="details">Qty. Dispatched To-Date: @atcualQty</span> <br>
+                                    <span class="details">Qty. At Dispatch Facility: @(qtydispFormat)</span> <br>
+                                    <span class="details">Qty. Scheduled For Loading: @(qtyDisTodate)</span>
+                                }
+                            }
+
+
+                        }
+                    }
+
+                    @{
+            if (item.status == "Under Planning") // Open = "Under Planning"
+            {
+                <span class="order-status os-open" data-status="open">@item.status</span>
+            }
+            else if (item.status == "Created") // Used internally by the application
+            {
+                <span class="order-status os-created">@item.status</span>
+            }
+            else if (item.status == "In Warehouse") //Dispatch Ready = "In Warehouse"
+            {
+                <span class="order-status os-dispatch-ready">@item.status</span>
+            }
+            else if (item.status == "Planned")
+            {
+                <div class="order-status up_top os-schedule-ready">@item.status</div> // schedule ready = "Planned"
+            }
+                    }
+
+                </li>
+        }
+    </ul>
+
+    <div class="order_totals">
+        <p><strong>Total: INR @string.Format("{0:#.00}", ViewBag.totaLAmount)</strong></p>
+    </div>
+</div>

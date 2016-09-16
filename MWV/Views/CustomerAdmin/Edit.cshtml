@@ -1,0 +1,294 @@
+﻿@model MWV.Models.Customer
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<br />
+
+<h2 style="margin-top:80px"><b> Edit Customer ->@Html.ActionLink("Goto Home", "Index")</b></h2>
+
+
+<br />
+
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    @Html.ValidationSummary("", new { @class = "error-msg" })
+
+
+
+    <input type="hidden" value="@Model.customer_id" id="CustomerIDToEdit" />
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Name</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.name, new { @class = "text-input", id = "name", @placeholder = "Enter name(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter name(upto 100 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;First Name</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.firstname, new { @class = "text-input", id = "firstname", @placeholder = "Enter First Name(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter First Name(upto 100 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Last Name</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.lastname, new { @class = "text-input", id = "lastname", @placeholder = "Enter Last Name(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Last Name(upto 100 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Email</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.email, new { @class = "text-input", id = "email", @placeholder = "Enter email(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter email(upto 100 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Select Agent</p>
+        <div class="col-md-10">
+            @Html.DropDownList("lstAgents", (SelectList)ViewBag.Agent_list, "Select Agent", new { @class = "select-input" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Phone</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.phone, new { @class = "text-input", id = "phone", @placeholder = "Enter phone(upto 15 char)", @maxlength = "15", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter phone(upto 15 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Address1</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.address1, new { @class = "text-input", id = "address1", @placeholder = "Enter address1(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter address1(upto 100 char)'" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Address2</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.address2, new { @class = "text-input", id = "address2", @placeholder = "Enter address2(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter address2(upto 100 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Address3</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.address3, new { @class = "text-input", id = "address3", @placeholder = "Enter address3(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter address3(upto 100 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;City</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.city, new { @class = "text-input", id = "city", @placeholder = "Enter city(upto 50 char)", @maxlength = "50", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter city(upto 50 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;PinCode</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.pincode, new { @class = "text-input", id = "pincode", @placeholder = "Enter pincode(upto 50 char)", @maxlength = "50", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter pincode(upto 50 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;State</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.state, new { @class = "text-input", id = "state", @placeholder = "Enter state(upto 50 char)", @maxlength = "50", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter state(upto 50 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Country</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.country, new { @class = "text-input", id = "country", @placeholder = "Enter country(upto 50 char)", @maxlength = "50", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter country(upto 50 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Fax</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.fax, new { @class = "text-input", id = "fax", @placeholder = "Enter fax(upto 50 char)", @maxlength = "50", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter fax(upto 50 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Status</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.status, new { @class = "text-input", id = "status", @placeholder = "Enter status(upto 50 char)", @readonly = "readonly", disabled = "disabled", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter status(upto 50 char)'" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Approved On</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.approved_on, "{0:dd/MM/yyyy}", new { @class = "text-input", id = "approved_on", @placeholder = "", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        @*<p class="form-label">&nbsp;Remarks</p>*@
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.remarks, new { @class = "text-input", id = "remarks", @placeholder = "Enter remarks(upto 500 char)", style = "display: none;", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter remarks(upto 500 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Credit Limit</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.credit_limit, new { @class = "text-input", id = "credit_limit", @placeholder = "", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Credit Days</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.credit_days, new { @class = "text-input", id = "credit_days", @placeholder = "", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <br />
+
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Password</p>
+        <div class="col-md-10">
+            <input type="password" id="txtPassword" class="text-input" placeholder="Enter Password For Customer" onfocus="this.placeholder = ''" onblur="    this.placeholder = 'Enter Password For Customer'">
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <p class="form-label">&nbsp;Confirm Password</p>
+        <div class="col-md-10">
+            <input type="password" id="txtConfirmPassword" class="text-input" placeholder="Enter confirm Password For Customer" onfocus="this.placeholder = ''" onblur="    this.placeholder = 'Enter confirm Password For Customer'">
+        </div>
+    </div>
+    <br />
+
+    @{
+        int? status = Model.login_enabled;
+        if (status == 0)
+        {
+            <p class="message_subject"><input type="checkbox" checked name="Msgchk" class="select_message" id="@Model.customer_id"> Approve Customers Login</p>
+
+        }
+        else
+        {
+            <p class="message_subject"><input type="checkbox" name="Msgchk" class="select_message" id="@Model.customer_id"> Approve Customers Login</p>
+
+        }
+
+    }
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+
+            <p class="error-msg" id="loginErrormsg"></p>
+            <span id="ErrorMsgs"></span>
+            <input type="submit" class="btn btn-default" id="btnEdiCust" value="Save" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" title="Cancel" class="btn btn-default" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "CustomerAdmin")'" />
+        </div>
+    </div><br /><br />
+</div>
+@*<script type="text/javascript">
+    function CheckValidation() {
+        if ($('name').val() == "Enter name(upto 100 char)" || $('#name').val().trim() == "" || $('#name').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter name!</p>");
+            return false;
+        }
+        else if (EmailValidation($('#email').val()) == false) {
+            return false;
+        }
+        if ($('city').val() == "Enter city(upto 50 char)" || $('#city').val().trim() == "" || $('#city').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter city!</p>");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    function EmailValidation(email) {
+
+        var myJsVariable = '@ViewBag.agntid';
+
+        $("#lstAgents").val(myJsVariable);
+
+        var sEmail = $("#email").val();
+        var filter = /^[\w\-\.\+]+\[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+        if (filter.test(sEmail) || $("#email").val() == "" || $('#email').val() == "Enter email(upto 100 char)") {
+            return true;
+        }
+        else {
+            $('#ErrorMsgs').html("<p class='error-msg'>Email address is not valid!</p>");
+            return false;
+        }
+    }
+    $('#btnEdiCust').click(function () {
+
+        var CustomerIDToEdit = $('#CustomerIDToEdit').val();
+        var name = $('#name').val();
+        var email = $('#email').val();
+        var phone = $('#phone').val();
+        var address1 = $('#address1').val();
+        var address2 = $('#address2').val();
+        var address3 = $('#address3').val();
+        var city = $('#city').val();
+        var pincode = $('#pincode').val();
+        var state = $('#state').val();
+        var country = $('#country').val();
+        var fax = $('#fax').val();
+        // var status = $('#status').val();
+
+        var remarks = $('#remarks').val();
+        var msg = "";
+
+        if (CheckValidation() == true) {
+            var datatosend = {
+                CustomerIDToEdit: CustomerIDToEdit,
+                name: name,
+                email: email,
+                phone: phone,
+                address1: address1,
+                address2: address2,
+                address3: address3,
+                city: city,
+                pincode: pincode,
+                state: state,
+                country: country,
+                fax: fax,
+                remarks: remarks,
+            }
+
+            $.ajax({
+                url: "/CustomerAdmin/EditCustomer/",
+                data: datatosend,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html'
+            })
+                      .success(function (result) {
+                          if (result == "True") {
+                              msg = 'Customer details Updated successfully.!';
+                              window.location.href = "/CustomerAdmin/Index?msg=" + msg;
+                          }
+                          else {
+                              $("#ErrorMsgs").html("<p class='error-msg'>" + 'Can not edit.Customer details are already in use.!' + "</p>");
+                          }
+
+                      })
+                     .error(function (xhr, ajaxOptions, thrownError) {
+                     })
+        }
+
+    });
+</script>*@
+
+<script>
+    var myJsVariable = '@ViewBag.agntid';
+
+    $("#lstAgents").val(myJsVariable);
+
+</script>
+<script src="~/Scripts/Admin/CustomerAdmin.js"></script>

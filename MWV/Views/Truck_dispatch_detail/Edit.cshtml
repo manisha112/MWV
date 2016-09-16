@@ -1,0 +1,61 @@
+﻿@model MWV.Models.Truck_dispatch_details
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Truck_dispatch_details</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.truck_dispatch_details_id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.truck_dispatch_id, "truck_dispatch_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("truck_dispatch_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.truck_dispatch_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.order_id, "order_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("order_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.order_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.order_product_id, "order_product_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("order_product_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.order_product_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.qty, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.qty)
+                @Html.ValidationMessageFor(model => model.qty)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

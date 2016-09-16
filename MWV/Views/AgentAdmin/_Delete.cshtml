@@ -1,0 +1,35 @@
+﻿@model IEnumerable<MWV.Models.Agent>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+  @{
+        foreach (var items in Model)
+    {
+            <center><h1>Delete Agent</h1> </center>
+            <br />
+<h3 class="form-label">&nbsp; Are you sure you want to delete this User?</h3>
+<div>
+    
+    <dl class="dl-horizontal">
+         
+
+        <dd class="form-label">
+            <p>Company Name: @items.name</p>    
+             <p>Email:  @items.email </p>  
+             <p>First Name: @items.firstname </p>  
+        </dd>
+    </dl>
+
+    
+        <div class="form-actions no-color">
+            <a href="#DeleteAgnt" class="btn btn-default" id="@items.agent_id">Delete</a>
+          
+        </div>
+     
+    &nbsp;@Html.ActionLink("Back to List", "Index")
+    <br />
+</div>
+  }
+    }
+                      <script src="~/Scripts/Admin/AgentAdmin.js"></script>    

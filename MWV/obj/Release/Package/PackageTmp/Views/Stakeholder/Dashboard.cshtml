@@ -1,0 +1,320 @@
+﻿<!-- ---------------------------------------------------------------------------------------------------------
+    STAKEHOLDER
+---------------------------------------------------------------------------------------------------------- -->
+<div class="stakeholder_tab">
+    <a href="#stakeholderReports" class="tab-link">Reports</a>
+
+    <div id="stakeholderReports" class="stakeholder_panel hidden">
+        <div class="fix-overflow">
+            <a href="#closeStakeholderReports" class="close-panel close_stakeholder_reports"><img src="../images/close-panel.png"></a>
+        </div>
+        <select class="select-input choose_report" id="reportsddl">
+            <option>Choose Report</option>
+            <!--<option value="customer">Customer Report</option>-->
+            <option value="agent">Agent Report</option>
+            <option value="order-book">Order Book</option>
+            <option value="bd">BD Report</option>
+            <option value="fg">FG Report</option>
+            <option value="sourcing">Sourcing Report</option>
+        </select>
+        <!-- -------------------------------------------------------------------------------------------------
+            CUSTOMER REPORT: AUTO-SEARCH
+        -------------------------------------------------------------------------------------------------- -->
+        <!--
+        <div id="searchCustomersCustomerReport" class="search_customers hidden option-pod">
+            <div class="auto_search_input_field">
+                <input type="text" value="Search Customer" class="search-input" id="autoSearchCustomersCustomerReport">
+                <a href="#clearSearch">&nbsp;</a>
+            </div>
+        </div>
+
+        <div class="auto_search_results">
+            <div id="autoSearchCustomerReportCustomersResults" class="auto-search"></div>
+        </div>
+        -->
+        <!-- -------------------------------------------------------------------------------------------------
+            AGENTS REPORT
+        -------------------------------------------------------------------------------------------------- -->
+        <div id="searchAgents" class="search_agents hidden option-pod">
+            <div class="fix-overflow all_agents">
+                @*<input type="checkbox" class="all_agents_checkbox" checked id="allagent">*@
+                @*<span>All Agents</span>*@
+            </div>
+
+            @Html.DropDownList("agentDropdown", (SelectList)ViewBag.AgentList, "All Agent", new { @class = "select-input select_agent", @value = "all" })
+
+
+            @*<select id="agentDropdown" class="select-input agent_dropdown disabled" disabled>
+                <option>Select Agent</option>
+                <option>Agent 1</option>
+                <option>Agent 2</option>
+                <option>Agent 3</option>
+            </select>*@
+        </div>
+        <!-- -------------------------------------------------------------------------------------------------
+            AGENTS AND CUSTOMERS CHECKBOXES
+        -------------------------------------------------------------------------------------------------- -->
+        <div id="customersAgentsOptions" class="customers_agents_options hidden option-pod">
+            <ul>
+                <li>
+                    <input type="checkbox" value="Planned" checked="checked">
+                    <span>Planned</span>
+                </li>
+                <li>
+                    <input type="checkbox" value="Under Planning" checked="checked">
+                    <span>Under Planning</span>
+                </li>
+                <li>
+                    <input type="checkbox" value="In Warehouse" checked="checked">
+                    <span>FG</span>
+                </li>
+                <li>
+                    <input type="checkbox" value="Dispatched" checked="checked">
+                    <span>Dispatched</span>
+                </li>
+            </ul>
+        </div>
+        <!-- -------------------------------------------------------------------------------------------------
+            ORDER BOOK
+        -------------------------------------------------------------------------------------------------- -->
+        <div id="orderBook" class="order_book hidden option-pod">
+            <select class="select-input search_by" id="search_by_orderbook">
+                <option value="by-agent">Search By Agent</option>
+                <option value="by-customer">Search By Customer</option>
+            </select>
+            @Html.DropDownList("agentDropdownOrderBook", (SelectList)ViewBag.AgentList, "All Agent", new { @class = "select-input select_agent", @value = "all" })
+
+            @*<select class="select-input select_agent">
+                <option>Select Agent</option>
+                <option value="agent1">Agent 1</option>
+                <option value="agent2">Agent 2</option>
+                <option value="agent3">Agent 3</option>
+            </select>*@
+            <div id="orderBookCustomersSearch" class="auto_search_input_field hidden">
+                <input type="text" value="Search Customer" class="search-input" id="autoSearchCustomersOrderBook">
+                <a href="#clearSearch">&nbsp;</a>
+            </div>
+            <input type="hidden" id="hfForOrderBook" />
+ 
+            <div class="auto_search_results">
+                <div id="autoSearchCustomerReportCustomersResults" class="auto-search"></div>
+            </div>
+        </div>
+        <!-- -------------------------------------------------------------------------------------------------
+            BD REPORT
+        -------------------------------------------------------------------------------------------------- -->
+        <div id="bdReport" class="bd_report hidden option-pod" >
+            <select class="select-input search_by" id="search_by_bd">
+                <option value="by-agent">Search By Agent</option>
+                <option value="by-customer">Search By Customer</option>
+            </select>
+            @Html.DropDownList("agentDropdownbdReport", (SelectList)ViewBag.AgentList, "All Agent", new { @class = "select-input select_agent", @value = "all" })
+
+            @*<select class="select-input select_agent">
+                <option>Select Agent</option>
+                <option>Agent 1</option>
+                <option>Agent 2</option>
+                <option>Agent 3</option>
+            </select>*@
+
+            <div id="bdReportCustomersSearch" class="auto_search_input_field hidden">
+                <input type="text" value="Search Customer" class="search-input" id="autoSearchCustomersBdReport">
+                <a href="#clearSearch">&nbsp;</a>
+            </div>
+            <input type="hidden" id="hfForBdreport" />
+            <div class="auto_search_results">
+                <div id="autoSearchCustomerReportBdResults" class="auto-search"></div>
+            </div>
+            @Html.DropDownList("papermillList", (SelectList)ViewBag.lstPapermills, "All Machine", new { @class = "select-input select_machine", @value = "all" })
+
+            @*<select class="select-input">
+                <option>Select Machine</option>
+                <option>PM 01</option>
+                <option>PM 02</option>
+                <option>PM 03</option>
+            </select>*@
+        </div>
+        <!-- -------------------------------------------------------------------------------------------------
+            FG REPORT
+        -------------------------------------------------------------------------------------------------- -->
+        <div id="fgReport" class="fg_report hidden option-pod">
+            <select class="select-input">
+                <option>All Machine</option>
+                <option>PM 01</option>
+                <option>PM 02</option>
+                <option>PM 03</option>
+            </select>
+        </div>
+        <!-- -------------------------------------------------------------------------------------------------
+            DATE RANGE
+        -------------------------------------------------------------------------------------------------- -->
+        <div id="reportByDateRange" class="report_by_date_range option-pod hidden">
+            <p class="form-label">From</p>
+            <div class="fix-overflow">
+                <select class="date-select-input" id="fromDateDay">
+                    <option>DD</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+
+                <select class="date-select-input" id="fromDateMonth">
+                    <option>MM</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+
+                <select class="date-select-input year" id="fromDateYear">
+                    <option>YYYY</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                </select>
+            </div>
+
+            <p class="form-label">To</p>
+
+            <div class="fix-overflow" >
+                <select class="date-select-input" id="toDateDay">
+                    <option>DD</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+
+                <select class="date-select-input" id="toDateMonth">
+                    <option>MM</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+
+                <select class="date-select-input year" id="toDateYear">
+                    <option>YYYY</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                </select>
+            </div>
+        </div>
+        <div class="hidden search_reports_button option-pod">
+            <span id="stackHolderErrorFromdate" class="error-msg"></span>
+            <span id="stackHolderErrorTodate" class="error-msg"></span>
+            <a href="#searchReports" class="btn">Search</a>
+        </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------------------------------------
+        REPORT: SEARCH RESULTS
+    ------------------------------------------------------------------------------------------------------ -->
+    <div id="reportResultsPanel" class="hidden report_results_panel">
+      @*Here we are using the _Reports view for shown the result*@
+    </div>
+    <!-- ---------------------------------------------------------------------------------------------------------
+        QUICK VIEW
+    ---------------------------------------------------------------------------------------------------------- -->
+    <div id="quickView" class="quick_view">
+        <h2>Download Report Below</h2>
+        <div class="quick_view_recent_reports" id="downloadAgentReport">
+
+            @*<ul>
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title"><strong>Report Name</strong> [07-12-2015]</p>
+
+                        <a href="#downloadReport" class="download_report" data-id="report-1234-123456-1234"><img src="images/download.png"></a>
+                    </div>
+                </li>
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title"><strong>Report Name</strong> [07-13-2015]</p>
+
+                        <a href="#downloadReport" class="download_report" data-id="report-1234-123456-1234"><img src="images/download.png"></a>
+                    </div>
+                </li>
+            </ul>*@
+        </div>
+    </div> <!-- .stakeholder_tab -->
+</div>
+<!-- #dashboard -->

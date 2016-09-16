@@ -1,0 +1,107 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@*@model IEnumerable<MWV.Models.Product_prices>*@
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    
+    ViewBag.Title = "Index";
+    string msg = @ViewBag.Message;
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+        border-collapse: collapse;
+    }
+</style>
+
+
+<h2 style="margin-top:80px">ProductPrice HomePage->@Html.ActionLink("Create New Product price", "Create")</h2>
+<center class="form-label"><b>List Of Product price</b></center>
+<span id="ErrorMsgs"><p class='error-msg'>@msg</p></span>
+
+<div id="DivPaging" style="padding: 10px 0 20px 0;line-height: 188%;">
+    @Html.PagedListPager((IPagedList)ViewBag.PageData, page => Url.Action("Index", new { page, @class = "pagination" }), new PagedListRenderOptions { DisplayEllipsesWhenNotShowingAllPageNumbers = false, DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never })
+</div>
+
+<table align="center" style="font-size: 12px;" id="tblPagingData">
+    <tr>
+        <th>
+            <h4><b>Customer Name </b></h4>
+        </th>
+        <th>
+            <h4><b>Product Code </b></h4>
+        </th>
+        <th>
+            <h4><b>Shade code</b></h4>
+        </th>
+        <th>
+            <h4><b>Unit Price</b></h4>
+        </th>
+        <th>
+            <h4><b>Start Date</b></h4>
+        </th>
+        <th>
+            <h4><b>End Date</b></h4>
+        </th>
+        <th>
+            <h4><b>Action</b></h4>
+        </th>
+
+    </tr>
+    @foreach (var item in ViewBag.PageData)
+    {
+
+        string stDt = @item.start_date.ToShortDateString();
+        string endDt = @item.end_date.ToShortDateString();
+
+        <tr>
+            <td>
+                @item.Customer.name
+            </td>
+            <td>
+                @item.product_code
+            </td>
+            <td>
+                @item.shade_code
+            </td>
+            <td>
+                @item.unit_price
+            </td>
+            <td>
+                @*@item.start_date*@
+                @stDt
+            </td>
+            <td>
+                @*@item.end_date*@
+                @endDt
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Details", new { id = @item.product_price_id })
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+
+
+<script type="text/javascript">
+
+    $('#DivPaging').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#tblPagingData').show();
+                                    $('#tblPagingData').html(result);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+</script>

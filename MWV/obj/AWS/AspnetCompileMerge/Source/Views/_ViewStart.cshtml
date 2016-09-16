@@ -1,0 +1,17 @@
+﻿@{
+    var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+    var Action = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+
+    string Newlayout = "";
+    if (controller == "Account" || (controller == "Truck_dispatch" && (Action == "TruckInward" || Action == "TruckOutward")))
+    {
+        Newlayout = null;
+    }
+    else{
+        Newlayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    Layout = Newlayout;
+}
+@*@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@

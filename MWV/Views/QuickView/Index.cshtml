@@ -1,0 +1,223 @@
+﻿@{
+    ViewBag.Title = "QuickView";
+}
+
+<h4>Customers View </h4>
+<table class="table">
+    <tr>
+        <th>
+            Customer Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Phone
+        </th>
+        <th>
+            Address1
+        </th>
+        <th>
+            City
+        </th>
+        <th>
+            Status
+        </th>
+    </tr>
+    @foreach (var item in Model.CustomerDetails)
+    {
+        <tr>
+            <td>
+                <a href="@Url.Action("Index", "Customer")"><span>@item.name</span></a>
+            </td>
+            <td>
+                @item.email
+            </td>
+            <td>
+                @item.phone
+            </td>
+            <td>
+                @item.address1
+            </td>
+            <td>
+                @item.city
+            </td>
+            <td>
+                @item.status
+            </td>
+        </tr>
+    }
+</table>
+
+<h4>Orders View </h4>
+<table class="table">
+    <tr>
+        <th>
+            Order_Id
+        </th>
+        <th>
+            Order_Date
+        </th>
+        <th>
+            Customer_Id
+        </th>
+        <th>
+           Status
+        </th>
+        <th>
+            Requested_Delivery_Date
+        </th>
+        <th>
+            Remarks
+        </th>
+        <th>
+            Amount
+        </th>
+        <th>
+           Papermill_Id
+        </th>
+    </tr>
+
+    @foreach (var item in Model.OrderDetails)
+    {
+        <tr>
+            <td>
+                @item.order_id
+            </td>
+            <td>
+                @item.order_date
+            </td>
+            <td>
+                @item.Customer.customer_id
+            </td>
+            <td>
+                @item.status
+            </td>
+            <td>
+                @item.requested_delivery_date
+            </td>
+            <td>
+                @item.remarks
+            </td>
+            <td>
+                @item.amount
+            </td>
+            <td>
+                @item.papermill_id
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<h4>Truck Dispatches </h4>
+<table class="table">
+    <tr>
+        <th>
+            Truck_Dispatch_Id
+        </th>
+        <th>
+            Truck_No
+        </th>
+        <th>
+            Estimated_Arrival
+        </th>
+        <th>
+            Estimated_Capacity
+        </th>
+        <th>
+            Actual_Arrival_At_Gate
+        </th>
+        <th>
+            Agent_Dispatched_On
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Left_Factory_On
+        </th>
+        <th>
+            Loaded_Capacity
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model.Truck_dispatches)
+    {
+        <tr>
+            <td>
+                @item.truck_dispatch_id
+            </td>
+            <td>
+                @item.truck_no
+            </td>
+            <td>
+                @item.estimated_arrival
+            </td>
+            <td>
+                @item.estimated_capacity
+            </td>
+            <td>
+                @item.actual_arrival_at_gate
+            </td>
+            <td>
+                @item.agent_dispatched_on
+            </td>
+            <td>
+                @item.status
+            </td>
+            <td>
+                @item.left_factory_on
+            </td>
+            <td>
+                @item.loaded_capacity
+            </td>
+        </tr>
+    }
+
+</table>
+
+@*<h4>Truck Dispatch Details </h4>
+<table class="table">
+    <tr>
+        <th>
+            Truck_Dispatch_Details_Id
+        </th>
+        <th>
+            Truck_Dispatch_Id
+        </th>
+        <th>
+            Order_Id
+        </th>
+        <th>
+            Order_Product_Id
+        </th>
+        <th>
+            Quantity
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Truck_dispatch_details)
+    {
+        <tr>
+            <td>
+                @item.truck_dispatch_details_id
+            </td>
+            <td>
+                @item.Truck_dispatches.truck_dispatch_id
+            </td>
+            <td>
+                @item.Order.order_id
+            </td>
+            <td>
+                @item.Truck_dispatches.estimated_capacity
+            </td>
+            <td>
+                @item.qty
+            </td>
+        </tr>
+    }
+
+</table>*@

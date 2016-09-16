@@ -1,0 +1,50 @@
+﻿@model IEnumerable<IdentitySample.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+        border-collapse:collapse;
+    }
+    </style>
+
+<h2>User HomePage->@Html.ActionLink("Create New User","Create")</h2>
+    <br />
+  &nbsp;<b class="error-msg">@ViewBag.StatusMessage</b>
+  
+    <br />
+<center class="form-label"><b>List Of Users</b></center>      
+ 
+<table align="center" >
+    <tr>
+        <th>
+            <h1><b>UserName</b></h1> 
+        </th>
+        <th>
+           <h1><b>Action</b></h1>
+        </th>
+        
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+             
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })|
+                @Html.ActionLink("Reset Password", "ResetPassword", new { code = item.Id })
+            </td>
+
+            
+        </tr>
+    }
+
+</table>
+<br />

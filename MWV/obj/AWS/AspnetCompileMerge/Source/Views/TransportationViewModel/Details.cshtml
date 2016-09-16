@@ -1,0 +1,82 @@
+﻿@model MWV.ViewModels.Truck_dispatchViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Truck_dispatchViewModel</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.papermill_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.papermill_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estimated_capacity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estimated_capacity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.truck_no)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.truck_no)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.agent_dispatched_on)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.agent_dispatched_on)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estimated_arrival)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estimated_arrival)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.agent_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.agent_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.order_product_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.order_product_id)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.truck_dispatch_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

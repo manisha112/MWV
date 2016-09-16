@@ -1,0 +1,120 @@
+﻿@model IEnumerable<MWV.Models.Truck_dispatches>
+
+    <div class="fix-overflow" id="closeImg">
+        <a href="#closeIncomingVehicles" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+
+
+    <h2>Scheduled Vehicles</h2>
+    <ul>
+        @if (ViewBag.NoRecordMsg != null)
+        {
+        <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+        }
+        @foreach (var item in Model)
+        {
+        <li>
+            <p class="title"><strong>@item.truck_no</strong></p>
+
+            <p class="details">
+                Expected Arrival:  @item.estimated_arrival.Value.ToString("dd MMM yyyy hh:mm tt")
+
+            </p>
+            <input type="checkbox" data-id="vehicleAttention-@item.truck_dispatch_id"> &nbsp; Arrived
+
+            <div id="vehicleAttention" class="vehicle_attention scheduled hidden">
+                <div class="fix-overflow">
+                    <a href="#closeVehicleAttention" class="close-panel"><img src="/images/close-panel.png"></a>
+                </div>
+                <p class="title"><strong>Attention!</strong></p>
+
+                <p class="details">Are you sure you want to mark vehicle @item.truck_no as arrived?</p>
+                <div class="fix-overflow">
+                    <a href="#closeVehicleAttention" class="btn">Cancel</a>
+                </div>
+                <div class="VehicleArrived">
+                    <a href="/GateKeeper/SaveArrivedVehicle/@item.truck_dispatch_id" data-id="@item.truck_dispatch_id" class="btn">Mark Arrived</a>
+                </div>
+            </div>
+
+        </li>
+        }
+
+    </ul>
+
+  
+                    
+    <script type="text/javascript">
+        $('#closeImg').on('click', 'a[href="#closeIncomingVehicles"]', function () {
+            $.ajax({
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html',
+                context: document.body,
+            })
+                                    .success(function (result) {
+
+                                        $('a[href="#closeIncomingVehicles"]').closest('.incoming_vehicles_panel').hide();
+                                    })
+                                   .error(function (xhr, ajaxOptions, thrownError) {
+                                   })
+
+
+        });
+        $('.fix-overflow').on('click', 'a', function () {
+            $.ajax({
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html',
+                context: document.body,
+            })
+                                    .success(function (result) {
+
+                                        $('a[href="#closeVehicleAttention"]').closest('.vehicle_attention').hide();
+                                        $('a[href="#closeVehicleAttention"]').closest('li').find('input[type="checkbox"]').prop('checked', false);
+                                    })
+                                   .error(function (xhr, ajaxOptions, thrownError) {
+                                   })
+
+
+        });
+        $('.VehicleArrived').on('click', 'a', function () {
+            $.ajax({
+                url: this.href,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html',
+                context: document.body,
+                async: false
+            })
+                                   .success(function (result) {
+                                       $(this).closest('li').remove();
+                                   })
+                                  .error(function (xhr, ajaxOptions, thrownError) {
+                                  })
+
+            $(this).closest('li').remove();
+
+            $.ajax({
+                url: "/GateKeeper/TruckInward/",
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html',
+                context: document.body,
+            })
+               .success(function (result) {
+
+                   //if ($('#incomingVehiclesPanel').is(':hidden')) {
+                   // $('#arrivedVehiclesPanel').hide();
+                   $('#incomingVehiclesPanel').html(result);
+                   $('#incomingVehiclesPanel').show();
+                   //} else {
+                   //    $('#incomingVehiclesPanel').hide();
+                   //}
+                   return false;
+               })
+                   .error(function (xhr, ajaxOptions, thrownError) {
+                   })
+
+        });
+    </script>

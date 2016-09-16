@@ -1,0 +1,85 @@
+﻿@model IEnumerable<MWV.Repository.Implementation.Truck_dispatchRepository.tempTruckDispatchDetails>
+
+
+<ul>
+@foreach (var item in Model)
+{
+    <li class="current_product" id="cargo_@item.sequenceNumber">
+        <div class="fix-overflow">
+            <p class="po_number"><strong>PO: @item.order_id</strong></p>
+            <a href="#removeCargo" class="remove_cargo"><img src="/images/delete.png"></a>
+        </div>
+
+        <p class="title"><strong>@Session["selectedOrderCustName"]</strong></p>
+        @* here display the product width and product code etc. *@
+        @*<p class="details">@item.order_product_id</p>*@
+        <p class="details">@string.Format("{0:#.00}", item.width) cm x @item.bf_code BF @item.gsm_code GSM @item.shade_code</p>
+        <p class="details">Qty. For Loading: @item.qty MT</p>
+        <div class="product_attention hidden">
+            <div class="fix-overflow">
+                <a href="#closeCargoAttention" class="close-panel"><img src="/images/close-panel.png"></a>
+            </div>
+            <p class="alert_title"><strong>Attention!</strong></p>
+            <p class="alert_details">Are you sure you want to remove this cargo?</p>
+
+            <a href="#closeCargoAttention" class="btn">Cancel</a>
+
+            <a href="#confirmRemoveCargo" onclick="DeleteCargo(@item.sequenceNumber);" class="btn">Remove</a>
+            @* data-id="mh12-123-12345" *@
+        </div>
+    </li>
+}
+</ul>
+
+
+
+<script language="javascript">
+
+    function DeleteCargo(seqNum) {
+        $.ajax(
+          {
+              cache: false,
+              type: "POST",
+              url: "/Truck_dispatch/confirmRemoveCargo/" + seqNum,
+              contentType: "application/html; charset=utf-8",
+              dataType: 'html',
+              context: document.body,
+              success: function () {
+                  //alert("product has been removed from the session");
+              }
+          });
+
+        var link = "#cargo_" + seqNum;
+        $('.product_attention').closest(link).remove();
+        $('.product_attention').hide();
+        $('html,body').animate({
+            scrollTop: $('#createOrderPanel').position().top + 140
+        }, 400);
+
+       
+    }
+
+    $('#tmpOrderSearchshowCargoList').on('click', 'a[href="#removeCargo"]', function () {
+        //alert("remove cargo is clicked");
+        
+        
+        if ($(this).closest('.current_product').find('.product_attention').is(':hidden')) {
+            $(this).closest('.current_product').find('.product_attention').show();
+
+            $('html,body').animate({
+                scrollTop: $(window).scrollTop() + 120
+            });
+        }
+
+       
+    });
+    $('.product_attention').on('click', 'a[href="#closeCargoAttention"]', function () {
+        $(this).closest('.product_attention').hide();
+
+        $('html,body').animate({
+            scrollTop: $(window).scrollTop() - 120
+        });
+
+       
+    });
+</script>

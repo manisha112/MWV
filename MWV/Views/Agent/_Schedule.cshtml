@@ -1,0 +1,28 @@
+﻿<ul>
+
+    @{
+        var item = ViewBag.scheduleDetails;
+        <p class="error-msg"> @ViewBag.norecordMsg</p>
+        for (var i = 0; i <= item.Count - 1; i++)
+        {
+            var todaydt = DateTime.Now.ToString("dd MMM yyy");
+            if (i == 0)
+            {
+                <li>
+                    <p class="details">@todaydt - @item[i].end_date.ToString("dd MMM yyy")</p>
+
+                    <span class="paper-shade">@item[i].shade_code</span>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <p class="details">@item[i].start_date.ToString("dd MMM yyy") - @item[i].end_date.ToString("dd MMM yyy")</p>
+
+                    <span class="paper-shade">@item[i].shade_code</span>
+                </li>
+
+            }
+        }
+    }
+</ul>

@@ -1,0 +1,88 @@
+﻿@model MWV.ViewModels.Truck_dispatchViewModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Truck_dispatchViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.papermill_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.papermill_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estimated_capacity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estimated_capacity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.truck_no)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.truck_no)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.agent_dispatched_on)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.agent_dispatched_on)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estimated_arrival)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estimated_arrival)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.agent_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.agent_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.order_product_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.order_product_id)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

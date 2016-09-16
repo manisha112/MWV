@@ -1,0 +1,34 @@
+﻿
+<div class="fix-overflow">
+    <h3>Recent Production Plans</h3>
+    @if (ViewBag.NoRecordMsg == null)
+    {
+        <a href="#seeAllRecentProductionPlans" class="see_all">See All</a>
+    }
+</div>
+<ul>
+    <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+    @foreach (var item in ViewBag.ProductionPlanlist)
+    {
+        <li>
+            <div class="fix-overflow">
+                <p class="title dl_title"><strong>@item.estimated_start.ToString("dd MMM yyy hh:mm tt")</strong></p>
+
+                <a href="#downloadPlans" class="download_plans" data-id="@item.srNo"><img src="/images/download.png"></a>
+            </div>
+            <p class="details">Plan No: @item.srNo</p>
+            <p class="details">Assigned to @item.papermillName</p>
+
+            <p><a href="#seePlansDetails" class="see-details" data-id="@item.srNo">See Details</a></p>
+        </li>
+    }
+</ul>
+<script>
+    $('#quickViewRecentProductionPlans').on('click', 'a[href="#downloadPlans"]', function () {
+
+        var orderid = $(this).attr("data-id");
+        window.location = "ProductionPlanner/GetPdffileForPP?orderid=" + orderid
+
+
+    });
+</script>

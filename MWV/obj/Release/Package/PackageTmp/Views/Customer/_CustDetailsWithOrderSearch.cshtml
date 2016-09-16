@@ -1,0 +1,408 @@
+﻿<div class="list-item-wrapper">
+    <div class="customer-list-item">
+        @foreach (var item in Model)
+        {
+            <div class="fix-overflow">
+                <a href="#closeCurrentCustomer" class="close-panel"><img src="/images/close-panel.png"></a>
+
+                <p class="title"><strong>@item.name</strong></p>
+            </div>
+
+            string strAddress = "";
+            string cityState = "";
+            strAddress = @item.address1 + "<br />" + @item.address2 + "<br />" + @item.address3;
+
+            if (strAddress.Contains("<br /><br />"))
+                strAddress = strAddress.Remove(strAddress.Length - 6);
+
+            if (strAddress.Substring(strAddress.Length - 1) == ">")
+                strAddress = strAddress.Remove(strAddress.Length - 6);
+
+            cityState = @item.city + " / " + @item.state + " / " + @item.country + " / " + @item.pincode;
+            if (cityState.Contains(" /  /  / "))
+                cityState = cityState.Remove(cityState.Length - 3);
+            if (cityState.Contains(" /  / "))
+                cityState = cityState.Remove(cityState.Length - 3);
+            if (cityState.Substring(cityState.Length - 2) == "/ ")
+                cityState = cityState.Remove(cityState.Length - 3);
+
+                <p>@Html.Raw(@strAddress)</p>
+                <p>@cityState</p>
+
+                <a href="#createOrderFromCustomer" data-id="@item.customer_id" data-value="@item.customer_id" data-name="@item.name" class="btn">Create Order</a>
+        }
+        <p>View Order History</p>
+
+        <select name="show_orders_type" class="select-input">
+            <option>Show All Orders</option>
+        </select>
+
+        <div class="from_to">
+            <p class="form-label">From</p>
+
+            <div class="fix-overflow">
+                <select class="date-select-input" id="customerOrderHistoryFromDateDay">
+                    <option>DD</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+
+                <select class="date-select-input" id="customerOrderHistoryFromDateMonth">
+                    <option>MM</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+
+                <select class="date-select-input year" id="customerOrderHistoryFromDateYear">
+                    <option>YYYY</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                </select>
+            </div>
+
+            <p class="form-label">To</p>
+
+            <div class="fix-overflow">
+                <select class="date-select-input" id="customerOrderHistoryToDateDay">
+                    <option>DD</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+
+                <select class="date-select-input" id="customerOrderHistoryToDateMonth">
+                    <option>MM</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+
+                <select class="date-select-input year" id="customerOrderHistoryToDateYear">
+                    <option>YYYY</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                </select>
+            </div>
+        </div>
+        @* <div id="tmpViewOrder"> div added Rajni so that the on click function can be written.*@
+
+
+        @*<div id="ErrorMsgInvalidFromDate" class="hidden">
+                <p class="error-msg ">Please select a Valid From date</p>
+            </div>
+            <div id="ErrorMsgInvalidToDate" class="hidden">
+                <p class="error-msg ">Please select a Valid To date</p>
+            </div>
+            <div id="reqCustViewOrderHistoryErrors" class="hidden">
+                <p class="error-msg"> To Date should be greater than equal to From Date !</p>
+            </div>*@<br />
+        <span id="ErrorMsgInvalidFromDate" class="error-msg"></span><br />
+        <span id="ErrorMsgInvalidToDate" class="error-msg"></span>
+        <span id="reqCustViewOrderHistoryErrors" class="error-msg"></span>
+
+
+
+
+
+        <a href="#viewOrderHistory" class="btn">View</a>
+        @*</div>*@
+        <div class="customer_orders hidden" id="tmpCustOrders">
+            <span id="tmpCurrentCustOrders"></span>
+        </div> <!-- .customer_orders -->
+    </div> <!-- .customer_list_item -->
+</div> <!-- .list_item_wrapper -->
+
+<script language="javascript">
+    $('#selectedCustomerResults').on('click', 'a[href="#viewOrderHistory"]', function () {
+        //
+        //var selectedCustomerid = $('select#customersSelectCustomerDropdown').val();
+        //var selCustName = $('select#customersSelectCustomerDropdown option:selected').text();
+        //alert("inside on click of selectedCustomerResults --> viewOrderHistory");
+        $('#ErrorMsgInvalidToDate').html('');
+        $('#ErrorMsgInvalidFromDate').html('');
+        $('#reqCustViewOrderHistoryErrors').html('');
+        // make a ajax call and post the datest to filter the order records to fill the tmp span 'tmpCurrentCustOrders'
+        var fromDateValidate = $('#customerOrderHistoryFromDateDay').val() + "/" + $('#customerOrderHistoryFromDateMonth').val() + "/" + $('#customerOrderHistoryFromDateYear').val();
+        var toDateValidate = $('#customerOrderHistoryToDateDay').val() + "/" + $('#customerOrderHistoryToDateMonth').val() + "/" + $('#customerOrderHistoryToDateYear').val();
+        var fromDate = ValidateDate(fromDateValidate);
+        var toDate = ValidateDate(toDateValidate);
+        if ($('#customerOrderHistoryFromDateDay').val() == "DD" && $('#customerOrderHistoryFromDateMonth').val() == "MM" && $('#customerOrderHistoryFromDateYear').val() == "YYYY"
+     && $('#customerOrderHistoryToDateDay').val() == "DD" && $('#customerOrderHistoryToDateMonth').val() == "MM" && $('#customerOrderHistoryToDateYear').val() == "YYYY") {
+            $('#ErrorMsgInvalidFromDate').html("Please select a Valid From date !");
+            $("#tmpCustOrders").hide();
+            $('#ErrorMsgInvalidToDate').html("Please select a Valid To date !");
+        } else if ($('#customerOrderHistoryFromDateDay').val() == "DD" || $('#customerOrderHistoryFromDateMonth').val() == "MM" || $('#customerOrderHistoryFromDateYear').val() == "YYYY") {
+            $('#ErrorMsgInvalidFromDate').html("Please select a Valid From date !");
+            $("#tmpCustOrders").hide();
+            $('#ErrorMsgInvalidToDate').html('');
+            if ($('#customerOrderHistoryToDateDay').val() == "DD" || $('#customerOrderHistoryToDateMonth').val() == "MM" || $('#customerOrderHistoryToDateYear').val() == "YYYY") {
+                $('#ErrorMsgInvalidToDate').html("Please select a Valid To date !");
+                $("#tmpCustOrders").hide();
+            }
+        }
+        else if ($('#customerOrderHistoryToDateDay').val() == "DD" || $('#customerOrderHistoryToDateMonth').val() == "MM" || $('#customerOrderHistoryToDateYear').val() == "YYYY") {
+            $('#ErrorMsgInvalidFromDate').html('');
+            $("#tmpCustOrders").hide();
+            $('#ErrorMsgInvalidToDate').html("Please select a Valid To date !");
+            if (fromDate == false) {
+                $('#ErrorMsgInvalidFromDate').html("<p class='error-msg'>Please select a Valid From date!</p>");
+                //  $('#ErrorMsgInvalidToDate').html("<p class='error-msg'>Please select a Valid To date!</p>");s
+            }
+        } else if (toDate == false && fromDate == false) {
+            $('#ErrorMsgInvalidToDate').html("Please select a Valid To date !");
+            $("#tmpCustOrders").hide();
+            $('#ErrorMsgInvalidFromDate').html("Please select a Valid From date !");
+        } else if (toDate == false) {
+            $('#ErrorMsgInvalidFromDate').html('');
+            $("#tmpCustOrders").hide();
+            $('#ErrorMsgInvalidToDate').html("Please select a Valid To date !");
+
+        } else if (fromDate == false) {
+            $('#ErrorMsgInvalidToDate').html('');
+            $("#tmpCustOrders").hide();
+            $('#ErrorMsgInvalidFromDate').html("Please select a Valid From date !");
+        }
+        else {
+            $('#ErrorMsgInvalidToDate').html('');//
+            $('#ErrorMsgInvalidFromDate').html('');//$('#customerOrderHistoryToDateDay').val()
+            var fromdtChk = $('#customerOrderHistoryFromDateYear').val() + "/" + $('#customerOrderHistoryFromDateMonth option:selected').text() + "/" + $('#customerOrderHistoryFromDateDay').val();
+            var todtChk = $('#customerOrderHistoryToDateYear').val() + "/" + $('#customerOrderHistoryToDateMonth option:selected').text() + "/" + $('#customerOrderHistoryToDateDay').val();
+
+            var dateCompareResult = CompareDate(fromdtChk, todtChk);
+            if (dateCompareResult != true) {
+                $("#tmpCustOrders").hide();
+                $('#reqCustViewOrderHistoryErrors').html("To Date should be greater than equal to From Date !");
+            }
+            else {
+
+                $('#ErrorMsgInvalidToDate').html('');
+                $('#ErrorMsgInvalidFromDate').html('');
+                $('#reqCustViewOrderHistoryErrors').html('');
+                var datatosend = {
+                    selectedCustomerid: $('select#customersSelectCustomerDropdown').val(),
+                    fromDate: $('#customerOrderHistoryFromDateDay').val() + "/" + $('#customerOrderHistoryFromDateMonth').val() + "/" + $('#customerOrderHistoryFromDateYear').val(),
+                    toDate: $('#customerOrderHistoryToDateDay').val() + "/" + $('#customerOrderHistoryToDateMonth').val() + "/" + $('#customerOrderHistoryToDateYear').val()
+                };
+                $.ajax(
+                              {
+                                  cache: false,
+                                  type: "POST",
+                                  url: "/Customer/GetCurrentCustOrders/",
+                                  data: datatosend,
+                                  dataType: "html",
+                                  context: document.body,
+                                  success: function (data) {
+                                      //alert(data);
+                                      //$('.customer_orders').show();
+                                      $('#tmpCurrentCustOrders').html(data);
+                                  }
+                              });
+
+                $(this).next('.customer_orders').show();
+
+                $('html,body').animate({
+                    scrollTop: $('#customersPanel').position().top + $(this).closest('.customer-list-item').height() - 400
+                }, 400);
+
+            }
+
+        }
+
+
+
+    });
+    function customersSeeOrderDetails(id) {
+
+        //alert("id: "+ id);
+        $('#customersPanel').hide();
+        //alert($('#orderDetails-' + id).show());
+        //$('#tmpOrderDetails-' + id).show();
+        //$('#selectOrder').hide();
+        //$('#ordersPanel .close_orders_panel').hide();
+        //$('#ordersPanel .order_details').find('.arrange_new_transportation .cargo_list').hide();
+        //alert($('#ordersPanel').show());
+        //$('#tmpOrderDetails').show();
+        $.ajax({
+            url: "/quickView/GetOrderDetailsMaster/" + id,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                           .success(function (result) {
+                               $('#customersPanel').hide();
+                               $('#transportationPanel').hide();
+                               $('.close_orders_panel').hide();
+                               $('#selectOrder').hide();
+                               $('#ordersResultsPanel').hide();
+                               //$('#orderDetails-' + id).show();
+                               $('#orderDetails').show();
+                               $('#tmpOrderDetails').html(result);
+                               $('#ordersPanel').show();
+                               // $('#ordersPanel').html(result);
+                           })
+                          .error(function (xhr, ajaxOptions, thrownError) {
+                          })
+
+        $.ajax({
+            url: "/quickView/GetOrderDetailsChild/" + id,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                               .success(function (result) {
+                                   $('#customersPanel').hide();
+                                   $('#transportationPanel').hide();
+                                   $('.close_orders_panel').hide();
+                                   $('#selectOrder').hide();
+                                   $('#ordersResultsPanel').hide();
+                                   //$('#orderDetails-' + id).show();
+                                   $('#orderDetails').show();
+                                   $('#tmpOrderProdsList').html(result);
+                                   $('#ordersPanel').show();
+                                   // $('#ordersPanel').html(result);
+                               })
+                              .error(function (xhr, ajaxOptions, thrownError) {
+                              })
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top
+        }, 400);
+    }
+
+
+
+    $('#selectedCustomerResults').on('click', 'a[href="#seeOrderDetails"]', function () {
+        customersSeeOrderDetails($(this).attr('data-id'));
+
+
+    });
+    //$('#tmpViewOrder').on('click', 'a[href="#viewOrderHistory"]', function () {
+
+    //    //var selectedCustomerid = $('select#customersSelectCustomerDropdown').val();
+    //    //var selCustName = $('select#customersSelectCustomerDropdown option:selected').text();
+    //   // alert(selectedCustomerid);
+    //    // added by Rajni
+    //    // make a ajax call and post the datest to filter the order records to fill the tmp span 'tmpCurrentCustOrders'
+    //    var datatosend = {
+    //        selectedCustomerid : $('select#customersSelectCustomerDropdown').val(),
+    //        fromDate: $('#customerOrderHistoryFromDateDay').val() + "/" + $('#customerOrderHistoryFromDateMonth').val() + "/" + $('#customerOrderHistoryFromDateYear').val(),
+    //     toDate: $('#customerOrderHistoryToDateDay').val() + "/" + $('#customerOrderHistoryToDateMonth').val() + "/" + $('#customerOrderHistoryToDateYear').val()
+    //};
+    //$.ajax(
+    //              {
+    //                  cache: false,
+    //                  type: "POST",
+    //                  url: "/Customer/GetCurrentCustOrders/",
+    //                  data: datatosend,
+    //                  dataType: "html",
+    //                  context: document.body,
+    //                  success: function (data) {
+    //                      alert(data);
+    //                      $('.customer_orders').show();
+    //                      $('#tmpCurrentCustOrders').html(data);
+    //                  }
+    //              });
+
+    //    // added by Rajni
+
+    //});
+    function CompareDate(fromdtChk, todtChk) {
+
+        // if (Date.parse(fromdate) > Date.parse(todate)) {
+        if (Date.parse(fromdtChk) > Date.parse(todtChk)) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    
+
+
+</script>

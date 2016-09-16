@@ -1,0 +1,90 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IEnumerable<MWV.Models.Order>
+
+<div class="fix-overflow">
+    <a href="#closeCustomerOrdersPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+
+
+    <ul>
+@if (ViewBag.NoRecordMsg != null)
+    {
+    <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+    }
+    else
+    {
+        <li>
+            @{
+        if (ViewBag.Pagecount > 5)
+        { 
+               <div id="SerachCustomer">
+                @Html.PagedListPager((IPagedList)ViewBag.lstOrders, page => Url.Action("GetCurrentCustOrders", new { page, @class = "pagination" }), new PagedListRenderOptions { DisplayEllipsesWhenNotShowingAllPageNumbers = false, DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never })
+            </div>
+            }
+    }
+            
+        </li>
+        foreach (var item in ViewBag.lstOrders)
+        {
+            <li>
+                <div class="fix-overflow">
+                    <p class="title"><strong>PO: @item.order_id</strong></p>
+
+                    <a href="#downloadOrder" class="download_order" data-id="@item.order_id"><img src="/images/download.png"></a>
+                </div>
+
+                <p class="details">Placed On: @item.order_date.ToString("dd MMM yyyy hh:mm tt")</p>
+
+                @*<p><a href="#seeOrderDetails" class="see-details" data-id="mwv-1234-123456-1234">See Details</a></p>*@
+                <p><a href="#seeOrderDetails" class="see-details" data-id="@item.order_id">See Details</a></p>
+            </li>
+        }
+    }
+    </ul>
+    
+</div>
+
+                      <script language="javascript">
+
+                          $('#SerachCustomer').on('click', 'a', function () {
+                              $.ajax({
+                                  url: this.href,
+                                  contentType: "application/html; charset=utf-8",
+                                  type: "GET",
+                                  dataType: 'html',
+                                  context: document.body,
+                              })
+                                                      .success(function (result) {
+                                                          $('.customer_orders').show();
+                                                          $('#tmpCurrentCustOrders').show();
+                                                          $('#tmpSearchResCustsAlphabetically').show();
+                                                          $('#tmpCurrentCustOrders_alphabetically').html(result);
+                                                          $('#tmpCurrentCustOrders').html(result);
+                                                      })
+                                                     .error(function (xhr, ajaxOptions, thrownError) {
+                                                     })
+                             
+                              //$(this).next('.customer_orders').show();
+
+                              $('html,body').animate({
+                                  scrollTop: $('#customersPanel').position().top + $(this).closest('.customer-list-item').height()
+                              }, 400);
+
+                          });
+
+                          $('#tmpCustOrders').on('click', 'a[href="#downloadOrder"]', function () {
+                              var orderid = $(this).attr("data-id");
+                              window.location = "Agent/GetPdffile?orderid=" + orderid
+
+
+                          });
+
+                          $('#tmpSearchResCustsAlphabetically').on('click', 'a[href="#downloadOrder"]', function () {
+                              var orderid = $(this).attr("data-id");
+                              window.location = "Agent/GetPdffile?orderid=" + orderid
+
+
+                          });
+
+    </script>

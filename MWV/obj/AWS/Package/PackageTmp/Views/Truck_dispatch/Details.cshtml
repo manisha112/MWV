@@ -1,0 +1,145 @@
+﻿@model MWV.Models.Truck_dispatches
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Truck_dispatches</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        @*<dt>
+            @Html.DisplayNameFor(model => model.agent_id)
+        </dt>*@
+
+        @*<dd>
+            @Html.DisplayFor(model => model.agent_id)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.truck_no)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.truck_no)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estimated_arrival)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estimated_arrival)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estimated_capacity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estimated_capacity)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.actual_arrival_at_gate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.actual_arrival_at_gate)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.agent_dispatched_on)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.agent_dispatched_on)
+        </dd>
+
+        @*<dt>
+        @Html.DisplayNameFor(model => model.status)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.status)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.left_factory_on)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.left_factory_on)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.loaded_capacity)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.loaded_capacity)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.created_on)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.created_on)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.created_by)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.created_by)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.modified_on)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.modified_on)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.modified_by)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.modified_by)
+    </dd>*@
+
+    </dl>
+    <h4>Cargo Details</h4>
+    <table class="table">
+        <tr>
+            <th>truck_dispatch_id</th>
+            <th>order_id</th>
+            <th>order_product_id</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Truckdispatchdetails)
+        {
+            <tr>
+                <td>@item.truck_dispatch_id</td>
+                <td>@item.order_id</td>
+                <td>@item.order_product_id</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.truck_dispatch_details_id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.truck_dispatch_details_id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.truck_dispatch_details_id })
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.truck_dispatch_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,96 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+
+@model IEnumerable<MWV.Models.Order>
+
+    <div class="fix-overflow">
+        <a href="#closeOrdersResultsPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+
+    <ul>
+        @if (ViewBag.NoRecordMsg != null)
+        {
+           <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+        }
+        else
+        {
+        <li>
+            @{
+            if (ViewBag.Pagesize > 5)
+            {
+
+                <div id="PagerOrderSearch">
+                    @Html.PagedListPager((IPagedList)ViewBag.lstOrder, page => Url.Action("OrdersSearchResults", new { page, @class = "pagination" }), new PagedListRenderOptions { DisplayEllipsesWhenNotShowingAllPageNumbers = false, DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never })
+                </div>
+            }
+            }
+        </li>
+
+            foreach (var item in ViewBag.lstOrder)
+            {
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title"><strong>PO: @item.order_id</strong></p>
+
+                        <a href="#downloadOrder" class="download_order" data-id="@item.order_id"><img src="/images/download.png"></a>
+                    </div>
+
+                    <p><a href="#seeOrderDetails" class="see-details" data-order-id="@item.order_id">See Details</a></p>
+
+                    <p class="details">Placed On: @item.order_date.ToString("dd MMM yyyy hh:mm tt")</p>
+                    @{
+                if (item.status == "Under Planning") // Open = "Under Planning"
+                {
+                    <span class="order-status os-open" data-status="open">@item.status</span>
+                }
+                else if (item.status == "Created") // Used internally by the application
+                {
+                    <span class="order-status os-created">@item.status</span>
+                }
+                else if (item.status == "In Warehouse") //Dispatch Ready = "In Warehouse"
+                {
+                    <span class="order-status os-dispatch-ready">@item.status</span>
+                }
+                else if (item.status == "Planned")
+                {
+                    <div class="order-status up_top os-schedule-ready">@item.status</div> // schedule ready = "Planned"
+                }
+                else if (item.status == "Dispatched") // Used internally by the application
+                {
+                    <span class="order-status os-complete">@item.status</span>
+                }
+}
+
+                </li>
+            }
+        }
+    </ul>
+
+
+    <script type="text/javascript">
+
+        $('#PagerOrderSearch').on('click', 'a', function () {
+            $.ajax({
+                url: this.href,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html',
+                context: document.body,
+            })
+                                    .success(function (result) {
+                                        $('#ordersResultsPanel').slideDown();
+                                        $('#ordersResultsPanel').html(result);
+                                    })
+                   .error(function (xhr, ajaxOptions, thrownError) {
+                   })
+
+            // $('#ordersResultsPanel').show();
+
+            $('html,body').animate({
+                scrollTop: $('#ordersResultsPanel').position().top + $('#selectOrderPanel').height() + 40
+            }, 400);
+
+        });
+
+    </script>

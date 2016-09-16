@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "MWV Dev: Finance";
+}
+
+
+<!-- ---------------------------------------------------------------------------------------------------------
+    CUSTOMERS PANEL
+---------------------------------------------------------------------------------------------------------- -->
+<div id="financeCustomers" class="finance_customers">
+    <a href="#customersPanel" class="tab-link">Customers</a>
+
+    <div id="customersPanel" class="customers_panel hidden">
+        <div class="fix-overflow">
+            <a href="#closeCustomersPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+        </div>
+
+        <!-- -----------------------------------------------------------------------------------------------------
+            CUSTOMERS PANEL: SEARCH / SELECT CUSTOMER
+        ------------------------------------------------------------------------------------------------------ -->
+
+        <div id="selectCustomer" class="select_customer">
+            <div class="auto_search_input_field">
+                <input type="text" value="Search" class="search-input" id="autoSearchCustomers">
+                <a href="#clearSearch">&nbsp;</a>
+            </div>
+
+            <!-- -------------------------------------------------------------------------------------------------
+                CUSTOMERS PANEL: AUTO-SEARCH
+            -------------------------------------------------------------------------------------------------- -->
+
+            <div class="auto_search_results">
+                <div id="autoSearchCustomersResults" class="auto-search">
+                    @*<div class="list-item-wrapper hidden" id="temp_lstWrp"></div>*@
+                </div>
+            </div>
+
+            <!-- -------------------------------------------------------------------------------------------------
+                CUSTOMERS PANEL: SELECT FROM LIST
+            -------------------------------------------------------------------------------------------------- -->
+
+            <div id="selectCustomerDropdownPanel" class="customers_select_customer_dropdown">
+                <p class="center">or</p>
+
+                <div class="block-small-margin">
+                    @Html.DropDownList("selectCustomerDropdown", (SelectList)ViewBag.customer_list, "Select Customer", new { @class = "select-input" })
+
+
+                    @*<select id="selectCustomerDropdown" class="select-input">
+                            <option>Select Customer</option>
+                            <option value="customer-a">Customer A</option>
+                            <option value="customer-b">Customer B</option>
+                            <option value="customer-c">Customer C</option>
+                        </select>*@
+                </div>
+            </div>
+
+            <div id="selectedCustomerResults" class="selected_customer_results hidden">
+                @* being shown from the partial view "_customerList"*@
+
+            </div> <!-- #selectedCustomerResults -->
+            <!-- -------------------------------------------------------------------------------------------------
+                CUSTOMERS PANEL: BROWSE ALPHABETICALLY
+            -------------------------------------------------------------------------------------------------- -->
+
+            <div id="browseCustomerAlphabetically">
+                <p class="center">or</p>
+
+                <div class="block-small-margin">
+                    @Html.DropDownList("selectCustomerAlphabetically", (SelectList)ViewBag.custlist_alphabetically, "Browse Alphabetically", new { @class = "select-input" })
+                </div>
+            </div>
+
+            <div id="alphabetCustomerResults" class="alphabet_customer_results hidden">
+
+                @* a partialview "_SearchResultsCustomersAlphabetically" *@
+                @* Get Customer Click in PageList  *@
+                <div id="tmpSearchResCustsAlphabetically">
+
+                </div>
+            </div>
+        </div> <!-- #selectCustomer -->
+    </div> <!-- #customersPanel -->
+</div> <!-- #financeCustomers -->
+@* hidden field for autocomplete  *@
+ 
+
+
+<script type="text/javascript">
+    $('#selectCustomerDropdownPanel').on('change', 'select#selectCustomerDropdown', function () {
+        
+        readyToClose = true;
+        var selectedCustomerid = $('select#selectCustomerDropdown').val();
+        var selCustName = $('select#selectCustomerDropdown option:selected').text();
+        if ($(this).val() !== '') {
+            //Call Partical Result
+            $.ajax(
+              {
+                  cache: false,
+                  type: "GET",
+                  url: "/FinanceHead/GetFinanceCustomer/" + selectedCustomerid,
+                  contentType: "application/json; charset=utf-8",
+                  success: function (data) {
+                      //alert(data);
+
+                      $('#selectedCustomerResults').show();
+                      $('#selectedCustomerResults').html(data);
+
+                  }
+              });
+
+
+
+            $('#selectedCustomerResults').show();
+
+            $('html,body').animate({
+                scrollTop: $('#customersPanel').position().top + 150
+            }, 400);
+        } else {
+            $('#selectedCustomerResults').hide();
+        }
+
+        $('#autoSearchCustomers').autocomplete('close');
+        $('#autoSearchCustomers').autocomplete('destroy');
+        $('#selectCustomer .auto_search_results').hide();
+        $('#autoSearchCustomers').val('Search').blur();
+        $('#autoSearchCustomers').removeClass('search-input-clear');
+        $('#selectCustomer .auto_search_input_field').find('a').hide();
+        buildAutoComplete();
+
+        //return false;
+    });
+</script>
+
+ 

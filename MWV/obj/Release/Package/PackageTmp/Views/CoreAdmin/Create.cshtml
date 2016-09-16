@@ -1,0 +1,52 @@
+﻿@model MWV.Models.Core
+@{
+
+}
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<h2><b> Create New Core -> @Html.ActionLink("Goto Home", "Index")</b></h2><br />
+ &nbsp;<span id="ErrorMsgs"></span><br />
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-error" })
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Core Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.core_code, new { @class = "text-input", id = "CoreCode", @placeholder = "Enter Core Code(upto 15 char)", @maxlength = "15", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Core Code(upto 15 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp; Core Description</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "CoreDescription", @placeholder = "Enter Core Description(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Core Description(upto 100 char)'" })
+        </div>
+    </div>
+    <br /><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" id="btnAddCore" value="Create" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-default"  title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "CoreAdmin")'" />
+        </div>
+    </div><br /><br />
+   
+
+
+<br /><br />
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

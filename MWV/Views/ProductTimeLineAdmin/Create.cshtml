@@ -1,0 +1,222 @@
+﻿@model MWV.Models.ProductionTimeline
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<h2><b> Create New ProductionTimeline -> @Html.ActionLink("Goto Home", "Index")</b></h2><br />
+
+
+<br /><br />
+  &nbsp;<span id="ErrorMsgs"></span>
+<br />
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary("", new { @class = "text-error" })
+
+<p class="form-label">&nbsp;PaperMill</p>
+@Html.DropDownList("PaperMill", (SelectList)ViewBag.papermill_list, "Select PaperMill", new { @class = "select-input" })
+
+<p class="form-label">&nbsp;BF Code</p>
+@Html.DropDownList("BFCode", (SelectList)ViewBag.bf_list, "Select BF", new { @class = "select-input" })
+
+<p class="form-label">&nbsp;GSM Code</p>
+@Html.DropDownList("GSMCode", (SelectList)ViewBag.gsm_list, "Select GSM", new { @class = "select-input" })
+
+<p class="form-label">&nbsp;Shade Code</p>
+@Html.DropDownList("ShadeCode", (SelectList)ViewBag.shadecode_list, "Select Shade", new { @class = "select-input" })
+
+<div class="form-group">
+    <p class="form-label">&nbsp; Speed</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.speed, new { @class = "text-input", id = "speed", @placeholder = "Enter speed", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Speed'", @type = "number", @step = "any" })
+    </div>
+</div>
+
+<div class="form-group">
+    <p class="form-label">&nbsp; Ton Per Hr</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.ton_per_hour, new { @class = "text-input", id = "TonPrHr", @placeholder = "Enter Ton Per Hr", @maxlength = "7", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Ton Per Hr'", @type = "number", @step = "any" })
+    </div>
+</div>
+
+<div class="form-group">
+    <p class="form-label">&nbsp; Time Per Ton(Min)</p>
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.time_per_ton, new { @class = "text-input", id = "TimePrTon", @placeholder = "Enter Time Per Ton in Minutes", @maxlength = "9", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Time Per Ton in Minutes'", @type = "number", @step = "any" })
+    </div>
+</div>
+<br /><br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" class="btn btn-default" id="btnAddProductTimeLine" value="Create" />
+    </div>
+</div>
+<br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "ProductTimeLineAdmin")'" />
+    </div>
+</div>
+
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+
+<script type="text/javascript">
+
+    function CheckProductTimeLineValidation() {
+        //
+        if ($('#PaperMill').val() == "Select PaperMill" || $('#PaperMill').val().trim() == "" || $('#PaperMill').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please Select PaperMill!</p>");
+            return false;
+        }
+        else if ($('#BFCode').val() == "Select BF" || $('#BFCode').val().trim() == "" || $('#BFCode').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please Select BF Code!</p>");
+            return false;
+        }
+        else if ($('#GSMCode').val() == "Select GSM" || $('#GSMCode').val().trim() == "" || $('#GSMCode').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please Select GSM Code!</p>");
+            return false;
+        }
+        else if ($('#ShadeCode').val() == "Select Shade" || $('#ShadeCode').val().trim() == "" || $('#ShadeCode').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please Select Shade!</p>");
+            return false;
+        }
+        else if (Check_Speed($('#speed').val()) == false) {
+            return false;
+        }
+        else if (CheckTon_per_hour($('#TonPrHr').val()) == false) {
+            return false;
+        }
+        else if (CheckTime_per_Ton($('#TimePrTon').val()) == false) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    function Check_Speed(speed) {
+        // var len = TonPrHr.length;
+        if (speed.charAt(0) == '.') {
+            $('#ErrorMsgs').html("<p class='error-msg'>speed should be numeric.!</p>");
+            return false;
+        }
+        else if (!/^(?=.)(?:\d+,)*\d*(?:\.\d+)?$/.test(speed)) {
+            $('#ErrorMsgs').html("<p class='error-msg'>speed should be numeric.!</p>");
+            return false;
+        }
+        return true;
+    }
+    function CheckTon_per_hour(TonPrHr) {
+        var len = TonPrHr.length;
+
+        if (TonPrHr == "Enter Ton Per Hr" || TonPrHr == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter Ton Per Hr!</p>");
+            return false;
+        }
+        else if (TonPrHr.charAt(0) == '.') {
+            $('#ErrorMsgs').html("<p class='error-msg'>Ton Per Hr should be numeric.!</p>");
+            return false;
+        }
+        else if (!/^(?=.)(?:\d+,)*\d*(?:\.\d+)?$/.test(TonPrHr)) {
+            $('#ErrorMsgs').html("<p class='error-msg'>Ton Per Hr should be numeric.!</p>");
+            return false;
+        }
+            // else if (!/^(\d+)?(?:\.\d{1,4})?$/.test(UnitPrice)) {
+        else if (!/^(\d+)?(?:\.\d{1,4})?$/.test(TonPrHr)) {
+            $('#ErrorMsgs').html("<p class='error-msg'>Only four decimal places are allowed in Ton Per Hr!</p>");
+            return false;
+        }
+
+        return true;
+    }
+    function CheckTime_per_Ton(TimePrTon) {
+
+        if (TimePrTon == "Enter Time Per Ton in Minutes" || TimePrTon == "" || TimePrTon.trim() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please Enter Time Per Ton in Minutes!</p>");
+            return false;
+        }
+        else if (TimePrTon.charAt(0) == '.') {
+            $('#ErrorMsgs').html("<p class='error-msg'>Time Per Ton should be numeric.!</p>");
+            return false;
+        }
+        else if (!/^(?=.)(?:\d+,)*\d*(?:\.\d+)?$/.test(TimePrTon)) {
+            $('#ErrorMsgs').html("<p class='error-msg'>Time Per Ton should be numeric.!</p>");
+            return false;
+        }
+            // else if (!/^(\d+)?(?:\.\d{1,4})?$/.test(UnitPrice)) {
+        else if (!/^(\d+)?(?:\.\d{1,2})?$/.test(TimePrTon)) {
+            $('#ErrorMsgs').html("<p class='error-msg'>Only two decimal places are allowed in Time Per Ton!</p>");
+            return false;
+        }
+
+        return true;
+    }
+    $('#btnAddProductTimeLine').click(function () {
+        //
+        var PaperMillID = $('#PaperMill').val();
+        var BFCode = $('#BFCode').val();
+        var GSMCode = $('#GSMCode').val();
+        var ShadeCode = $('#ShadeCode').val();
+        var speed;
+        if ($('#speed').val() == "Enter speed" || $('#speed').val().trim() == "" || $('#speed').val() == "")
+            speed = 0;
+        else
+            var speed = $('#speed').val();
+
+        var TonPrHr = $('#TonPrHr').val();
+        var TimePrTon = $('#TimePrTon').val();
+        var msg = "";
+
+        if (CheckProductTimeLineValidation() == true) {
+            //
+            var datatosend = {
+                PaperMillID: PaperMillID,
+                BFCode: BFCode,
+                GSMCode: GSMCode,
+                ShadeCode: ShadeCode,
+                speed: speed,
+                TonPrHr: TonPrHr,
+                TimePrTon: TimePrTon
+            }
+            $.ajax({
+                url: "/ProductTimeLineAdmin/AddProductTimeLine/",
+                data: datatosend,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html'
+            })
+                      .success(function (result) {
+                          //alert(result);
+                          if (result == "2") {
+                              $("#ErrorMsgs").html('');
+                              $("#ErrorMsgs").html("<p class='error-msg'>" + 'This ProductTimeLine already added for this combination.!' + "</p>");
+                              return false;
+                          }
+                          else if (result == "3") {
+                              msg = 'ProductTimeLine details added successfully.!';
+                              window.location.href = "/ProductTimeLineAdmin/Index?msg=" + msg;
+                          }
+                          else {
+                              $("#ErrorMsgs").html("<p class='error-msg'>" + 'Error while adding ProductTimeLine.!' + "</p>");
+                              return false;
+                          }
+
+                      })
+                     .error(function (xhr, ajaxOptions, thrownError) {
+                     })
+        }
+
+    });
+
+</script>

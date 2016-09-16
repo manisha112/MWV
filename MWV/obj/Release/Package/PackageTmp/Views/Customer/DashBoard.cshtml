@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "MWV Dev: Dispatch";
+}
+
+<!-- ---------------------------------------------------------------------------------------------------------
+       WELCOME PANEL
+   ---------------------------------------------------------------------------------------------------------- -->
+@*<div id="welcomePanel" class="welcome_panel four_icons">
+        <a href="/customer-orders.html" class="home"><img src="images/home.png"></a>
+        <a href="/messages.html" class="messages"><img src="images/mail-off.png"></a>
+        <a href="/alerts.html" class="alerts"><img src="images/alarm-off.png"></a>
+        <a href="#" class="settings"><img src="images/settings.png"></a>
+    </div>*@
+<!-- ---------------------------------------------------------------------------------------------------------
+    CUSTOMER ORDERS
+---------------------------------------------------------------------------------------------------------- -->
+<div class="customer_orders_tab">
+    <a href="#customerOrders" class="tab-link">Orders</a>
+
+    <div id="customerOrders" class="customer_orders_panel hidden">
+        <div class="fix-overflow">
+            <a href="#closeCustomerOrders" class="close-panel close_customer_orders"><img src="../images/close-panel.png"></a>
+        </div>
+
+        <h2>Search Orders</h2>
+
+        <p class="details">To search for multiple purchase orders, please type the numbers separated by commas.</p>
+        <input type="text" step="any" class="text-input" id="EnterPO" autocomplete="off" placeholder="Type Purchase Order #" onfocus=" this.placeholder = ''" onblur="    this.placeholder = 'Type Purchase Order #'">
+
+        @*<input type="text" class="text-input" placeholder="Type Purchase Order #" id="EnterPO" onblur="'this.placeholder  = Type Purchase Order #'" onfocus=" 'this.placeholder = Type Purchase Order #'" autocomplete="off">*@
+        <span id="errormsgForOrderSearch" class="error-msg"></span>
+        <a href="#searchOrders" class="btn">Search</a>
+    </div>
+
+    <!-- -----------------------------------------------------------------------------------------------------
+        ORDERS: SEARCH RESULTS
+    ------------------------------------------------------------------------------------------------------ -->
+    <div id="ordersResultsPanel" class="hidden orders_results_panel">
+
+
+    </div> <!-- #ordersResultsPanel -->
+    <!-- -------------------------------------------------------------------------------------------------
+        ORDERS: SEARCH RESULTS > ORDER DETAILS
+    -------------------------------------------------------------------------------------------------- -->
+    <div id="orderDetails" class="order_details hidden">
+        <div id="orderDetailsMst">
+
+        </div> <!-- orderDetailsMst -->
+        <div id="orderDetailsChild">
+
+        </div> <!-- orderDetailsChild -->
+        <!-- .order_details_full -->
+    </div> <!-- .order_details -->
+</div>
+

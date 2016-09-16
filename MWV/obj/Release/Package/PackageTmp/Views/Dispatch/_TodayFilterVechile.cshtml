@@ -1,0 +1,245 @@
+﻿@{
+
+    <div class="fix-overflow">
+        <a href="#closeScheduleDetails" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+
+
+    // var Action = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+    // ViewBag.dayText = "Today";
+    if (ViewBag.dayText == "Today")
+    {
+        DateTime TodayDate = DateTime.Now;
+        <p class="show_header"><strong>Show:</strong></p>
+        <select class="select-input" id="TodayFilterVehicles" data-id="@TodayDate.ToShortDateString()">
+            <option value="all-vehicles">All Vehicles</option>
+            <option value="show-arrived">Show Arrived</option>
+            <option value="show-departed">Show Departed</option>
+            <option value="show-in-queue">Show In Queue</option>
+        </select>
+    }
+    else if (ViewBag.dayText == "Tomorrow")
+    {
+        DateTime Tomorrow = DateTime.Now.AddDays(1);
+        <p class="show_header"><strong>Show:</strong></p>
+        <select class="select-input" id="TomorrowFilterVehicles" data-id="@Tomorrow.ToShortDateString()">
+            <option value="all-vehicles">All Vehicles</option>
+            <option value="show-arrived">Show Arrived</option>
+            <option value="show-departed">Show Departed</option>
+            <option value="show-in-queue">Show In Queue</option>
+        </select>
+    }
+    else if (ViewBag.dayText == "NextDay")
+    {
+        DateTime NextDay = DateTime.Now.AddDays(2);
+        <p class="show_header"><strong>Show:</strong></p>
+        @*@NextDay.ToString("dd MMM yyyy")*@
+        <select class="select-input" id="NextDayFilterVehicles" data-id="@NextDay.ToShortDateString()">
+            <option value="all-vehicles">All Vehicles</option>
+            <option value="show-arrived">Show Arrived</option>
+            <option value="show-departed">Show Departed</option>
+            <option value="show-in-queue">Show In Queue</option>
+        </select>
+    }
+    else if (ViewBag.dayText == "Search")
+    {
+        if (ViewBag.flag == "vehicle-no")
+        { }
+        else
+        {
+            <p class="show_header"><strong>Show:</strong></p>
+            <select class="select-input" id="SearchVehicles">
+                <option value="all-vehicles">All Vehicles</option>
+                <option value="show-arrived">Show Arrived</option>
+                <option value="show-departed">Show Departed</option>
+                <option value="show-in-queue">Show In Queue</option>
+            </select>
+        }
+    }
+
+}
+<script type="text/javascript">
+    $('.vehicle_schedule').on('change', 'select', function () {
+
+        var currentVal = $(this).val();
+        var date = $(this).attr('data-id');
+
+
+        if (currentVal === 'show-arrived') {
+            //alert(currentVal);
+            if ($(this).attr('id') == "TodayFilterVehicles") {
+                TodayArrivedVechicle(currentVal, date);
+
+            } else
+                if ($(this).attr('id') == "TomorrowFilterVehicles") {
+                    TomorrowArrivedVechicle(currentVal, date);
+                }
+                else
+                    if ($(this).attr('id') == "NextDayFilterVehicles") {
+                        NextDayArrivedVechicle(currentVal, date);
+                    }
+            $(this).next('.vehicle_results').find('li.arrived').show();
+            $(this).next('.vehicle_results').find('li.not_arrived').hide();
+            $(this).next('.vehicle_results').show();
+        } else if (currentVal === 'show-departed') {
+            if ($(this).attr('id') == "TodayFilterVehicles") {
+                TodayArrivedVechicle(currentVal, date);
+            } else
+                if ($(this).attr('id') == "TomorrowFilterVehicles") {
+                    TomorrowArrivedVechicle(currentVal, date, currentVal);
+                }
+                else
+                    if ($(this).attr('id') == "NextDayFilterVehicles") {
+                        NextDayArrivedVechicle(currentVal, date);
+                    }
+            $(this).next('.vehicle_results').find('li.not_departed').hide();
+            $(this).next('.vehicle_results').show();
+        } else if (currentVal === 'all-vehicles' || currentVal === 'show-in-queue') {
+            if ($(this).attr('id') == "TodayFilterVehicles") {
+                TodayArrivedVechicle(currentVal, date);
+
+            } else
+                if ($(this).attr('id') == "TomorrowFilterVehicles") {
+                    TomorrowArrivedVechicle(currentVal, date);
+                }
+                else
+                    if ($(this).attr('id') == "NextDayFilterVehicles") {
+                        NextDayArrivedVechicle(currentVal, date);
+                    }
+            $(this).next('.vehicle_results').find('li').show();
+            $(this).next('.vehicle_results').show();
+        }
+    });
+
+    function TodayArrivedVechicle(currentVal, date) {
+
+        //alert($(this).attr('data-id'));
+        var datatosend =
+   {
+       VehicleScheduleDate: date,
+       SelectedValue: currentVal,
+   }
+        $.ajax({
+            url: "/Dispatch/VehicleScheduleDetailsToday/",
+            data: datatosend,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+
+                            $('#vehicleDetails-Today').show();
+                            $('#vehicleDetailsMst-Today').show();
+                            $('#vehicleDetailsChild-Today').html(result);
+                            // ')
+
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+    }
+    function TomorrowArrivedVechicle(currentVal, date) {
+
+        //alert($(this).attr('data-id'));
+        var datatosend =
+   {
+       VehicleScheduleDate: date,
+       SelectedValue: currentVal,
+   }
+        $.ajax({
+            url: "/Dispatch/VehicleScheduleDetailsByTomorrow/",
+            data: datatosend,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+                            $('#vehicleDetails-Tomorrow').show();
+                            $('#vehicleDetailsMst-Tomorrow').show();
+                            $('#vehicleDetailsChild-Tomorrow').html(result);
+                            // ')
+
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+    }
+    function NextDayArrivedVechicle(currentVal, date) {
+
+        //alert($(this).attr('data-id'));
+        var datatosend =
+   {
+       VehicleScheduleDate: date,
+       SelectedValue: currentVal,
+   }
+        $.ajax({
+            url: "/Dispatch/VehicleScheduleDetailsByNextDay/",
+            data: datatosend,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+                            $('#vehicleDetails-NextDay').show();
+                            $('#vehicleDetailsMst-NextDay').show();
+                            $('#vehicleDetailsChild-NextDay').html(result);
+                            // ')
+
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+    }
+
+    $('.vehicles_search_results ').on('change', 'select', function () {
+
+        var currentVal = $('.search_by').val();
+        // alert(currentVal)
+        var searchString = $('#AgentList').val();
+        var fromDate = $('#searchVehiclesFromDay').val() + "-" + $('#searchVehiclesFromMonth').val() + "-" + $('#searchVehiclesFromYear').val();
+        var toDate = $('#searchVehiclesToDay').val() + "-" + $('#searchVehiclesToMonth').val() + "-" + $('#searchVehiclesToYear').val();
+        // alert(searchString);
+        var datatosend =
+   {
+       fromDate: fromDate,
+       toDate: toDate,
+       searchByString: currentVal,
+       ProductCode: $('#ProductCodeList').val(),
+       searchString: searchString,
+       filterVehicles: $('#SearchVehicles').val()
+
+   }
+        $.ajax({
+            url: "/Dispatch/GetFilterVehicleDetails/",
+            data: datatosend,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+
+                            //  $('#vehiclesSearchResults').show();
+                            $('#vehiclessearchresultsChild').show();
+                            $('#vehiclessearchresultsChild').html(result);
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+    });
+    $('.vehicle_schedule').on('click', 'a[href="#closeScheduleDetails"]', function () {
+        //$('#vehiclesSearchResults').hide();
+        //alert("dsd");
+        $(this).closest('.vehicle_schedule_details').hide();
+    });
+
+    $('.fix-overflow').on('click', 'a[href="#closeScheduleDetails"]', function () {
+        $('#vehiclesSearchResults').hide();
+        //   alert("dsd");
+        $(this).closest('.vehicle_schedule_details').hide();
+    });
+
+</script>

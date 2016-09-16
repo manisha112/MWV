@@ -1,0 +1,27 @@
+﻿@model IEnumerable<MWV.Repository.Implementation.OrderRepository.tempOrderProducts>
+@if (ViewBag.NoRecordMsg != null)
+{ 
+    @ViewBag.NoRecordMsg
+}
+else
+{ 
+<p class="customer_name"><strong>@Session["custname"]</strong></p>
+@*<p class="delivery_date">Requested Delivery Date: @ViewBag.req_del_date.ToString("dd MMM yyyy")</p>*@
+<p class="delivery_date">Customer PO: @ViewBag.customerpo</p>
+<ul>
+    @foreach (var item in ViewBag.currentList)
+    {
+        <li>
+            <p class="product_code"><strong>@item.product_code</strong></p>
+            <p class="product_details">@string.Format("{0:#.00}", item.width) cm x @item.bf_code BF @item.gsm_code GSM @item.shade_code</p>
+            <p class="product_details">Quantity: @string.Format("{0:#.0000}", item.qty) MT</p>
+            <p class="product_details">Unit Price: INR @string.Format("{0:#.00}", item.unit_price)</p>
+            <p class="product_details">Requested Delivery Date: @item.requested_delivery_date.ToShortDateString() </p>
+        </li>
+    }
+</ul>
+<div class="review_order_totals">
+    <p><strong>Total: INR @string.Format("{0:#.00}", ViewBag.grandtotal)</strong></p>
+</div>
+
+}

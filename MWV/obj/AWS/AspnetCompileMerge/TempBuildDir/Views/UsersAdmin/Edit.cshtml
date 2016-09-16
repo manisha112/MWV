@@ -1,0 +1,98 @@
+﻿@model IdentitySample.Models.EditUserViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit.</h2>
+
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Edit User Form.</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+               @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+               @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Roles", new { @class = "control-label col-md-2" })
+            <span class=" col-md-10">
+                @foreach (var item in Model.RolesList)
+                {
+                    @*<input type="checkbox" name="SelectedRole" value="@item.Value" checked="@item.Selected" class="checkbox-inline" />*@
+                    <input type="radio" name="SelectedRole" value="@item.Value" checked="@item.Selected" class="checkbox-inline" onclick="handleClick(this)" />
+                    @Html.Label(item.Value, new { @class = "control-label" })
+                }
+            </span>
+        </div>
+
+      
+
+        <div class="form-group">
+            @Html.Label("Papermill to be assigned to the 'Machine Head'", new { @class = "control-label col-md-2" })
+            <span class=" col-md-10">
+                <select disabled id="papermill_id" name="papermill_list">
+                    @foreach (var cat in ViewBag.Papermills_list)
+                    {
+                        <option value=@cat.Text>@cat.Text</option>
+                    }
+                </select>
+            </span>
+        </div>
+      
+        <div class="form-group">
+            @Html.Label("location to be assigned to the 'Gatekeeper'", new { @class = "control-label col-md-2" })
+            <span class=" col-md-10">
+                <select disabled id="location" name="Location_list">
+                    @foreach (var item in ViewBag.Location_list)
+                    {
+                        <option value=@item.Text>@item.Text</option>
+                    }
+                </select>
+            </span>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    var currentValue = 0;
+    function handleClick(SelectedRole) {
+        //alert('New value: ' + SelectedRole.value);
+        if (SelectedRole.value == 'MachineHead') {
+            document.getElementById("papermill_id").disabled = false;
+        }
+        else if (SelectedRole.value == 'GateKeeper') {
+            //alert("inside GateKeeper");
+            document.getElementById("papermill_id").disabled = true;
+            document.getElementById("location").disabled = false;
+        }
+        else {
+            document.getElementById("papermill_id").disabled = true;
+            document.getElementById("location").disabled = true;
+        }
+    }
+</script>
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

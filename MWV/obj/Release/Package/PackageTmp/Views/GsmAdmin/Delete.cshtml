@@ -1,0 +1,38 @@
+﻿@model MWV.Models.Gsm
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2><b> Delete Gsm ->@Html.ActionLink("Goto Home", "Index")</b></h2>
+<br /><br />
+  &nbsp;<span id="ErrorMsgs"></span>
+<br />
+&nbsp;<h3 class="form-label">&nbsp; Are you sure you want to delete this Gsm?</h3>
+<div>
+    </br>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Gsm Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.gsm_code, new { @class = "text-input", id = "GsmCode", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Description</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "description", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    </br>
+
+    @Html.AntiForgeryToken()
+    <div class="form-actions no-color">
+        <input type="submit" value="Delete" class="btn btn-default" id="btnDeleteGsm" />
+    </div><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "GsmAdmin")'" />
+        </div>
+    </div><br /><br />
+
+</div>
+</br>

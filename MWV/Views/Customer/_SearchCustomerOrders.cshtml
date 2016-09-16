@@ -1,0 +1,76 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+
+<div class="fix-overflow">
+    <a href="#closeOrdersResultsPanel" class="close-panel"><img src="../images/close-panel.png"></a>
+</div>
+<p class="error-msg"> @ViewBag.NoRecordMsg </p>
+@if (ViewBag.Pagesize > 5)
+{
+    <div id="OrderSearchPager">
+        @Html.PagedListPager((IPagedList)ViewBag.ordersList, page => Url.Action("OrdersSearchResultsByCustomerPO", new { page, @class = "pagination" }))
+    </div>
+}
+<ul>
+    @foreach (var item in ViewBag.ordersList)
+    {
+
+        <li>
+            <div class="fix-overflow">
+                <p class="title"><strong>Customer PO: @item.customerpo </strong></p>
+
+                <a href="#downloadOrder" class="download_order" data-id="@item.order_id"><img src="/images/download.png"></a>
+            </div>
+            <p><a href="#seeOrderDetails" class="see-details" data-id="@item.order_id">See Details</a></p>
+
+            <p class="details">Placed On: @item.order_date.ToString("dd MMM yyyy hh:mm tt")</p>
+            @*<a href="#filterOrderStatus" class="order-status os-open" data-status="open">@item.status</a>*@
+            @{
+        if (item.status == "Under Planning") // Open = "Under Planning"
+        {
+            <span class="order-status os-open" data-status="open">@item.status</span>
+        }
+        else if (item.status == "Created") // Used internally by the application
+        {
+            <span class="order-status os-created">@item.status</span>
+        }
+        else if (item.status == "In Warehouse") //Dispatch Ready = "In Warehouse"
+        {
+            <span class="order-status os-dispatch-ready">@item.status</span>
+        }
+        else if (item.status == "Planned")
+        {
+            <div class="order-status up_top os-schedule-ready">@item.status</div> // schedule ready = "Planned"
+        }
+        else if (item.status == "Dispatched") // Used internally by the application
+        {
+            <span class="order-status os-complete">@item.status</span>
+        }
+}
+        </li>
+    }
+</ul>
+
+<script type="text/javascript">
+
+    $('#OrderSearchPager').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                 .success(function (result) {
+                                     $('#ordersResultsPanel').show();
+                                     $('#ordersResultsPanel').html(result);
+                                 })
+        $('html,body').animate({
+            scrollTop: $('#customerOrders').position().top + 400
+        }, 400);
+    });
+    $('a').click(function (event) {
+        event.preventDefault();
+    });
+</script>

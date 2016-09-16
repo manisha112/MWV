@@ -1,0 +1,99 @@
+﻿@model IEnumerable<MWV.Repository.Implementation.Truck_dispatchRepository.tempTruckDispatchDetails>
+
+
+    <div class="transportation_details_full">
+        <p>Transportation Details For:</p>
+        <div class="vehicle_number">
+            <p class="title"><strong>Vehicle # @ViewBag.truck_no</strong></p>
+
+            @*<div class="transportation_details_icons">
+                    <a href="#editVehicle" class="edit_vehicle"><img src="/images/edit.png"></a>
+                    <a href="#removeVehicle" class="remove_vehicle"><img src="/images/delete.png"></a>
+                </div>*@
+        </div>
+        <p class="title"><strong>Location:@ViewBag.location</strong></p>
+
+        <p class="details">
+            @ViewBag.address
+            @*Survey No. 56/1<br>
+                Village - Morai via Vappi<br>
+                Dist. Valsad 396191*@
+        </p>
+        <p class="details">
+            Scheduled On: @ViewBag.created_on.ToString("dd MMM yyyy hh:mm tt")<br>
+            Vehicle Capacity: @ViewBag.estimated_capacity MT<br>
+            Scheduled Start:  @ViewBag.agent_dispatched_on.ToString("dd MMM yyyy hh:mm tt")<br>
+            Expected Arrival: @ViewBag.estimated_arrival.ToString("dd MMM yyyy hh:mm tt")<br>
+            @{string status = "";}
+            @{string statusDep = "";}
+            @if (ViewBag.actual_arrival_at_gate == null)
+            {
+                status = "Pending";
+            }
+            else
+            {
+                status = "Arrived";
+            }
+            @if (ViewBag.left_factory_on == null)
+            {
+                statusDep = "Pending";
+            }
+            else
+            {
+                statusDep = "Departed";
+            }
+
+            Arrival: @status<br>
+            Departure: @statusDep
+        </p>
+    </div>
+
+
+    <h2>Cargo List</h2>
+   
+    @if (ViewBag.NoCargo != null)
+    {
+        <p class="error-msg"> @ViewBag.NoCargo </p>
+       <script language="javascript">
+            $('#tmpSubmitTransportation').hide();        
+        </script>
+    }
+    else
+    {
+        
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>
+                    <div class="fix-overflow">
+                        <p class="po_number"><strong>PO: @item.order_id</strong></p>
+                    </div>
+                    <p class="title"><strong>@Session["selectedOrderCustName"]</strong></p>
+                    @*<p class="details">product code: @item.product_code </p>*@
+                    <p class="details">@string.Format("{0:#.00}", item.width) cm x @item.bf_code BF @item.gsm_code GSM @item.shade_code</p>
+                    <p class="details">Qty. For Loading: @item.qty MT</p>
+                </li>
+
+            }
+
+        </ul>
+                    
+                if (ViewBag.Qtymsg != null)
+                {
+                    <p class="error-msg"> @ViewBag.Qtymsg </p>
+                    <script language="javascript">
+
+                        $('#tmpSubmitTransportation').hide();
+                        //$("#tmpSubmitTransportation").click(function () {
+                        //    // $("#tmpSubmitTransportation").text("The Vehicle has no cargo in it. Can not be added to the database");
+                        //    return false;
+                        //});
+                        //.text("The Vehicle has no cargo in it. Can not be added to the database");
+                    </script>
+                }
+                
+                
+    }
+                      @*<script language="javascript">                       
+                          //.text("The Vehicle has no cargo in it. Can not be added to the database");
+                      </script>*@

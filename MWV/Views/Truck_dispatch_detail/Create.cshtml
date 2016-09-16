@@ -1,0 +1,91 @@
+﻿@model MWV.Models.Truck_dispatch_details
+
+@{
+    ViewBag.Title = "Create";
+}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#order_id").change(function () {
+            var selectedItem = $(this).val();
+            var ddlStates = $("#order_product_id");
+            var statesProgress = $("#states-loading-progress");
+            statesProgress.show();
+            alert(selectedItem);
+            $.ajax(
+                {
+                    cache: false,
+                    type: "GET",
+                    url: "/Truck_dispatch/GetProductsByOrderId/" + selectedItem,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        ddlStates.html('');
+                        $.each(data, function (id, option) {
+                            ddlStates.append($('<option></option>').val(option.id).html(option.name));
+                        });
+                        statesProgress.hide();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert("ajaxOptions " + ajaxOptions);
+                        alert('Failed to retrieve states.');
+                        statesProgress.hide();
+                    }
+                });
+        });
+    });
+</script>
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Truck_dispatch_details</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.truck_dispatch_id, "truck_dispatch_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("truck_dispatch_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.truck_dispatch_id)
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.order_id, "order_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("order_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.order_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.order_product_id, "order_product_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("order_product_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.order_product_id)
+            </div>
+        </div>
+        <span id="states-loading-progress" style="display: none;">Please wait..</span>
+        <div class="form-group">
+            @Html.LabelFor(model => model.qty, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.qty)
+                @Html.ValidationMessageFor(model => model.qty)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

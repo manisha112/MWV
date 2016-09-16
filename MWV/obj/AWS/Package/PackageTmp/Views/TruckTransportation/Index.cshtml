@@ -1,0 +1,73 @@
+﻿@model MWV.Models.TruckTransportation
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Transportation Details</h2>
+
+</br>
+
+@using (Html.BeginForm())
+{
+    @:<form>
+        @:<div>
+            @Html.LabelFor(model => model.papermill_id) @: &nbsp;&nbsp;
+
+            @Html.DropDownListFor(model => model.papermill_id, new System.Web.Mvc.SelectList(Model.locations, "papermill_id", "location"))
+
+            @: </br></br>
+            @Html.LabelFor(model => model.vehicleCapacity) @: &nbsp;
+            @Html.TextBoxFor(model => model.vehicleCapacity, new { @class = "form-control" })
+
+            @: </br>
+            @Html.LabelFor(model => model.vehicleNumber) @: &nbsp;
+            @Html.TextBoxFor(model => model.vehicleNumber, new { @class = "form-control" })
+
+            @: </br>
+            @Html.LabelFor(model => model.agent_dispatched_on) @: &nbsp;
+            @Html.TextBoxFor(model => model.agent_dispatched_on, new { @class = "form-control" })
+
+            @: </br>
+            @Html.LabelFor(model => model.estimated_arrival) @: &nbsp;
+            @Html.TextBoxFor(model => model.estimated_arrival, new { @class = "form-control" })
+
+            @: </br>
+            @:</div>
+
+        @: </br>
+        @Html.Label("--------------- Add Cargo ---------------") @: &nbsp;
+        @:</br></br>
+
+        @:<div>
+            @Html.LabelFor(model => model.agent_id) @: &nbsp;&nbsp;
+            @Html.DropDownListFor(model => model.agent_id, new System.Web.Mvc.SelectList(Model.order_id, "agent_id", "order_id"))
+
+            @: </br></br>
+            @Html.LabelFor(model => model.order_product_id) @: &nbsp;&nbsp;
+            @Html.DropDownList("product_code", "Select Value")
+
+            @:</br></br>
+            @Html.LabelFor(model => model.qty)
+            @Html.TextBoxFor(model => model.qty, new { @class = "form-control" })
+            @:</div>
+
+
+        @:</br>
+
+        <p>
+            @Html.ActionLink("Add Cargo", "SaveTruckDetails", "TruckDispatchDetails", new { id = Model.order_id }, null)
+        </p>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+        @:</form>
+
+
+    @section Scripts {
+
+        <script src="~/Scripts/ShowAddCargo.js"></script>
+    }
+}
+

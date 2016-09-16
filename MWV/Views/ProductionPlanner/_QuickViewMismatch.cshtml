@@ -1,0 +1,20 @@
+﻿
+<div class="fix-overflow">
+    <h3>Recent Mismatches</h3>
+    @if (ViewBag.NoRecordMsg == null)
+    {
+        <a href="#seeAllRecentMismatches" class="see_all">See All</a>  
+    }
+  
+</div>
+<ul>
+    <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+    @foreach (var item in ViewBag.QuickiewSeeDetails)
+    {
+        <li>
+            <p class="title"><strong> @item.papermillname on @item.RequestedDate.ToString("dd MMM yyyy")</strong></p>
+            <p class="details">@item.BF BF @item.GSM GSM @item.shade </p>
+            <p><a href="#seeMismatchDetails" class="see-details" data-id="@item.dm_id">See Details</a></p>
+        </li>
+    }
+</ul>

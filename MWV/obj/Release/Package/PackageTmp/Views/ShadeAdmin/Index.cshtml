@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MWV.Models.Shade>
+@{
+    //  ViewBag.Title = "Index";
+    string a = ViewBag.Message;
+    string msg = @ViewBag.Message;
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+        border-collapse:collapse;
+    }
+</style>
+
+<h2>Shade HomePage->@Html.ActionLink("Create New Shade", "Create")</h2>
+
+
+<center class="form-label"><b>List Of Shade's</b></center>
+<span id="ErrorMsgs"><p class='error-msg'>@msg</p></span>
+
+<table align="center">
+    <tr>
+        <th>
+            <h1><b>Shade Code </b></h1>
+        </th>
+        <th>
+            <h1><b>Shade Description </b></h1>
+        </th>
+        <th>
+            <h1><b>Action</b></h1>
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.shade_code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Details", new { id = item.shade_code }) |
+                @Html.ActionLink("Delete", "DeleteDetails", new { id = item.shade_code })
+            </td>
+
+
+        </tr>
+    }
+
+</table>
+<br />
+

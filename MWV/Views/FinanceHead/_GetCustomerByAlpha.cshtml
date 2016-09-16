@@ -1,0 +1,56 @@
+﻿@*@Model MWV.Models.Customer*@
+@using PagedList;
+@using PagedList.Mvc;
+
+<div class="fix-overflow">
+    <a href="#closeCustomerResults" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+@{
+    if (ViewBag.PageSizeForPagi > 5)
+    {
+        <div id="CustomerByAlpha">
+            @Html.PagedListPager((IPagedList)ViewBag.CustmoerList, page => Url.Action("GetCustomersbyAlphabet", new { page, @class = "pagination" }), new PagedListRenderOptions { DisplayEllipsesWhenNotShowingAllPageNumbers = false})
+        </div>
+    }
+}
+<ul>
+   
+     
+    @foreach (var item in ViewBag.CustmoerList)
+    {
+        <li id="cust_@item.customer_id" class="myClass">
+            <a href="#selectCustomer" data-id="@item.customer_id">@item.CustomerName</a>
+            <!-- .customer_list_item -->
+
+            <div class="customer-list-item hidden" id="divCustList"></div>
+        </li>
+    }
+
+</ul>
+
+<script type="text/javascript">
+    $('#alphabetCustomerResults').find('#dvFix').on('click', 'a[href="#closeCustomerResults"]', function () {
+        $("#alphabetCustomerResults").hide();
+
+    });
+    $('#CustomerByAlpha').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#alphabetCustomerResults').show();
+                                    $('#alphabetCustomerResults').html(result);
+                                    //$('html,body').animate({
+                                    //    scrollTop: $('#mismatchesPanel').position().top
+                                    //}, 400);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+</script>
+
+

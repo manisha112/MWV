@@ -1,0 +1,61 @@
+﻿@model IEnumerable<MWV.Models.Order_Products>
+@{
+    
+    Layout= null ;
+    
+}
+                      
+<center><h2>West Rock</h2></center>
+<center><h3>&nbsp;&nbsp;Purchase Order</h3></center>
+  <hr />
+  
+  
+ <table style="width:100%">
+     <tr>
+         <td>Agent Name:@ViewBag.AgentName</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td>Purchase Order#:@ViewBag.PurchaseordNo</td>
+     </tr>
+     <tr>
+         <td>Customer Name:@ViewBag.Customername</td>
+        <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td>Order Date:@ViewBag.orderdate.ToString("dd MMM yyyy hh:mm tt")</td>
+     </tr>
+ </table>
+    <br />
+<table style="width:100%">
+    <tr>
+        <th>Request Delivery Date</th>
+        <th>Product Code</th>
+        <th>Shade</th>
+        <th>Width(Cm)</th>
+        <th>Qty(Mt)</th>
+        <th>Amount</th>
+
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            @{
+                
+        DateTime dt = Convert.ToDateTime(item.requested_delivery_date);
+        string dtnew = dt.ToString("dd/MM/yyyy");
+            }
+            <td style="padding:12px;">@dtnew</td>
+            <td style="padding:10px;">@item.product_code</td>
+            <td style="padding:10px;">@item.shade_code</td>
+            <td style="padding:12px;">@item.width</td>
+            <td style="padding:10px;">@item.qty</td>
+            <td style="padding:10px;">@item.amount</td>
+        </tr>
+    }
+</table>
+<br />
+<h4>Total Amount :@ViewBag.totalamt</h4>

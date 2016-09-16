@@ -1,0 +1,162 @@
+﻿@model MWV.Models.Order
+
+
+@{
+    ViewBag.Title = "Create";
+}
+<h2>Create</h2>
+
+@*@using (Ajax.BeginForm("PerformAction",
+    new AjaxOptions { OnSuccess = "OnSuccess", OnFailure = "OnFailure" }))
+{
+    <fieldset>
+        <table width="500">
+            <tr>
+                <td>@Html.LabelFor(model => model.agent_id, "agent_id", new { @class = "control-label col-md-2" })</td>
+                <td>
+                    @Html.Raw(ViewBag.agent_id)
+                @Html.ValidationMessageFor(model => model.agent_id)
+            </td>
+
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.customer_id, "customer_id", new { @class = "control-label col-md-2" })</td>
+            <td>
+                @Html.DropDownList("customer_list", "")
+            @Html.ValidationMessageFor(model => model.customer_id)
+        </td>
+
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(model => model.requested_delivery_date, new { @class = "control-label col-md-2" })</td>
+        <td>@Html.EditorFor(model => model.requested_delivery_date)
+        @Html.ValidationMessageFor(model => model.requested_delivery_date)
+    </td>
+</tr>
+</table>
+
+<input type="submit" value="Submit" />
+</fieldset>
+}
+
+<script type="text/javascript">
+
+    function OnSuccess(response) {
+        alert(response);
+    }
+
+    function OnFailure(response) {
+        alert("Whoops! That didn't go so well did it?");
+    }
+
+</script>
+------------------------------------------------------------------*@
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Order</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.agent_id, "agent_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @Html.Raw(ViewBag.agent_id)
+                @Html.ValidationMessageFor(model => model.agent_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.customer_id, "customer_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("customer_list", "")
+                @Html.ValidationMessageFor(model => model.customer_id)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.requested_delivery_date, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.requested_delivery_date)
+                @Html.ValidationMessageFor(model => model.requested_delivery_date)
+            </div>
+        </div>
+        <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+
+        @*<table>
+                @if (Model.OrderProducts != null) { }
+                @foreach (var item in Model.OrderProducts) {
+                <tr>
+                    <td>@item.product_code</td>
+                </tr>
+                }}
+            </table>*@
+
+        @*@Ajax.ActionLink(
+            "Add product",
+            "Create",
+            "Order_product",
+            new { agent_id = ViewBag.order_id, customer_id = ViewBag.customer_id, requested_delivery_date = ViewBag.requested_delivery_date },
+            new AjaxOptions { UpdateTargetId = "addProduct" }
+            )
+        <div id="addProduct"></div>*@
+
+
+
+    </div>
+}
+<p>&nbsp;</p>
+<hr />
+
+@* display the list of order products  *@
+
+@if (Model.OrderProducts.Count != 0)
+{
+
+    <dt style="width:auto">
+        List of Order Products
+        @*@Html.DisplayNameFor(model => model.OrderProducts)*@
+    </dt>
+    <dd>
+        <table class="table">
+            <tr>
+                <td><b>Product Code</b></td>
+                <td><b>Unit Price</b></td>
+                <td><b>Quantity</b></td>
+                <td><b>Amount</b></td>
+            </tr>
+            @foreach (var item in Model.OrderProducts)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.product_code)</td>
+                    <td>@Html.DisplayFor(modelItem => item.unit_price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.qty)</td>
+                    <td>@Html.DisplayFor(modelItem => item.amount)</td>
+                </tr>
+            }
+        </table>
+    </dd>
+
+}
+else
+{
+    @Html.ActionLink("Add New Order Product", "Create", "Order_product", new { id = Model.order_id }, null)
+}
+
+
+    </dl>
+<hr />
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

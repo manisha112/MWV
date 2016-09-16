@@ -1,0 +1,383 @@
+﻿@{
+    ViewBag.Title = "MWV Dev: Machine Head";
+}
+
+<div id="machineControlPanel" class="machine_control_panel">
+    @{
+        var item = @ViewBag.status;
+    }
+    @if (item == "ON")
+    {
+        <a href="#machineOff" class="off">Machine Off</a>
+        <a href="#machineOn" class="on">Machine On</a>
+    }
+    else
+    {
+        <a href="#machineOff" class="on">Machine Off</a>
+        <a href="#machineOn" class="off">Machine On</a>
+    }
+
+</div>
+
+<div id="machineOffPanel" class="machine_confirm_panel hidden">
+    <div class="fix-overflow">
+        <a href="#closeMachineOffPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+
+    <h2>Attention!</h2>
+
+    <p class="details">This action will notify all departments that this machine has stopped.</p>
+
+    <p class="details">Please confirm this action, or click &quot;Cancel&quot; to deny this action.</p>
+
+    <div id="machineOffTimeFrame" class="time_frame">
+        <p class="form-label">Stop Time</p>
+
+        <div class="fix-overflow start_stop_time">
+            <select class="date-select-input" id="offStopTimeDay">
+                <option>DD</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select class="date-select-input" id="offStopTimeMonth">
+                <option>MM</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select class="date-select-input year" id="offStopTimeYear">
+                <option>YYYY</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+
+        <div class="time_selects">
+            <select id="offStopTimeHour" class="select-input time">
+                <option value="1:00">1:00</option>
+                <option value="2:00">2:00</option>
+                <option value="3:00">3:00</option>
+                <option value="4:00">4:00</option>
+                <option value="5:00">5:00</option>
+                <option value="6:00">6:00</option>
+                <option value="7:00">7:00</option>
+                <option value="8:00">8:00</option>
+                <option value="9:00">9:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+            </select>
+            <select id="offStopTimeHourAmPm" class="select-input time_am_pm">
+                <option value="am">AM</option>
+                <option value="pm">PM</option>
+            </select>
+        </div>
+
+        <p class="form-label">Estimated Start Time</p>
+
+        <div class="fix-overflow start_stop_time">
+            <select class="date-select-input" id="offStartTimeDay">
+                <option>DD</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select class="date-select-input" id="offStartTimeMonth">
+                <option>MM</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select class="date-select-input year" id="offStartTimeYear">
+                <option>YYYY</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+
+        <div class="time_selects">
+            <select id="offStartTimeHour" class="select-input time">
+                <option value="1:00">1:00</option>
+                <option value="2:00">2:00</option>
+                <option value="3:00">3:00</option>
+                <option value="4:00">4:00</option>
+                <option value="5:00">5:00</option>
+                <option value="6:00">6:00</option>
+                <option value="7:00">7:00</option>
+                <option value="8:00">8:00</option>
+                <option value="9:00">9:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+            </select>
+            <select id="offStartTimeHourAmPm" class="select-input time_am_pm">
+                <option value="am">AM</option>
+                <option value="pm">PM</option>
+            </select>
+        </div>
+    </div>
+
+    <textarea class="textarea-input remark" id="machineStopRemark" placeholder="Type Remark" onfocus="this.placeholder = ''" onblur="    this.placeholder = 'Type Remark'"></textarea>
+    <span id="StopMachinceFromDate" class="error-msg"></span>
+    <span id="StopMachinceTodate" class="error-msg"></span>
+    <a href="#closeMachineOffPanel" class="btn">Cancel</a>
+    <a href="#stopMachine" class="btn">Stop Machine</a>
+</div>
+<div id="machineOnPanel" class="machine_confirm_panel hidden">
+    <div class="fix-overflow">
+        <a href="#closeMachineOnPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+
+    <h2>Attention!</h2>
+
+    <p class="details">This action will notify all departments that this machine has started.</p>
+
+    <p class="details">Please confirm this action, or click &quot;Cancel&quot; to deny this action.</p>
+
+    <div id="machineOnTimeFrame" class="time_frame">
+        <p class="form-label">Actual Start Time</p>
+
+        <div class="fix-overflow start_stop_time">
+            <select class="date-select-input" id="onStartTimeDay">
+                <option>DD</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select class="date-select-input" id="onStartTimeMonth">
+                <option>MM</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select class="date-select-input year" id="onStartTimeYear">
+                <option>YYYY</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+
+        <div class="time_selects">
+            <select id="onStartTimeHour" class="select-input time">
+                <option value="1:00">1:00</option>
+                <option value="2:00">2:00</option>
+                <option value="3:00">3:00</option>
+                <option value="4:00">4:00</option>
+                <option value="5:00">5:00</option>
+                <option value="6:00">6:00</option>
+                <option value="7:00">7:00</option>
+                <option value="8:00">8:00</option>
+                <option value="9:00">9:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+            </select>
+            <select id="onStartTimeHourAmPm" class="select-input time_am_pm">
+                <option value="am">AM</option>
+                <option value="pm">PM</option>
+            </select>
+        </div>
+    </div>
+
+    <textarea class="textarea-input remark" id="machineStartRemark" placeholder="Type Remark" onfocus="this.placeholder = ''" onblur="    this.placeholder = 'Type Remark'"></textarea>
+    @*<textarea class="textarea-input remark" id="machineStartRemark">Type Remark</textarea>*@
+    <span id="startMachinceDate" class="error-msg"></span>
+  
+    <a href="#closeMachineOnPanel" class="btn">Cancel</a>
+    <a href="#startMachine" class="btn">Start Machine</a>
+</div>
+
+<div class="production_plan">
+    <div class="tab-link tab-a">
+        <div class="fix-overflow">
+            @*<a href="#downloadOrder" class="download_order"><img src="/images/download.png"></a>*@
+            <div class="plan_title">
+                <p><strong>Today's Production Plan</strong></p>
+                @{
+                    DateTime TodayDate = DateTime.Now;
+                }             
+                <a href="#seeDetails" id="Today" data-id="@TodayDate.ToShortDateString()" class=" see_details_link">See Details</a>
+            </div>
+        </div>
+    </div>
+    <div id="planDetails-Today" class="production_plan_details hidden">
+
+    </div> <!-- .production_plan_details -->
+</div> <!-- .production_plan -->
+
+<div class="production_plan">
+    <div class="tab-link tab-b">
+        <div class="fix-overflow">
+            @*<a href="#downloadOrder" class="download_order"><img src="/images/download.png"></a>*@
+            <div class="plan_title">
+                <p>
+                    <strong>
+                        @{
+                            DateTime TomorrowDate = DateTime.Now.AddDays(1);
+                        }
+                        @TomorrowDate.ToString("dd MMM yyyy")
+                    </strong>
+                </p>
+                <a href="#seeDetails" id="Tomorrow" data-id="@TomorrowDate.ToShortDateString()" class=" see_details_link">See Details</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="planDetails-Tomorrow" class="production_plan_details hidden">
+
+    </div>
+</div> <!-- .production_plan -->
+
+<div class="production_plan">
+    <div class="tab-link tab-a">
+        <div class="fix-overflow">
+            @*<a href="#downloadOrder" class="download_order"><img src="/images/download.png"></a>*@
+            <div class="plan_title">
+                <p>
+                    <strong>
+                        @{
+                            DateTime NextDate = DateTime.Now.AddDays(2);
+                        }
+                        @NextDate.ToString("dd MMM yyyy")
+                    </strong>
+                </p>
+                <a href="#seeDetails" id="NextDate" data-id="@NextDate.ToShortDateString()" class="see_details_link">See Details</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="planDetails-NextDate" class="production_plan_details hidden">
+
+    </div>
+</div> <!-- .production_plan -->
+ 

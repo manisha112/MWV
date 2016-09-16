@@ -1,0 +1,1799 @@
+﻿@model MWV.Models.Customer
+@{
+    ViewBag.Title = "DashBoard";
+}
+
+<script type="text/javascript">
+    $(function () {
+        //Added By Manisha
+        //Show 7 days quick view details
+
+        $.ajax({
+            url: "/QuickView/QuickViewDetails/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+                            $('#quickViewRecentOrders').html(result);
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+    });
+</script>
+
+
+<!-- ---------------------------------------------------------------------------------------------------------
+    CREATE ORDER BUTTON
+---------------------------------------------------------------------------------------------------------- -->
+
+<div id="createOrderButton" class="create_order_button">
+    <a href="#showCreateOrderPanel" class="btn create_order">Create New Order</a>
+</div>
+
+<!-- ---------------------------------------------------------------------------------------------------------
+    CREATE ORDER PANEL
+---------------------------------------------------------------------------------------------------------- -->
+
+<div id="createOrderPanel" class="hidden create_order_panel">
+    <div class="fix-overflow">
+        <a href="#closeCreateOrderPanel" class="close-panel"><img src="../images/close-panel.png"></a>
+    </div>
+
+    <!-- -----------------------------------------------------------------------------------------------------
+        CREATE ORDER: SEARCH / SELECT CUSTOMER
+    ------------------------------------------------------------------------------------------------------ -->
+
+    <div id="createOrderSelectCustomer" class="select_customer_panel">
+        <h2>Create Order - Select Customer</h2>
+
+        <div class="fix-overflow">
+            <a href="#createCustomer" class="create_customer"><img src="images/add.png"> <span>Create Customer</span></a>
+        </div>
+
+        <div class="auto_search_input_field">
+            <input type="text" value="Search" class="search-input" id="ordersAutoSearchCustomers">
+            <a href="#clearSearch">&nbsp;</a>
+        </div>
+
+        <div class="auto_search_results">
+            <div id="ordersAutoSearchCustomersResults" class="auto-search"></div>
+        </div>
+
+        <div id="selectCustomerDropdownPanel" class="select_customer_dropdown_panel">
+            <p>or</p>
+            @Html.DropDownList("selectCustomerDropdown", (SelectList)ViewBag.customer_list, "Select Customer", new { @class = "select-input" })
+            @*<select id="selectCustomerDropdown" class="select-input">
+                    <option>Select Customer</option>
+                    <option value="customer-a">Customer A</option>
+                    <option value="customer-b">Customer B</option>
+                    <option value="customer-c">Customer C</option>
+                </select>*@
+        </div>
+
+        <div id="createOrderSelectedCustomerResults" class="selected_customer_results hidden">
+            <div class="list-item-wrapper">
+                <div class="customer-list-item">
+                    <div class="fix-overflow">
+                        <a href="#closeCurrentCustomer" class="close-panel"><img src="images/close-panel.png"></a>
+
+                        <p class="title"><strong>Customer A</strong></p>
+                    </div>
+
+                    <p>523 Anywhere Ave. / Funtown / Motania / PIN</p>
+                    <p>Sri Lanka / 800-777-5555 / 800-777-3333</p>
+
+                    <a href="#selectCustomerFromList" data-value="customer-a" data-name="Customer A" class="btn">Select</a>
+                </div> <!-- .customer_list_item -->
+            </div> <!-- .list_item_wrapper -->
+        </div> <!-- #selectedCustomerResults -->
+    </div> <!-- #createOrderSelectCustomer -->
+    <!-- -----------------------------------------------------------------------------------------------------
+        CREATE ORDER: CREATE NEW CUSTOMER
+    ------------------------------------------------------------------------------------------------------ -->
+    @using (Html.BeginForm("CreateCustomer", "Customer", FormMethod.Post, new { id = "FormcustomerDetails", name = "FormcustomerDetails" }))
+    {
+        //Added by Manisha
+        //For create customer
+        @Html.AntiForgeryToken()
+
+        <div id="createCustomerPanel" class="create_customer_panel hidden">
+            <h2>Create New Customer</h2>
+            <div class="inputs">
+                <div class="col-md-10" id="divCustomerName">
+                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "text-input", @id = "txtName", @placeholder = "Name" }, })
+                    @Html.ValidationMessageFor(model => model.name)
+                </div>
+
+                <div class="col-md-10" id="divCustomerAddress1">
+                    @Html.EditorFor(model => model.address1, new { htmlAttributes = new { @class = "text-input", @id = "txtAddress1", @placeholder = "Address1" }, })
+                    @Html.ValidationMessageFor(model => model.address1)
+                </div>
+
+                <div class="col-md-10" id="divCustomerAddress2">
+                    @Html.EditorFor(model => model.address2, new { htmlAttributes = new { @class = "text-input", @id = "txtAddress2", @placeholder = "Address2" }, })
+                    @Html.ValidationMessageFor(model => model.address2)
+                </div>
+
+                <div class="col-md-10" id="divCustomerAddress3">
+                    @Html.EditorFor(model => model.address3, new { htmlAttributes = new { @class = "text-input", @id = "txtAddress3", @placeholder = "Address3" }, })
+                    @Html.ValidationMessageFor(model => model.address3)
+                </div>
+
+                <div class="col-md-10" id="divCity">
+                    @Html.EditorFor(model => model.city, new { htmlAttributes = new { @class = "text-input", @id = "txtCity", @placeholder = "City" }, })
+                    @Html.ValidationMessageFor(model => model.city)
+                </div>
+
+                <div class="col-md-10" id="divPincode">
+                    @Html.EditorFor(model => model.pincode, new { htmlAttributes = new { @class = "text-input", @id = "txtPincode", @placeholder = "Pincode" }, })
+                    @Html.ValidationMessageFor(model => model.pincode)
+                </div>
+
+                <div class="col-md-10" id="divState">
+                    @Html.EditorFor(model => model.state, new { htmlAttributes = new { @class = "text-input", @id = "txtState", @placeholder = "State" }, })
+                    @Html.ValidationMessageFor(model => model.state)
+                </div>
+
+                <div class="col-md-10" id="divCountry">
+                    @Html.EditorFor(model => model.country, new { htmlAttributes = new { @class = "text-input", @id = "txtCountry", @placeholder = "Country" }, })
+                    @Html.ValidationMessageFor(model => model.country)
+                </div>
+
+
+                <div class="col-md-10" id="divPhone">
+                    @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "text-input", @id = "txtPhone", @placeholder = "Phone" }, })
+                    @Html.ValidationMessageFor(model => model.phone)
+                </div>
+
+                <div class="col-md-10" id="divFax">
+                    @Html.EditorFor(model => model.fax, new { htmlAttributes = new { @class = "text-input", @id = "txtFax", @placeholder = "Fax" }, })
+                    @Html.ValidationMessageFor(model => model.fax)
+                </div>
+                <div class="col-md-10" id="divEmail">
+                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "text-input", @id = "txtEmail", @placeholder = "Email" }, })
+                    @Html.ValidationMessageFor(model => model.email)
+                </div>
+
+                @*<input type="text" class="text-input" id="customerName" value="Name">
+                    <input type="text" class="text-input" id="customerAddress1" value="Address Line 1">
+                    <input type="text" class="text-input" id="customerAddress2" value="Address Line 2">
+                    <input type="text" class="text-input" id="customerAddress3" value="Address Line 3">
+                    <input type="text" class="text-input" id="customerCity" value="City">
+                    <input type="text" class="text-input" id="customerPin" value="PIN">
+                    <input type="text" class="text-input" id="customerState" value="State">
+                    <input type="text" class="text-input" id="customerCountry" value="Country">
+                    <input type="text" class="text-input" id="customerPhone" value="Phone">
+                    <input type="text" class="text-input" id="customerFax" value="Fax">
+                    <input type="text" class="text-input" id="customerEmail" value="Email">*@
+                @*<div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>*@
+
+            </div>
+
+            <a href="#createNewCustomer" class="btn">Create</a>
+        </div> <!-- #createCustomerPanel -->
+
+
+        //Modified By manisha
+        //li fields are used in Ajax (Index.js)
+        <div id="reviewCustomerPanel" class="review_customer_panel hidden">
+            <h2>Review Customer Information</h2>
+            <div id="ReviewCustomerDetails">
+                @*<ul>
+                        <li>
+                            <div id="Name">
+                            </div>
+                        </li>
+                    <li>Address Line 1</li>
+                    <li>Address Line 2</li>
+                    <li>Address Line 3</li>
+                    <li>City</li>
+                    <li>PIN</li>
+                    <li>State</li>
+                    <li>Country</li>
+                    <li>Phone</li>
+                    <li>Fax</li>
+                    <li>Email</li>
+                    </ul>*@
+            </div>
+
+            <div class="buttons">
+                <a href="#cancelCreateCustomer" class="btn">Cancel</a>
+                <a href="#editCreateCustomer" class="btn">Edit Customer</a>
+                <a href="#createCustomerConfirmation" class=" btn">Create</a>
+
+                @*<a href="#createCustomerConfirmation" onclick="$(this).parents('form').submit()" class="btn">Create</a>*@
+
+                @*<a href="#createCustomerConfirmation" onclick="$(this).parents('form').submit()" class="btn">Create</a>*@
+                @*<a href="#createCustomerConfirmation" class=" btn">Create</a>*@
+                @*<div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" id="btnSaveCustDetils"/>
+                    </div>*@
+            </div>
+        </div> <!-- #reviewCustomerPanel -->
+    }
+    <div id="confirmCustomerPanel" class="confirm_customer_panel hidden">
+
+    </div> <!-- #confirmCustomerPanel -->
+@*</div>*@ <!-- #createOrderPanel -->
+<!-- -----------------------------------------------------------------------------------------------------
+    CREATE ORDER: CREATE NEW CUSTOMER: CONFIRMATION
+------------------------------------------------------------------------------------------------------ -->
+
+<div id="confirmCustomerPanel" class="confirm_customer_panel hidden">
+    <h2>Confirmation</h2>
+
+    <div class="thank_you">
+        <p class="title"><strong>Thank you for your submission</strong></p>
+
+        <p class="details">Your submission will be reviewed shortly, and you will be notified if it is approved.</p>
+    </div>
+
+    <div class="buttons">
+        <a href="#closeCreateCustomerConfirmation" class="btn">Close</a>
+        <a href="#createAnotherCustomer" class="btn">Create Another Customer</a>
+    </div>
+</div> <!-- #confirmCustomerPanel -->
+<!-- -----------------------------------------------------------------------------------------------------
+    CREATE ORDER: ADD PRODUCTS
+------------------------------------------------------------------------------------------------------ -->
+
+
+<div id="createOrderAddProducts" class="hidden add_products_panel">
+    <div class="back-btn"><a href="#back"><img src="images/back.png"></a></div>
+
+    <h2>Create Order - Add Products</h2>
+
+    <!-- -------------------------------------------------------------------------------------------------
+        CREATE ORDER: ADD PRODUCTS > DELIVERY DATE
+    -------------------------------------------------------------------------------------------------- -->
+    <div id="createOrderDeliveryDate" class="delivery_date">
+        <input type="hidden" id="selectedCustomerId">
+        <p class="customer_name"><strong id="selectedCustomerName">Customer Name</strong></p>
+        <p class="form-label">Requested Delivery Date</p>
+        <input type="text" value="DD" class="date-input" id="requestedDeliveryDateDay">
+        <input type="text" value="MM" class="date-input" id="requestedDeliveryDateMonth">
+        <input type="text" value="YYYY" class="date-input-year" id="requestedDeliveryDateYear">
+        <div class="fix-overflow">
+            <a href="#addProduct" class="add_product"><img src="images/add.png"> <span>Add Product</span></a>
+        </div>
+    </div> <!-- #createOrderDeliveryDate -->
+    <!-- -------------------------------------------------------------------------------------------------
+        CREATE ORDER: ADD PRODUCTS > CURRENT PRODUCT LIST
+    -------------------------------------------------------------------------------------------------- -->
+    <div id="createOrderCurrentProducts" class="hidden current_products">
+        @*//Rajni- created a partial view for div id '_currentProductsList'*@
+        <div id="lstProds" ></div>
+        @*//Rajni- created a partial view for div id '_currentProductsList'*@
+        <div class="order_buttons">
+            <a href="#cancelPlaceOrder" class="btn">Cancel</a>
+            <a href="#placeOrder" class="btn">Place Order</a>
+        </div>
+    </div> <!-- #createOrderCurrentProducts -->
+    <!-- -------------------------------------------------------------------------------------------------
+        CREATE ORDER: ADD PRODUCTS > ADD PRODUCT
+    -------------------------------------------------------------------------------------------------- -->
+    <div id="addProductPanel" class="hidden add_product_panel">
+        <div class="fix-overflow">
+            <a href="#closeAddProductPanel" class="close-panel"><img src="images/close-panel.png"></a>
+        </div>
+        <div class="add_product_inputs">
+            @Html.DropDownList("selectBf", (SelectList)ViewBag.Bf_list, "Select Bf", new { @class = "select-input" })
+
+            @*<select class="select-input" id="selectBf">
+                <option>Select BF</option>
+                <option value="bf-1">BF 1</option>
+                <option value="bf-2">BF 2</option>
+                <option value="bf-3">BF 3</option>
+            </select>*@
+
+            @Html.DropDownList("selectGsm", (SelectList)ViewBag.Gsm_list, "Select Gsm", new { @class = "select-input" })
+
+            @*<select class="select-input" id="selectGsm">
+                <option>Select GSM</option>
+                <option value="gsm-1">GSM 1</option>
+                <option value="gsm-2">GSM 2</option>
+                <option value="gsm-3">GSM 3</option>
+            </select>*@
+
+            @Html.DropDownList("selectShade", (SelectList)ViewBag.Shade_list, "Select Shade", new { @class = "select-input" })
+            
+            @*<select class="select-input" id="selectShade">
+                <option>Select Shade</option>
+                <option value="shade-1">Shade 1</option>
+                <option value="shade-2">Shade 2</option>
+                <option value="shade-3">Shade 3</option>
+            </select>*@
+           
+            @Html.DropDownList("selectCore", (SelectList)ViewBag.Core_list, "Select Core", new { @class = "select-input" })
+            @*<select class="select-input" id="selectCore">
+                <option>Select Core</option>
+                <option value="core-1">Core 1</option>
+                <option value="core-2">Core 2</option>
+                <option value="core-3">Core 3</option>
+            </select>*@
+            @Html.TextBox("selectWidth", "", new { @class = "text-input", @placeholder = "Enter width (cm)" })
+            @*<select class="select-input" id="selectWidth">
+            <option>Select Width</option>
+            <option value="width-1">Width 1</option>
+            <option value="width-2">Width 2</option>
+            <option value="width-3">Width 3</option>
+        </select>*@
+            @Html.TextBox("inputDiaCm", "", new { @class = "text-input", @placeholder = "Enter DIA (cm)" })
+            @*<input type="text" value="Enter DIA (cm)" class="text-input" id="inputDiaCm">*@
+            @Html.TextBox("inputQuantityMt", "", new { @class = "text-input", @placeholder = "Enter Quantity (MT)" })
+            @*<input type="text" value="Enter Quantity (MT)" class="text-input" id="inputQuantityMt">*@
+        </div>
+        <input type="hidden" name="hCustomer_id" id="hCustomer_id" value="" />
+        <div class="product_details">
+            <p class="product_code_header"><strong>Product Code:</strong></p>
+            <p id="productCode" class="product_code"></p>
+            @* TK-144.0-185-40RGMP *@ 
+            <p class="product_code_header"><strong>Price:</strong></p>
+            <p id="productPrice" class="product_price">INR 29,335</p>
+        </div>
+
+        <a href="#addProductToOrder" class="btn add_product_to_order">Add</a>
+    
+    </div> <!-- #addProductPanel -->
+</div> <!-- #createOrderAddProducts -->
+<!-- -----------------------------------------------------------------------------------------------------
+    CREATE ORDER: REVIEW ORDER
+------------------------------------------------------------------------------------------------------ -->
+<div id="reviewOrder" class="hidden review_order">
+    <h2>Review Order</h2>
+    <div id="ShowOrderReview"></div>
+    @* created a partial view for order review "_OrderReview" *@
+
+    <div class="order_buttons">
+        <a href="#cancelOrder" class="btn">Cancel</a>
+        <a href="#editOrder" class="btn">Edit Order</a>
+        <a href="#submitOrder" class="btn">Submit Order</a>
+    </div>
+</div> <!-- #reviewOrder -->
+
+<!-- -----------------------------------------------------------------------------------------------------
+    CREATE ORDER: ORDER CONFIRMATION
+------------------------------------------------------------------------------------------------------ -->
+<div id="orderConfirmation" class="hidden order_confirmation">
+    <h2>Order Confirmation</h2>
+    <div id="OrderConfirmed" class="order_confirmation_details">@* added by Rajni for loading the submit order info *@
+        @* partial view "_orderConfirmation"  *@
+
+        @*<p class="details">Thank you for your order.</p>
+
+            <p class="details">PO Confirmation:</p>
+
+            <p class="title"><strong>MWV-1234-123456-4759</strong></p>
+
+            <p class="title"><strong>Customer Name</strong></p>
+
+            <p class="details">Requested Delivery Date: 13/08/2015</p>
+
+            <ul id="orderConfirmationProductList" class="product_list">
+                <li>
+                    <p class="product_code"><strong>TK-144.0-185-40RGMP</strong></p>
+                    <p class="product_details">144.0 x 185 BF 40 RUBY KRAFT TOP</p>
+                    <p class="product_details">INR 29,335</p>
+                </li>
+                <li>
+                    <p class="product_code"><strong>TK-144.0-185-40RGMP</strong></p>
+                    <p class="product_details">144.0 x 185 BF 40 RUBY KRAFT TOP</p>
+                    <p class="product_details">INR 29,335</p>
+                </li>
+            </ul>
+
+            <div id="orderConfirmationTotals" class="order_confirmation_totals">
+                <p id="orderConfirmationTotalPrice"><strong>Total: INR 29,335</strong></p>
+                <p id="orderConfirmationGrandTotal"><strong>Grand Total: INR 32,335</strong></p>
+            </div>*@
+    </div>
+        @* partial view "_orderConfirmation"  *@
+        <div class="order_buttons">
+            <a href="#printOrder" class="btn">Print</a>
+            <a href="#closeOrder" class="btn">Close</a>
+            <a href="#duplicateOrder" class="btn">Duplicate This Order</a>
+            <a href="#addAnotherOrder" class="btn">Add Another Order</a>
+        </div>
+    </div> <!-- #orderConfirmation -->
+        </div> <!-- #createOrderPanel -->
+        
+<!-- ---------------------------------------------------------------------------------------------------------
+    PANEL GRID TOP ROW
+---------------------------------------------------------------------------------------------------------- -->
+
+<div class="panel_grid panel_grid_top">
+    <div class="panel_grid_tab"><a href="#orders">Orders</a></div>
+    <div class="panel_grid_tab"><a href="#customers">Customers</a></div>
+</div>
+
+<!-- ---------------------------------------------------------------------------------------------------------
+    CUSTOMERS PANEL
+---------------------------------------------------------------------------------------------------------- -->
+
+<div id="customersPanel" class="customers_panel hidden">
+    <div class="fix-overflow">
+        <a href="#closeCustomersPanel" class="close-panel"><img src="images/close-panel.png"></a>
+    </div>
+
+    <!-- -----------------------------------------------------------------------------------------------------
+        CUSTOMERS PANEL: SEARCH / SELECT CUSTOMER
+    ------------------------------------------------------------------------------------------------------ -->
+
+    <div id="selectCustomer" class="select_customer">
+        <h2>Customers [214]</h2>
+
+        <div class="fix-overflow">
+            <a href="#createCustomer" class="create_customer"><img src="images/add.png"> <span>Create Customer</span></a>
+        </div>
+
+        <div class="auto_search_input_field">
+            <input type="text" value="Search" class="search-input" id="autoSearchCustomers">
+            <a href="#clearSearch">&nbsp;</a>
+        </div>
+
+        <!-- -------------------------------------------------------------------------------------------------
+            CUSTOMERS PANEL: AUTO-SEARCH
+        -------------------------------------------------------------------------------------------------- -->
+
+        <div class="auto_search_results">
+            <div id="autoSearchCustomersResults" class="auto-search"></div>
+        </div>
+
+        <!-- -------------------------------------------------------------------------------------------------
+            CUSTOMERS PANEL: SELECT FROM LIST
+        -------------------------------------------------------------------------------------------------- -->
+
+        <div id="customersSelectCustomerDropdownPanel" class="customers_select_customer_dropdown">
+            <p class="center">or</p>
+
+            <div class="block-small-margin">
+                <select id="customersSelectCustomerDropdown" class="select-input">
+                    <option>Select Customer</option>
+                    <option value="customer-a">Customer A</option>
+                    <option value="customer-b">Customer B</option>
+                    <option value="customer-c">Customer C</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="selectedCustomerResults" class="selected_customer_results hidden">
+            <div class="list-item-wrapper">
+                <div class="customer-list-item">
+                    <div class="fix-overflow">
+                        <a href="#closeCurrentCustomer" class="close-panel"><img src="images/close-panel.png"></a>
+
+                        <p class="title"><strong>Customer A</strong></p>
+                    </div>
+
+                    <p>523 Anywhere Ave. / Funtown / Motania / PIN</p>
+                    <p>Sri Lanka / 800-777-5555 / 800-777-3333</p>
+
+                    <a href="#createOrderFromCustomer" data-value="customer-a" data-name="Customer A" class="btn">Create Order</a>
+
+                    <p>View Order History</p>
+
+                    <select name="show_orders_type" class="select-input">
+                        <option>Show All Orders</option>
+                    </select>
+
+                    <div class="from_to">
+                        <p class="form-label">From</p>
+
+                        <input value="DD" class="date-input" type="text" id="customerOrderHistoryFromDateDay">
+                        <input value="MM" class="date-input" type="text" id="customerOrderHistoryFromDateMonth">
+                        <input value="YYYY" class="date-input-year" type="text" id="customerOrderHistoryFromDateYear">
+
+                        <p class="form-label">To</p>
+
+                        <input value="DD" class="date-input" type="text" id="customerOrderHistoryToDateDay">
+                        <input value="MM" class="date-input" type="text" id="customerOrderHistoryToDateMonth">
+                        <input value="YYYY" class="date-input-year" type="text" id="customerOrderHistoryToDateYear">
+                    </div>
+
+                    <a href="#viewOrderHistory" class="btn">View</a>
+
+                    <div class="customer_orders hidden">
+                        <div class="fix-overflow">
+                            <a href="#closeCustomerOrdersPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                        </div>
+
+                        <div class="pagination">
+                            <a href="#" class="next"><img src="images/pagination-next.png"></a>
+                            <a href="#" class="prev"><img src="images/pagination-prev.png"></a>
+                            <a href="#" class="page">1</a>
+                            <a href="#" class="page">2</a>
+                            <a href="#" class="page current">3</a>
+                            <a href="#" class="page">4</a>
+                        </div>
+
+
+                    </div> <!-- .customer_orders -->
+                </div> <!-- .customer_list_item -->
+            </div> <!-- .list_item_wrapper -->
+        </div> <!-- #selectedCustomerResults -->
+        <!-- -------------------------------------------------------------------------------------------------
+            CUSTOMERS PANEL: BROWSE ALPHABETICALLY
+        -------------------------------------------------------------------------------------------------- -->
+
+        <div id="browseCustomerAlphabetically">
+            <p class="center">or</p>
+
+            <div class="block-small-margin">
+                <select id="selectCustomerAlphabetically" class="select-input">
+                    <option>Browse Alphabetically</option>
+                    @*<option value="a">A</a>
+                    <option value="b">B</a>
+                    <option value="c">C</a>*@
+                </select>
+            </div>
+        </div>
+
+        <div id="alphabetCustomerResults" class="alphabet_customer_results hidden">
+            <div class="fix-overflow">
+                <a href="#closeCustomerResults" class="close-panel"><img src="images/close-panel.png"></a>
+            </div>
+
+            <div class="pagination">
+                <a href="#" class="next"><img src="images/pagination-next.png"></a>
+                <a href="#" class="prev"><img src="images/pagination-prev.png"></a>
+
+                <a href="#" class="page">1</a>
+                <a href="#" class="page current">2</a>
+                <a href="#" class="page">3</a>
+                <a href="#" class="page">4</a>
+                <a href="#" class="page">5</a>
+            </div>
+
+            <ul>
+                <li>
+                    <p class="customer_name"><a href="#selectCustomer">Customer A</a></p>
+
+                    <div class="customer-list-item hidden">
+                        <div class="fix-overflow">
+                            <a href="#closeCurrentCustomer" class="close-panel"><img src="images/close-panel.png"></a>
+
+                            <p class="title"><strong>Customer A</strong></p>
+                        </div>
+
+                        <p>523 Anywhere Ave. / Funtown / Motania / PIN</p>
+                        <p>Sri Lanka / 800-777-5555 / 800-777-3333</p>
+
+                        <a href="#createOrderFromCustomer" data-value="customer-a" data-name="Customer A" class="btn">Create Order</a>
+
+                        <p>View Order History</p>
+
+                        <select name="show_orders_type" class="select-input">
+                            <option>Show All Orders</option>
+                        </select>
+
+                        <div class="from_to">
+                            <p class="form-label">From</p>
+
+                            <input value="DD" class="date-input" type="text" id="alphabetOrderHistoryFromDateDay">
+                            <input value="MM" class="date-input" type="text" id="alphabetOrderHistoryFromDateMonth">
+                            <input value="YYYY" class="date-input-year" type="text" id="alphabetOrderHistoryFromDateYear">
+
+                            <p class="form-label">To</p>
+
+                            <input value="DD" class="date-input" type="text" id="alphabetOrderHistoryToDateDay">
+                            <input value="MM" class="date-input" type="text" id="alphabetOrderHistoryToDateMonth">
+                            <input value="YYYY" class="date-input-year" type="text" id="alphabetOrderHistoryToDateYear">
+                        </div>
+
+                        <a href="#viewOrderHistory" class="btn">View</a>
+
+                        <div class="customer_orders hidden">
+                            <div class="fix-overflow">
+                                <a href="#closeCustomerOrdersPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                            </div>
+
+                            <div class="pagination">
+                                <a href="#" class="next"><img src="images/pagination-next.png"></a>
+                                <a href="#" class="prev"><img src="images/pagination-prev.png"></a>
+                                <a href="#" class="page">1</a>
+                                <a href="#" class="page">2</a>
+                                <a href="#" class="page current">3</a>
+                                <a href="#" class="page">4</a>
+                            </div>
+
+                            <ul>
+                                <li>
+                                    <div class="fix-overflow">
+                                        <p class="title"><strong>PO: MWV-1234-123456-1234</strong></p>
+
+                                        <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                                    </div>
+
+                                    <p class="details">Placed On: 12-10-2015</p>
+
+                                    <p><a href="#seeOrderDetails" class="see-details" data-id="mwv-1234-123456-1234">See Details</a></p>
+                                </li>
+                                <li>
+                                    <div class="fix-overflow">
+                                        <p class="title"><strong>PO: MWV-1234-123456-1234</strong></p>
+
+                                        <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                                    </div>
+
+                                    <p class="details">Placed On: 12-10-2015</p>
+
+                                    <p><a href="#seeOrderDetails" class="see-details" data-id="mwv-1234-123456-1234">See Details</a></p>
+                                </li>
+                            </ul>
+                        </div> <!-- .customer_orders -->
+                    </div> <!-- .customer_list_item -->
+                </li>
+                <li>
+                    <p class="customer_name"><a href="#selectCustomer">Customer B</a></p>
+
+                    <div class="customer-list-item hidden">
+                        <div class="fix-overflow">
+                            <a href="#closeCurrentCustomer" class="close-panel"><img src="images/close-panel.png"></a>
+
+                            <p class="title"><strong>Customer A</strong></p>
+                        </div>
+
+                        <p>523 Anywhere Ave. / Funtown / Motania / PIN</p>
+                        <p>Sri Lanka / 800-777-5555 / 800-777-3333</p>
+
+                        <a href="#createOrderFromCustomer" data-value="customer-a" data-name="Customer A" class="btn">Create Order</a>
+
+                        <p>View Order History</p>
+
+                        <select name="show_orders_type" class="select-input">
+                            <option>Show All Orders</option>
+                        </select>
+
+                        <div class="from_to">
+                            <p class="form-label">From</p>
+
+                            <input value="DD" class="date-input" type="text">
+                            <input value="MM" class="date-input" type="text">
+                            <input value="YYYY" class="date-input-year" type="text">
+
+                            <p class="form-label">To</p>
+
+                            <input value="DD" class="date-input" type="text">
+                            <input value="MM" class="date-input" type="text">
+                            <input value="YYYY" class="date-input-year" type="text">
+                        </div>
+
+                        <a href="#viewOrderHistory" class="btn">View</a>
+
+                        <div class="customer_orders hidden">
+                            <div class="fix-overflow">
+                                <a href="#closeCustomerOrdersPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                            </div>
+
+                            <div class="pagination">
+                                <a href="#" class="next"><img src="images/pagination-next.png"></a>
+                                <a href="#" class="prev"><img src="images/pagination-prev.png"></a>
+                                <a href="#" class="page">1</a>
+                                <a href="#" class="page">2</a>
+                                <a href="#" class="page current">3</a>
+                                <a href="#" class="page">4</a>
+                            </div>
+
+                            <ul>
+                                <li>
+                                    <div class="fix-overflow">
+                                        <p class="title"><strong>PO: MWV-1234-123456-1234</strong></p>
+
+                                        <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                                    </div>
+
+                                    <p class="details">Placed On: 12-10-2015</p>
+
+                                    <p><a href="#seeOrderDetails" class="see-details" data-id="mwv-1234-123456-1234">See Details</a></p>
+                                </li>
+                                <li>
+                                    <div class="fix-overflow">
+                                        <p class="title"><strong>PO: MWV-1234-123456-1234</strong></p>
+
+                                        <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                                    </div>
+
+                                    <p class="details">Placed On: 12-10-2015</p>
+
+                                    <p><a href="#seeOrderDetails" class="see-details" data-id="mwv-1234-123456-1234">See Details</a></p>
+                                </li>
+                            </ul>
+                        </div> <!-- .customer_orders -->
+                    </div> <!-- .customer_list_item -->
+                </li>
+                <li>
+                    <p class="customer_name"><a href="#selectCustomer">Customer C</a></p>
+
+                    <div class="customer-list-item hidden">
+                        <div class="fix-overflow">
+                            <a href="#closeCurrentCustomer" class="close-panel"><img src="images/close-panel.png"></a>
+
+                            <p class="title"><strong>Customer A</strong></p>
+                        </div>
+
+                        <p>523 Anywhere Ave. / Funtown / Motania / PIN</p>
+                        <p>Sri Lanka / 800-777-5555 / 800-777-3333</p>
+
+                        <a href="#createOrderFromCustomer" data-value="customer-a" data-name="Customer A" class="btn">Create Order</a>
+
+                        <p>View Order History</p>
+
+                        <select name="show_orders_type" class="select-input">
+                            <option>Show All Orders</option>
+                        </select>
+
+                        <div class="from_to">
+                            <p class="form-label">From</p>
+
+                            <input value="DD" class="date-input" type="text">
+                            <input value="MM" class="date-input" type="text">
+                            <input value="YYYY" class="date-input-year" type="text">
+
+                            <p class="form-label">To</p>
+
+                            <input value="DD" class="date-input" type="text">
+                            <input value="MM" class="date-input" type="text">
+                            <input value="YYYY" class="date-input-year" type="text">
+                        </div>
+
+                        <a href="#viewOrderHistory" class="btn">View</a>
+
+                        <div class="customer_orders hidden">
+                            <div class="fix-overflow">
+                                <a href="#closeCustomerOrdersPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                            </div>
+
+                            <div class="pagination">
+                                <a href="#" class="next"><img src="images/pagination-next.png"></a>
+                                <a href="#" class="prev"><img src="images/pagination-prev.png"></a>
+                                <a href="#" class="page">1</a>
+                                <a href="#" class="page">2</a>
+                                <a href="#" class="page current">3</a>
+                                <a href="#" class="page">4</a>
+                            </div>
+
+                            <ul>
+                                <li>
+                                    <div class="fix-overflow">
+                                        <p class="title"><strong>PO: MWV-1234-123456-1234</strong></p>
+
+                                        <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                                    </div>
+
+                                    <p class="details">Placed On: 12-10-2015</p>
+
+                                    <p><a href="#seeOrderDetails" class="see-details" data-id="mwv-1234-123456-1234">See Details</a></p>
+                                </li>
+                                <li>
+                                    <div class="fix-overflow">
+                                        <p class="title"><strong>PO: MWV-1234-123456-1234</strong></p>
+
+                                        <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                                    </div>
+
+                                    <p class="details">Placed On: 12-10-2015</p>
+
+                                    <p><a href="#seeOrderDetails" class="see-details" data-id="mwv-1234-123456-1234">See Details</a></p>
+                                </li>
+                            </ul>
+                        </div> <!-- .customer_orders -->
+                    </div> <!-- .customer_list_item -->
+                </li>
+            </ul>
+        </div>
+    </div> <!-- #selectCustomer -->
+</div> <!-- #customersPanel -->
+<!-- ---------------------------------------------------------------------------------------------------------
+    ORDERS PANEL
+---------------------------------------------------------------------------------------------------------- -->
+
+<div id="ordersPanel" class="orders_panel hidden">
+    <div class="fix-overflow close_orders_panel">
+        <a href="#closeOrdersPanel" class="close-panel"><img src="images/close-panel.png"></a>
+    </div>
+
+    <!-- -----------------------------------------------------------------------------------------------------
+        ORDERS: SEARCH / SELECT ORDER
+    ------------------------------------------------------------------------------------------------------ -->
+
+    <div id="selectOrder" class="select_order">
+        <h2>Orders</h2>
+
+        <div id="selectOrderPanel" class="select_order_panel">
+            <select id="selectOrderTypeDropdown" class="select-input">
+                <option value="All-Orders">All Orders</option>
+                <option value="Open">Open</option>
+                <option value="Completed">Completed</option>
+                <option value="Schedule-Ready">Schedule Ready</option>
+                <option value="Dispatch-Ready">Dispatch Ready</option>
+                <option value="Purchase-Order-Number">Purchase Order Number</option>
+            </select>
+
+            <div id="orderByDateRange" class="order_by_date_range">
+                <p class="form-label">From</p>
+
+                <div id="orderFromDate" class="date-input-group">
+                    <input type="text" value="DD" class="date-input" id="orderFromDateDay">
+                    <input type="text" value="MM" class="date-input" id="orderFromDateMonth">
+                    <input type="text" value="YYYY" class="date-input-year" id="orderFromDateYear">
+                </div>
+
+                <p class="form-label">To</p>
+
+                <div id="orderToDate" class="date-input-group">
+                    <input type="text" value="DD" class="date-input" id="orderToDateDay">
+                    <input type="text" value="MM" class="date-input" id="orderToDateMonth">
+                    <input type="text" value="YYYY" class="date-input-year" id="orderToDateYear">
+                </div>
+            </div>
+
+            <div id="orderByPurchaseOrderNumber" class="hidden order_by_purchase_order_number">
+                <input type="text" id="orderPurchaseOrderNumber" class="text-input" value="Type Purchase Order #">
+            </div>
+
+            <a href="#searchOrders" class="btn search_orders">Search</a>
+        </div> <!-- #selectOrderPanel -->
+        <!-- -----------------------------------------------------------------------------------------------------
+            ORDERS: SEARCH RESULTS
+        ------------------------------------------------------------------------------------------------------ -->
+
+        <div id="ordersResultsPanel" class="hidden orders_results_panel">
+            <div class="fix-overflow">
+                <a href="#closeOrdersResultsPanel" class="close-panel"><img src="images/close-panel.png"></a>
+            </div>
+
+            <div class="pagination">
+                <a href="#" class="next"><img src="images/pagination-next.png"></a>
+                <a href="#" class="prev"><img src="images/pagination-prev.png"></a>
+
+                <a href="#" class="page">1</a>
+                <a href="#" class="page">2</a>
+                <a href="#" class="page current">3</a>
+                <a href="#" class="page">4</a>
+                <a href="#" class="page">5</a>
+                <a href="#" class="page">6</a>
+                <a href="#" class="page">7</a>
+            </div>
+
+            <ul>
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title"><strong>PO: MWV-1234-123456-1234</strong></p>
+
+                        <a href="#downloadOrder" class="download_order" data-id="mwv-1234-123456-1234"><img src="images/download.png"></a>
+                    </div>
+
+                    <p><a href="#seeOrderDetails" class="see-details" data-order-id="mwv-1234-123456-1234">See Details</a></p>
+
+                    <p class="details">Placed On: 02-03-2016</p>
+
+                    <a href="#filterOrderStatus" class="order-status os-open" data-status="open">Open</a>
+                </li>
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title"><strong>PO: MWV-1234-123456-2345</strong></p>
+
+                        <a href="#downloadOrder" class="download_order" data-id="mwv-1234-123456-2345"><img src="images/download.png"></a>
+                    </div>
+
+                    <p><a href="#seeOrderDetails" class="see-details" data-order-id="mwv-1234-123456-1234">See Details</a></p>
+
+                    <p class="details">Placed On: 13-06-2016</p>
+
+                    <a href="#filterOrderStatus" class="order-status os-complete" data-status="complete">Complete</a>
+                </li>
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title"><strong>PO: MWV-1234-123456-3456</strong></p>
+
+                        <a href="#downloadOrder" class="download_order" data-order-id="mvw-1234-123456-3456"><img src="images/download.png"></a>
+                    </div>
+
+                    <p><a href="#seeOrderDetails" class="see-details" data-order-id="mwv-1234-123456-1234">See Details</a></p>
+
+                    <p class="details">Placed On: 12-12-2016</p>
+
+                    <a href="#filterOrderStatus" class="order-status os-dispatch-ready" data-status="dispatch-ready">Dispatch Ready</a>
+                </li>
+            </ul>
+        </div> <!-- #ordersResultsPanel -->
+    </div> <!-- #selectOrder -->
+    <!-- -------------------------------------------------------------------------------------------------
+        ORDERS: SEARCH RESULTS > ORDER DETAILS
+    -------------------------------------------------------------------------------------------------- -->
+
+    <div id="orderDetails" class="order_details hidden">
+        @*<div class="fix-overflow">
+            <a href="#closeOrderDetails" class="close-panel"><img src="images/close-panel.png"></a>
+        </div>*@
+
+        @*<div class="order_details_full">
+            <p>Order Details For:</p>
+
+            <div class="fix-overflow">
+                <p class="po_number"><strong>PO: MWV-123-123456-1234</strong></p>
+
+                <div class="order_details_icons">
+                    <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                    <a href="#duplicateOrder" class="duplicate_order"><img src="images/duplicate.png"></a>
+                </div>
+            </div>
+
+            <div class="order-status up_top os-schedule-ready">Schedule Ready</div>
+
+            <div class="customer_name">
+                <p class="name"><strong>Customer Name</strong></p>
+
+                <p class="details">
+                    Placed On: 03-08-2015<br>
+                    Requested Delivery Date: 03-15-2015
+                </p>
+            </div>
+
+            <div class="customer_name">
+                <p class="name"><strong>Location: Morai Division</strong></p>
+
+                <p class="details">
+                    Survey No. 56/1<br>
+                    Village - Morai via Vappi<br>
+                    Dist. Valsad 396191
+                </p>
+            </div>
+        </div>*@ <!-- .order_details_full -->
+
+        @*<a href="#arrangeTransportation" class="btn arrange_transportation_button">Arrange Transportation</a>*@
+
+        <!-- ---------------------------------------------------------------------------------------------
+            ORDERS: SEARCH RESULTS > ORDER DETAILS > ARRANGE TRANSPORTATION
+        ---------------------------------------------------------------------------------------------- -->
+
+        <div class="arrange_new_transportation hidden">
+            <div class="fix-overflow">
+                <a href="#closeArrangeTransportationPanel" class="close-panel"><img src="images/close-panel.png"></a>
+            </div>
+
+            <h2>Arrange New Transportation</h2>
+
+            <div class="location_details">
+                <p class="title"><strong>Location: Morai Division</strong></p>
+
+                <p class="details">
+                    Survey No. 56/1<br>
+                    Village - Morai via Vappi<br>
+                    Dist. Valsad 396191
+                </p>
+            </div>
+
+            <div class="start_arrival_times">
+                <div class="start_time">
+                    <p class="form-label">Start</p>
+
+                    <input type="text" value="DD" class="date-input" id="ordersNewTransportationStartDay">
+                    <input type="text" value="MM" class="date-input" id="ordersNewTransportationStartMonth">
+                    <input type="text" value="YYYY" class="date-input-year" id="ordersNewTransportationStartYear">
+                </div>
+
+                <div class="time_selects">
+                    <select id="ordersNewTransportationStartTime" class="select-input time">
+                        <option value="8:00">8:00</option>
+                        <option value="9:00">9:00</option>
+                    </select>
+                    <select id="ordersNewTransportationStatTimeAmPm" class="select-input time_am_pm">
+                        <option value="am">AM</option>
+                        <option value="pm">PM</option>
+                    </select>
+                </div>
+
+                <div class="arrival_time">
+                    <p class="form-label">Expected Arrival Time</p>
+
+                    <input type="text" value="DD" class="date-input" id="ordersNewTransportationArrivalDay">
+                    <input type="text" value="MM" class="date-input" id="ordersNewTransportationArrivalMonth">
+                    <input type="text" value="YYYY" class="date-input-year" id="ordersNewTransportationArrivalYear">
+                </div>
+
+                <div class="time_selects">
+                    <select id="ordersNewTransportationArrivalTime" class="select-input time">
+                        <option value="8:00">8:00</option>
+                        <option value="9:00">9:00</option>
+                    </select>
+                    <select id="ordersNewTransportationArrivalTimeAmPm" class="select-input time_am_pm">
+                        <option value="am">AM</option>
+                        <option value="pm">PM</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ---------------------------------------------------------------------------------------------
+                ORDERS: SEARCH RESULTS > ORDER DETAILS > ARRANGE TRANSPORTATION > CARGO LIST
+            ---------------------------------------------------------------------------------------------- -->
+
+            @*<div class="cargo_list hidden">
+                <ul>
+                    <li>
+                        <div class="fix-overflow">
+                            <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+                            <a href="#removeCargo" class="remove_cargo"><img src="images/delete.png"></a>
+                        </div>
+
+                        <p class="title"><strong>Customer Name</strong></p>
+                        <p class="details">TK-144.0-185-40RGMP</p>
+                        <p class="details">Qty. For Loading: 1.000 MT</p>
+                    </li>
+                    <li>
+                        <div class="fix-overflow">
+                            <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+                            <a href="#removeCargo" class="remove_cargo"><img src="images/delete.png"></a>
+                        </div>
+
+                        <p class="title"><strong>Customer Name</strong></p>
+                        <p class="details">TK-144.0-185-40RGMP</p>
+                        <p class="details">Qty. For Loading: 1.000 MT</p>
+                    </li>
+                </ul>
+            </div>*@
+
+            <div class="fix-overflow">
+                <a href="#addCargoToTransportation" class="add_cargo"><img src="images/add.png"> <span>Add Cargo</span></a>
+            </div>
+
+            <!-- ---------------------------------------------------------------------------------------------
+                ORDERS: SEARCH RESULTS > ORDER DETAILS > ARRANGE TRANSPORTATION > ADD CARGO
+            ---------------------------------------------------------------------------------------------- -->
+
+            <div class="add_cargo_panel hidden">
+                <div class="fix-overflow">
+                    <a href="#closeAddCargoPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                </div>
+
+                <h2>Add Cargo Item</h2>
+
+                <div class="add_cargo_panel_details">
+                    <select class="select-input">
+                        <option>Select PO #</option>
+                    </select>
+
+                    <select class="select-input">
+                        <option>Select Product</option>
+                    </select>
+
+                    <input type="text" class="text-input" value="Enter Quantity (MT)" id="ordersAddCargoEnterQuantity">
+
+                    <a href="#addNewCargoItem" class="btn">Add Cargo</a>
+                </div>
+            </div>
+
+            <div class="submit_transportation_button hidden">
+                <a href="#submitTransportation" class="btn">Submit Transportation</a>
+            </div>
+        </div> <!-- .arrange_new_transportation -->
+        <!-- -------------------------------------------------------------------------------------------------
+            ORDERS: SEARCH RESULTS > ORDER DETAILS > REVIEW TRANSPORTATION
+        -------------------------------------------------------------------------------------------------- -->
+
+        <div class="transportation_details hidden">
+            <div class="fix-overflow">
+                <a href="#closeReviewTransportationDetails" class="close-panel"><img src="images/close-panel.png"></a>
+            </div>
+
+            <h2>Review Transportation Details</h2>
+
+            <div class="transportation_details_full">
+                    <p>Transportation Details For:</p>
+
+                    <p class="title"><strong>Vehicle # MH-123-1234</strong></p>
+
+                    <p class="title"><strong>Location: Morai Division</strong></p>
+
+                    <p class="details">
+                        Survey No. 56/1<br>
+                        Village - Morai via Vappi<br>
+                        Dist. Valsad 396191
+                    </p>
+
+                    <p class="details">
+                        Scheduled On June 6th at 09:32 AM<br>
+                        Vehicle Capacity 4.000 MT<br>
+                        Scheduled Start: June 7th at 8:00 AM<br>
+                        Expected Arrival: June 9th at 2:00 PM<br>
+                        Arrival: Pending<br>
+                        Departure: Pending
+                    </p>
+            </div>
+
+            <!-- -----------------------------------------------------------------------------------------
+                ORDERS: SEARCH RESULTS > ORDER DETAILS > REVIEW TRANSPORTATION > CARGO LIST
+            ------------------------------------------------------------------------------------------ -->
+
+            <h2>Cargo List</h2>
+
+            <div class="cargo_list">
+                <ul>
+                    <li>
+                        <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+
+                        <p class="title"><strong>Customer Name</strong></p>
+                        <p class="details">TK-144.0-185-40RGMP</p>
+                        <p class="details">Qty. For Loading: 1.000 MT</p>
+                    </li>
+                    <li>
+                        <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+
+                        <p class="title"><strong>Customer Name</strong></p>
+                        <p class="details">TK-144.0-185-40RGMP</p>
+                        <p class="details">Qty. For Loading: 1.000 MT</p>
+                    </li>
+                </ul>
+            </div> <!-- .cargo_list -->
+
+            <div class="review_transportation_details_buttons">
+                <a href="#cancelReviewDetails" class="btn">Cancel</a>
+                <a href="#editReviewDetails" class="btn">Edit</a>
+                <a href="#submitReviewDetails" class="btn">Submit Transportation</a>
+            </div>
+        </div> <!-- .transportation_details -->
+        <!-- -------------------------------------------------------------------------------------------------
+            ORDERS: SEARCH RESULTS > ORDER DETAILS > TRANSPORTATION CONFRIMATION
+        -------------------------------------------------------------------------------------------------- -->
+
+        <div class="review_transportation_confirmation hidden">
+            <div class="fix-overflow">
+                <a href="#closeTransportationConfirmation" class="close-panel"><img src="images/close-panel.png"></a>
+            </div>
+
+            <h2>Confirmation</h2>
+
+            <p class="title"><strong>Transportation Setup Complete</strong></p>
+
+            <p class="details">Your transportation information has been received and recorded in our system.</p>
+
+            <a href="#closeTransportationConfirmation" class="btn">Close</a>
+        </div> <!-- .review_transportation_confirmation -->
+
+        <div class="order_details_full">
+            <div class="scheduled_transportation hidden">
+                <p class="scheduled_header">Scheduled Transportation:</p>
+
+                <ul>
+                    <li>
+                        <div class="fix-overflow vehicle_number">
+                            <a href="#editTransportation"><img src="images/edit.png"></a>
+                            <a href="#removeTransportation"><img src="images/delete.png"></a>
+
+                            <p class="title"><strong>Vehicle # MH-123-1234</strong></p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="title"><strong>Vehicle # MH-567-2345</strong></p>
+                        <p class="details">Arrived on June 9th at 05:27 PM</p>
+                        <p class="details">Departure: Pending</p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- -----------------------------------------------------------------------------------------
+                ORDERS: SEARCH RESULTS > ORDER DETAILS > TRANSPORTATION CONFIRMATION > PRODUCTS LIST
+            ------------------------------------------------------------------------------------------ -->
+
+            <ul class="order_products">
+                <li>
+                    <p class="product_code"><strong>TK-144.0-185-40RGMP</strong></p>
+
+                    <p class="details">
+                        144.0 x 185 BF 40 RUBY KRAFT TOP<br>
+                        Qty. Ordered: 2.400 MT<br>
+                        Rate: 39.750<br>
+                        Est. Ready Time: June 9th, 2015 9:00 AM<br>
+                        INR 29,335<br>
+                        Qty. Dispatched To-Date: 1.200 MT<br>
+                        Qty. At Dispatch Facility: 1.200 MT<br>
+                        Qty. Scheduled For Loading: 0.800 MT
+                    </p>
+
+                    <span class="order-status os-dispatch-ready">Dispatch Ready</span>
+                </li>
+                <li>
+                    <p class="product_code"><strong>TK-144.0-185-40RGMP</strong></p>
+
+                    <p class="details">
+                        144.0 x 185 BF 40 RUBY KRAFT TOP<br>
+                        Qty. Ordered: 2.400 MT<br>
+                        Rate: 39.750<br>
+                        Est. Ready Time: June 9th, 2015 9:00 AM<br>
+                        INR 29,335<br>
+                        Qty. Dispatched To-Date: 1.200 MT<br>
+                        Qty. At Dispatch Facility: 1.200 MT<br>
+                        Qty. Scheduled For Loading: 0.800 MT
+                    </p>
+
+                    <span class="order-status os-schedule-ready">Schedule Ready</span>
+                </li>
+                <li>
+                    <p class="product_code"><strong>TK-144.0-185-40RGMP</strong></p>
+
+                    <p class="details">
+                        144.0 x 185 BF 40 RUBY KRAFT TOP<br>
+                        Qty. Ordered: 2.400 MT<br>
+                        Rate: 39.750<br>
+                        Est. Ready Time: June 9th, 2015 9:00 AM<br>
+                        INR 29,335<br>
+                        Qty. Dispatched To-Date: 1.200 MT<br>
+                        Qty. At Dispatch Facility: 1.200 MT<br>
+                        Qty. Scheduled For Loading: 0.800 MT
+                    </p>
+
+                    <span class="order-status os-product-ready">Product Ready</span>
+                </li>
+            </ul>
+
+            <div class="order_totals">
+                <p><strong>Total: INR 29,335</strong></p>
+                <p><strong>Grand Total: INR 32,335</strong></p>
+            </div>
+        </div> <!-- .order_details_full -->
+    </div> <!-- .order_details -->
+
+    <div id="ordersArrangeNewTransportation" class="arrange_new_transportation hidden">
+        <div class="fix-overflow">
+            <a href="#closeArrangeNewTransportation" class="close-panel"><img src="images/close-panel.png"></a>
+        </div>
+
+        <h2>Arrange New Transportation</h2>
+
+        <div class="transportation_location">
+            <p class="location"><strong>Location: Morai Division</strong></p>
+
+            <p>
+                Survey No. 56/1<br>
+                Village - Morai via Vappi<br>
+                Dist. Valsad 396191
+            </p>
+        </div>
+
+        <input type="text" class="text-input" value="Type Vehicle Number">
+        <input type="text" class="text-input" value="Type Vehicle Capacity (MT)">
+
+        <div class="start_time">
+            <p class="form-label">Start</p>
+
+            <div class="start_date">
+                <input type="text" class="date-input" value="DD">
+                <input type="text" class="date-input" value="MM">
+                <input type="text" class="date-input-year" value="YYYY">
+            </div>
+            <div class="fix-overflow start_time">
+                <select class="select-input time">
+                    <option value="8:00">8:00</option>
+                    <option value="9:00">9:00</option>
+                </select>
+                <select class="select-input time_am_pm">
+                    <option value="am">AM</option>
+                    <option value="pm">PM</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="arrival_time">
+            <p class="form-label">Expected Arrival Time</p>
+
+            <div class="start_date">
+                <input type="text" class="date-input" value="DD">
+                <input type="text" class="date-input" value="MM">
+                <input type="text" class="date-input-year" value="YYYY">
+            </div>
+            <div class="fix-overflow start_time">
+                <select class="select-input time">
+                    <option value="8:00">8:00</option>
+                    <option value="9:00">9:00</option>
+                </select>
+                <select class="select-input time_am_pm">
+                    <option value="am">AM</option>
+                    <option value="pm">PM</option>
+                </select>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="ordersExistingTransportationCargo" class="existing_cargo hidden">
+            <ul>
+                <li>
+                    <p class="po_num">
+                        <strong>PO: MWV-1234-123456-4759</strong>
+                        <a href="#removeCargo"><img src="images/delete.png"></a>
+                    </p>
+                    <p><strong>TK-144.0-185-40RGMP</strong></p>
+                    <p>Qty. For Loading: 1.000 MT</p>
+                </li>
+                <li>
+                    <p class="po_num">
+                        <strong>PO: MWV-1234-123456-4759</strong>
+                        <a href="#removeCargo"><img src="images/delete.png"></a>
+                    </p>
+                    <p><strong>TK-144.0-185-40RGMP</strong></p>
+                    <p>Qty. For Loading: 1.000 MT</p>
+                </li>
+            </ul>
+
+            <div class="fix-overflow">
+                <a href="#addCargo" class="add_cargo"><img src="images/add.png"> <span>Add Cargo</span></a>
+            </div>
+
+            <a href="#submitTransportation" class="btn">Submit Transportation</a>
+        </div>
+
+        <div class="fix-overflow">
+            <a href="#addCargo" class="add_cargo"><img src="images/add.png"> <span>Add Cargo</span></a>
+        </div>
+
+        <div id="ordersAddCargoPanel" class="add_cargo_panel hidden">
+            <div class="fix-overflow">
+                <a href="#closeAddCargoPanel" class="close-panel"><img src="images/close-panel.png"></a>
+            </div>
+
+            <p>Add Cargo Item</p>
+
+            <select class="select-input">
+                <option>Select Purchase Order #</option>
+            </select>
+
+            <select class="select-input">
+                <option>Select Product</option>
+            </select>
+
+            <input type="text" class="text-input" value="Enter Quantity (MT)">
+
+            <a href="#addCargoToTransportation" class="btn">Add Cargo</a>
+        </div>
+    </div> <!-- #arrangeNewTransportation -->
+</div> <!-- #ordersPanel -->
+<!-- ---------------------------------------------------------------------------------------------------------
+    PANEL GRID BOTTOM ROW
+---------------------------------------------------------------------------------------------------------- -->
+
+<div class="panel_grid panel_grid_bottom">
+    <div class="panel_grid_tab"><a href="#transportation">Transportation</a></div>
+    <div class="panel_grid_tab"><a href="#reports">Reports</a></div>
+</div>
+
+<!-- ---------------------------------------------------------------------------------------------------------
+    TRANSPORTATION PANEL
+---------------------------------------------------------------------------------------------------------- -->
+
+<div id="transportationPanel" class="transportation_panel hidden">
+    <div class="fix-overflow">
+        <a href="#closeTransportationPanel" class="close-panel"><img src="images/close-panel.png"></a>
+    </div>
+
+    <div id="selectTransportation">
+        <h2>Transportation</h2>
+
+        <div id="selectTransportationPanel" class="select_transportation_panel">
+            <select id="selectVehicleTypeDropdown" class="select-input select_vehicle_type">
+                <option value="All-Vehicles">All Vehicles</option>
+                <option value="Departed-Vehicles">Departed Vehicles</option>
+                <option value="Scheduled-Vehicles">Scheduled Vehicles</option>
+                <option value="Vehicle-Number">Vehicle Number</option>
+            </select>
+
+            <div id="transportationFromTo" class="transportation_from_to">
+                <p class="form-label">From</p>
+
+                <input type="text" value="DD" class="date-input" id="transportationFromDateDay">
+                <input type="text" value="MM" class="date-input" id="transportationFromDateMonth">
+                <input type="text" value="YYYY" class="date-input-year" id="transportationFromDateYear">
+
+                <p class="form-label">To</p>
+
+                <input type="text" value="DD" class="date-input" id="transportationToDateDay">
+                <input type="text" value="MM" class="date-input" id="transportationToDateMonth">
+                <input type="text" value="YYYY" class="date-input-year" id="transportationToDateYear">
+            </div>
+
+            <div id="vehicleNumberInput" class="vehicle_number_input hidden">
+                <input type="text" value="Type Vehicle Number" class="text-input" id="transportationVehicleNumber">
+            </div>
+
+            <div class="search_button">
+                <a href="#searchTransportation" class="btn">Search</a>
+            </div>
+
+            <div id="transportationResultsPanel" class="hidden transportation_results_panel">
+                <div class="fix-overflow">
+                    <a href="#closeTransportationResultsPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                </div>
+
+                @*<div class="pagination">
+                    <a href="#" class="next"><img src="images/pagination-next.png"></a>
+                    <a href="#" class="prev"><img src="images/pagination-prev.png"></a>
+
+                    <a href="#" class="page">1</a>
+                    <a href="#" class="page">2</a>
+                    <a href="#" class="page current">3</a>
+                    <a href="#" class="page">4</a>
+                    <a href="#" class="page">5</a>
+                    <a href="#" class="page">6</a>
+                    <a href="#" class="page">7</a>
+                </div>
+
+                <ul>
+                    <li>
+                        <div class="fix-overflow">
+                            <p class="vehicle_number"><strong>Vehicle # MH-123-1234</strong></p>
+
+                            <div class="vehicle_icons">
+                                <a href="#editVehicle" class="edit_vehicle"><img src="images/edit.png"></a>
+                                <a href="#removeVehicle" class="remove_vehicle"><img src="images/delete.png"></a>
+                            </div>
+                        </div>
+
+                        <p class="details">Scheduled on June 6 at 9:03 AM</p>
+                        <p class="details">Arrival: Pending</p>
+                        <p class="details">Departure: Pending</p>
+
+                        <a href="#seeDetails" class="see-details" data-id="mh-123-1234">See Details</a>
+                    </li>
+                    <li>
+                        <div class="fix-overflow">
+                            <p class="vehicle_number"><strong>Vehicle # MH-123-1235</strong></p>
+                        </div>
+
+                        <p class="details">Scheduled on June 6 at 9:03 AM</p>
+                        <p class="details">Arrived on June 9th at 5:27 PM</p>
+                        <p class="details">Departure: Pending</p>
+
+                        <a href="#seeDetails" class="see-details" data-id="mh-123-1234">See Details</a>
+                    </li>
+                    <li>
+                        <div class="fix-overflow">
+                            <p class="vehicle_number"><strong>Vehicle # MH-123-1236</strong></p>
+                        </div>
+
+                        <p class="details">Scheduled on June 6 at 9:03 AM</p>
+                        <p class="details">Arrived on June 9th at 5:27 PM</p>
+                        <p class="details">Departed on June 11th at 3:30 PM</p>
+
+                        <a href="#seeDetails" class="see-details" data-id="mh-123-1234">See Details</a>
+                    </li>
+                    <li>
+                        <div class="fix-overflow">
+                            <p class="vehicle_number"><strong>Vehicle # MH-123-1238</strong></p>
+
+                            <div class="vehicle_icons">
+                                <a href="#editVehicle" class="edit_vehicle"><img src="images/edit.png"></a>
+                                <a href="#removeVehicle" class="remove_vehicle"><img src="images/delete.png"></a>
+                            </div>
+                        </div>
+
+                        <p class="details">Scheduled June 6 at 9:03 AM</p>
+                        <p class="details">Arrival: Pending</p>
+                        <p class="details">Departure: Pending</p>
+
+                        <a href="#seeDetails" class="see-details" data-id="mh-123-1234">See Details</a>
+                    </li>
+                </ul>*@
+
+            </div> <!-- #transportationResultsPanel -->
+
+            <div id="transportationDetails" class="transportation_details hidden">
+                @*<div class="fix-overflow">
+                    <a href="#closeTransportationDetails" class="close-panel"><img src="images/close-panel.png"></a>
+                </div>*@
+
+                @*<div class="transportation_details_full">
+                    <p>Transportation Details For:</p>
+
+                    <div class="vehicle_number">
+                        <p class="title"><strong>Vehicle # MH-123-1234</strong></p>
+
+                        <div class="transportation_details_icons">
+                            <a href="#editVehicle" class="edit_vehicle"><img src="images/edit.png"></a>
+                            <a href="#removeVehicle" class="remove_vehicle"><img src="images/delete.png"></a>
+                        </div>
+                    </div>
+
+                    <p class="title"><strong>Location: Morai Division</strong></p>
+                    <p class="details">
+                        Survey No. 56/1<br>
+                        Village - Morai via Vappi<br>
+                        Dist. Valsad 396191
+                    </p>
+                    <p class="details">
+                        Scheduled On June 6th at 09:32 AM<br>
+                        Vehicle Capacity 4.000 MT<br>
+                        Scheduled Start: June 7th at 8:00 AM<br>
+                        Expected Arrival: June 9th at 2:00 PM<br>
+                        Arrival: Pending<br>
+                        Departure: Pending
+                    </p>
+                </div>*@
+
+                @*<h2>Cargo List</h2>*@
+
+                @*<div class="cargo_list">
+                    <ul>
+                        <li>
+                            <div class="fix-overflow">
+                                <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+                                <a href="#removeCargo" class="remove"><img src="images/delete.png"></a>
+                            </div>
+
+                            <p class="title"><strong>Customer Name</strong></p>
+                            <p class="details">TK-144.0-185-40RGMP</p>
+                            <p class="details">Qty. For Loading: 1.000 MT</p>
+                        </li>
+                        <li>
+                            <div class="fix-overflow">
+                                <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+                                <a href="#removeCargo" class="remove"><img src="images/delete.png"></a>
+                            </div>
+
+                            <p class="title"><strong>Customer Name</strong></p>
+                            <p class="details">TK-144.0-185-40RGMP</p>
+                            <p class="details">Qty. For Loading: 1.000 MT</p>
+                        </li>
+                    </ul>
+
+                    <div class="fix-overflow">
+                        <a href="#addCargoToCargoList" class="add_cargo"><img src="images/add.png"> <span>Add Cargo</span></a>
+                    </div>
+
+                    <div class="add_cargo_panel hidden">
+                        <div class="fix-overflow">
+                            <a href="#closeAddCargoPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                        </div>
+
+                        <h2>Add Cargo Item</h2>
+
+                        <div class="add_cargo_panel_details">
+                            <select class="select-input">
+                                <option>Select PO #</option>
+                            </select>
+
+                            <select class="select-input">
+                                <option>Select Product</option>
+                            </select>
+
+                            <input type="text" class="text-input" value="Enter Quantity (MT)" id="transportationDetailsAddCargoPanelEnterQuantity">
+
+                            <a href="#addNewCargoItem" class="btn">Add Cargo</a>
+                        </div>
+                    </div>
+                </div>*@<!-- .cargo_list -->
+            </div> <!-- .transportation_details -->
+
+
+            <div class="transportation_button">
+                <p class="or_wording">or</p>
+
+                <a href="#arrangeTransportation" class="btn arrange">Arrange Transportation</a>
+            </div>
+
+            <div id="arrangeNewTransportation" class="arrange_new_transportation hidden">
+                <div class="fix-overflow">
+                    <a href="#closeArrangeTransportationPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                </div>
+
+                <h2>Arrange New Transportation</h2>
+                @Html.DropDownList("newTransportationLocation", (SelectList)ViewBag.papermill_list, "Choose Papermill Location", new { @class = "select-input location_select", @placeholder = "Type in the details" })
+
+                @*<select id="newTransportationLocation" class="select-input location_select">
+                    <option>Select Location</option>
+                    <option value="morai-division">Morai Division</option>
+                </select>*@
+                @Html.TextBox("newTransportationVehicleNumber", "", new { @class = "text-input", @placeholder = "Type Vehicle Number" })
+                @*<input type="text" id="newTransportationVehicleNumber" value="Type Vehicle Number" class="text-input">*@
+
+                @Html.TextBox("newTransportationVehicleCapacity", "", new { @class = "text-input", @placeholder = "Type Vehicle Capacity (MT)" })
+                @*<input type="text" id="newTransportationVehicleCapacity" value="Type Vehicle Capacity (MT)" class="text-input">*@
+
+                <div class="start_arrival_times">
+                    <div class="start_time">
+                        <p class="form-label">Start</p>
+
+                        <input type="text" value="DD" class="date-input" id="newTransportationStartDay">
+                        <input type="text" value="MM" class="date-input" id="newTransportationStartMonth">
+                        <input type="text" value="YYYY" class="date-input-year" id="newTransportationStartYear">
+                    </div>
+
+                    <div class="time_selects">
+                        <select id="newTransportationStartTime" class="select-input time">
+                            <option value="8:00">8:00</option>
+                            <option value="9:00">9:00</option>
+                        </select>
+                        <select id="newTransportationStatTimeAmPm" class="select-input time_am_pm">
+                            <option value="am">AM</option>
+                            <option value="pm">PM</option>
+                        </select>
+                    </div>
+
+                    <div class="arrival_time">
+                        <p class="form-label">Expected Arrival Time</p>
+
+                        <input type="text" value="DD" class="date-input" id="newTransportationArrivalDay">
+                        <input type="text" value="MM" class="date-input" id="newTransportationArrivalMonth">
+                        <input type="text" value="YYYY" class="date-input-year" id="newTransportationArrivalYear">
+                    </div>
+
+                    <div class="time_selects">
+                        <select id="newTransportationArrivalTime" class="select-input time">
+                            <option value="8:00">8:00</option>
+                            <option value="9:00">9:00</option>
+                        </select>
+                        <select id="newTransportationArrivalTimeAmPm" class="select-input time_am_pm">
+                            <option value="am">AM</option>
+                            <option value="pm">PM</option>
+                        </select>
+                    </div>
+                </div>
+                @* created a partial view for the list of cargo - "_currentCargoList.cshtml" *@
+                <div class="cargo_list hidden">
+                    <div id="showCargoList"></div>
+                    @*<ul>
+                        <li>
+                            <div class="fix-overflow">
+                                <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+                                <a href="#removeCargo" class="remove"><img src="images/delete.png"></a>
+                            </div>
+
+                            <p class="title"><strong>Customer Name</strong></p>
+                            <p class="details">TK-144.0-185-40RGMP</p>
+                            <p class="details">Qty. For Loading: 1.000 MT</p>
+                        </li>
+                        <li>
+                            <div class="fix-overflow">
+                                <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+                                <a href="#removeCargo" class="remove"><img src="images/delete.png"></a>
+                            </div>
+
+                            <p class="title"><strong>Customer Name</strong></p>
+                            <p class="details">TK-144.0-185-40RGMP</p>
+                            <p class="details">Qty. For Loading: 1.000 MT</p>
+                        </li>
+                    </ul>*@
+                </div>
+
+                <div class="fix-overflow">
+                    <a href="#addCargoToTransportation" class="add_cargo"><img src="images/add.png"> <span>Add Cargo</span></a>
+                </div>
+
+                <div class="add_cargo_panel hidden">
+                    <div class="fix-overflow">
+                        <a href="#closeAddCargoPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                    </div>
+
+                    <h2>Add Cargo Item</h2>
+
+                    <div class="add_cargo_panel_details">
+                        <select class="select-input" id="Orderddl">
+                            @* id added by Rajni *@
+                            <option>Select PO #</option>
+                        </select>
+
+                        <select class="select-input" id="Productsddl">
+                            @* id added by Rajni *@
+                            <option>Select Product</option>
+                        </select>
+
+                        <input type="text" class="text-input" value="Enter Quantity (MT)" id="addCargoPanelEnterQuantity">
+
+                        <a href="#addNewCargoItem" class="btn">Add Cargo</a>
+                    </div>
+                </div>
+
+                <div class="submit_transportation_button hidden">
+                    <a href="#submitTransportation" class="btn">Submit Transportation</a>
+                </div>
+            </div> <!-- #arrangeNewTransportation -->
+
+            <div id="reviewTransportationDetails" class="transportation_details hidden">
+                @*<div class="fix-overflow">
+                    <a href="#closeReviewTransportationDetails" class="close-panel"><img src="images/close-panel.png"></a>
+                </div>*@
+
+                @*<h2>Review Transportation Details</h2>*@
+
+
+
+                @*create partial view for review transportation details  *@
+                <div id="reviewTransport"></div>
+                @*<div class="transportation_details_full">
+                    <p>Transportation Details For:</p>
+
+                    <p class="title"><strong>Vehicle # MH-123-1234</strong></p>
+
+                    <p class="title"><strong>Location: Morai Division</strong></p>
+
+                    <p class="details">
+                        Survey No. 56/1<br>
+                        Village - Morai via Vappi<br>
+                        Dist. Valsad 396191
+                    </p>
+
+                    <p class="details">
+                        Scheduled On June 6th at 09:32 AM<br>
+                        Vehicle Capacity 4.000 MT<br>
+                        Scheduled Start: June 7th at 8:00 AM<br>
+                        Expected Arrival: June 9th at 2:00 PM<br>
+                        Arrival: Pending<br>
+                        Departure: Pending
+                    </p>
+                </div>*@
+
+                <h2>Cargo List</h2>
+
+                <div class="cargo_list">
+                    <ul>
+                        <li>
+                            <div class="fix-overflow">
+                                <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+                            </div>
+
+                            <p class="title"><strong>Customer Name</strong></p>
+                            <p class="details">TK-144.0-185-40RGMP</p>
+                            <p class="details">Qty. For Loading: 1.000 MT</p>
+                        </li>
+                        <li>
+                            <div class="fix-overflow">
+                                <p class="po_number"><strong>PO: MWV-1234-123456-4759</strong></p>
+                            </div>
+
+                            <p class="title"><strong>Customer Name</strong></p>
+                            <p class="details">TK-144.0-185-40RGMP</p>
+                            <p class="details">Qty. For Loading: 1.000 MT</p>
+                        </li>
+                    </ul>
+            </div>
+            <!-- .cargo_list -->
+
+                @* taken the cargo list in the _reviewTransportation.cshtml *@
+
+                <div class="review_transportation_details_buttons">
+                    <a href="#cancelReviewDetails" class="btn">Cancel</a>
+                    <a href="#editReviewDetails" class="btn">Edit</a>
+                    <a href="#submitReviewDetails" class="btn">Submit Transportation</a>
+                </div>
+            </div> <!-- #reviewTransportationDetails -->
+
+            <div id="reviewTransportationConfirmation" class="review_transportation_confirmation hidden">
+                <div class="fix-overflow">
+                    <a href="#closeConfirmation" class="close-panel"><img src="images/close-panel.png"></a>
+                </div>
+
+                <h2>Confirmation</h2>
+
+                <p class="title"><strong>Transportation Setup Complete</strong></p>
+
+                <p class="details">Your transportation information has been received and recorded in our system.</p>
+
+                <a href="#closeConfirmation" class="btn">Close</a>
+            </div> <!-- #reviewTransportationConfirmation -->
+        </div> <!-- #selectTransportationPanel -->
+    </div> <!-- #selectTransportation -->
+</div> <!-- #transportationPanel -->
+<!-- ---------------------------------------------------------------------------------------------------------
+    QUICK VIEW
+---------------------------------------------------------------------------------------------------------- -->
+
+<div id="quickView" class="quick_view">
+    <h2>Quick View (Last 7 Days)</h2>
+
+    <div id="quickViewRecentOrders" class="quick_view_recent_orders">
+        <div class="fix-overflow">
+            @*<h3>Recent Orders</h3>*@
+            @*<a href="#seeAllRecentOrders" class="see_all">See All</a>*@
+        </div>
+    </div>
+
+    <div id="quickViewRecentTransportationUpdates" class="quick_view_recent_transportation">
+        <div class="fix-overflow">
+            @*<h3>Recent Transportation Updates</h3>*@
+            @*<a href="#seeAllRecentTransportation" class="see_all">See All</a>*@
+        </div>
+    </div>
+</div> <!-- #quickView -->
+@*</div>*@

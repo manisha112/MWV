@@ -1,0 +1,64 @@
+﻿@model MWV.Models.Gsm
+@{
+
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<br />
+
+<h2><b> Edit Gsm ->@Html.ActionLink("Goto Home", "Index")</b></h2>
+
+<br /><br />
+  &nbsp;<span id="ErrorMsgs"></span>
+<br />
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true)
+
+        <input type="hidden" value="@Model.gsm_code " id="GsmCodeToEdit" />
+
+        <div class="form-group">
+            <p class="form-label">&nbsp;Gsm Code</p>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.gsm_code, new { @class = "text-input", id = "GsmCode", @placeholder = "Enter Gsm Code(upto 15 char)", @readonly = "readonly", disabled = "disabled", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Gsm Code(upto 15 char)'" })
+            </div>
+        </div>
+        <div class="form-group">
+            <p class="form-label">&nbsp; Gsm Description</p>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "GsmDescription", @placeholder = "Enter Gsm Description(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Gsm Description(upto 100 char)'" })
+            </div>
+        </div>
+        <br /><br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" id="btnEditGsm" value="Save" />
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "GsmAdmin")'" />
+            </div>
+        </div><br /><br />
+    </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+
+

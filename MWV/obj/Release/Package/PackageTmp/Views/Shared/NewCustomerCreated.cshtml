@@ -1,0 +1,39 @@
+﻿ @model IEnumerable<MWV.Models.Customer>
+    @{
+        Layout = null;
+    }
+
+   
+     
+             @{
+   
+    <p class="name">
+        Dear @ViewBag.PlannerName,
+
+    </p>
+    <p class="details">
+
+        New customer has been added with the below details,
+    </p>
+      <p class="details">Customer Name: @ViewBag.CustName</p>
+     <p class="details">Customer City: @ViewBag.City</p>
+     <p class="details">Created by : @ViewBag.CreatedBy</p>
+      <p class="details">Created on: @ViewBag.CreatedOn</p>
+
+    <p class="details">Please Approve or Reject the Customer by going to the Pending Approvals section</p>
+
+   <p class="details">regards,</p>
+     <p class="details"> Support Team,</p>  
+    <p class="details"> support@westrock.com.</p>
+       
+
+}
+
+
+      
+
+      
+       
+
+
+  

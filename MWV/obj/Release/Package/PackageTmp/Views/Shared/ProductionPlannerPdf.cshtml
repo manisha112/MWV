@@ -1,0 +1,156 @@
+﻿@{
+    Layout = null;
+}
+
+<style>
+    table {
+        /*border: 1px;*/
+        /*border-collapse: collapse;*/
+        font-size: 9px;
+    }
+
+    .alnright {
+        text-align: right;
+    }
+</style>
+
+<itext pagesize="A4" orientation="landscape">
+
+
+    <div style="font-size:11px;"><center><b>Production Plan(@ViewBag.papermillName)&nbsp; Date :@ViewBag.estStartTime.ToString("dd MMM yyyy hh:mm tt")</b></center></div><br />
+
+    @foreach (var item in ViewBag.JumbosDetails)
+    {
+        <table style="width:100%;border:0;">
+            <tr>
+                <td>Jumbo No : @item.jumboNo</td>
+                <td>@item.BF BF @item.GSM GSM @item.shade</td>
+                <td>Jumbo Start Date : @item.estimated_start.ToString("dd MMM yyyy hh:mm tt")</td>
+                <td>Planned Qty : @item.plannedQty</td>
+            </tr>
+
+        </table>
+        @*<div style="font-size:10px;"> &nbsp; &nbsp;   &nbsp;&nbsp; &nbsp;Jumbo Start Date :@item.estimated_start.ToString("dd MMM yyyy hh:mm tt")&nbsp;&nbsp; &nbsp;@item.plannedQty </div>*@
+        <table style="width:100%;border:1px;">
+            <tr style="border:1px;">
+                <th style="border:1px;">Lot No</th>
+                <th style="border:1px;">Party Name(Weight)</th>
+                <th style="border:1px;">Marking</th>
+                <th style="border:1px;">Remark</th>
+                <th style="border:1px;">Sizes</th>
+                <th style="border:1px;">Deckle</th>
+                <th style="border:1px;">Qty.</th>
+            </tr>
+
+            @{
+
+        var item1 = ViewBag.LotsDetails;
+        string size = "";
+        string sizeWithName = "";
+        string dupweight = "";
+        decimal Decklesize = 0;
+        decimal Qty = 0;
+        int sequ = 0;
+        decimal Totalqty = 0;
+        decimal totalamt = 0;
+        for (var i = 0; i <= item1.Count - 1; i++)
+        {
+
+            if (item1[i].jumboNo == item.jumboNo)
+            {
+                if (item1[i].Sequence == sequ || sequ == 0)
+                {
+
+                    size = size + Math.Round(item1[i].Width, 2).ToString() + " cm + ";
+                    if (item1[i].order_product_id == null)
+                    {
+                        sizeWithName = sizeWithName + Math.Round(item1[i].Width, 2).ToString() + " cm " + "<br />";
+                    }
+                    else
+                    {
+                        sizeWithName = sizeWithName + @item1[i].CustomerName + "-" + Math.Round(item1[i].Width, 2).ToString() + " cm " + "<br />";
+                    }
+
+                    //sizeWithName = sizeWithName + @item1[i].CustomerName + "-" + Math.Round(item1[i].Width, 2).ToString() + " cm " + "<br />";
+
+                    if (item1[i].order_product_id == null)
+                    {
+                        sizeWithName = sizeWithName.Remove(sizeWithName.Length - 6) + "side cut";
+                    }
+                    else
+                    {
+                        sizeWithName = sizeWithName;
+                    }
+              
+
+                    Decklesize += item1[i].Width;
+                    Qty += item1[i].DeckleQty;
+
+                }
+                else if (sequ != 0)
+                {
+                    <tr style="border:1px;">
+                        <td style="border:1px;">@sequ</td>
+                        @{
+
+                    size = size.Remove(size.Length - 2);
+                    Decklesize = Math.Round(Decklesize, 2);
+                    Qty = Math.Round(Qty, 2);
+                        }
+                        <td style="border:1px;">@Html.Raw(@sizeWithName)</td>
+                        <td style="border:1px;">@item1[i].marking</td>
+                        <td style="border:1px;"></td>
+                        <td style="border:1px;">@size</td>
+                        <td style="border:1px;">@Decklesize</td>
+                        <td style="border:1px;">@Qty MT</td>
+                        
+
+                    </tr>
+
+
+
+                    totalamt += Qty;
+                    size = "";
+                    sizeWithName = "";
+                    Decklesize = 0;
+                    Qty = 0;
+                    size = size + Math.Round(item1[i].Width, 2).ToString() + " cm + ";
+                    sizeWithName = sizeWithName + @item1[i].CustomerName + "-" + Math.Round(item1[i].Width, 2).ToString() + " cm" + "<br />";
+                    Decklesize += item1[i].Width;
+                    Qty += item1[i].DeckleQty;
+
+
+
+                }
+                sequ = item1[i].Sequence;
+
+
+            }
+
+        }
+
+        <tr style="border:1px;">
+            <td style="border:1px;">@sequ</td>
+            @{
+
+        size = size.Remove(size.Length - 2);
+        Decklesize = Math.Round(Decklesize, 2);
+        Qty = Math.Round(Qty, 2);
+            }
+            <td style="border:1px;">@Html.Raw(@sizeWithName)</td>
+            <td style="border:1px;"></td>
+            <td style="border:1px;"></td>
+            <td style="border:1px;">@size</td>
+            <td style="border:1px;">@Decklesize</td>
+            <td style="border:1px;">@Qty MT</td>
+
+        </tr>
+
+
+            }
+
+        </table>
+
+    }
+
+</itext>

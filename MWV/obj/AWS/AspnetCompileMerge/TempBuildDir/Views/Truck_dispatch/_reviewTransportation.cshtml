@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MWV.Repository.Implementation.Truck_dispatchRepository.tempTruckDispatchDetails>
+
+<p>Transportation Details For:</p>
+ 
+<div class="transportation_details_full">
+    <p class="title"><strong>Vehicle # @ViewBag.truck_no </strong></p>
+    <p class="title"><strong>Location:@ViewBag.location_id</strong></p>
+
+    @*<p class="title"><strong>Vehicle # MH-123-1234</strong></p>
+        <p class="title"><strong>Location: Morai Division</strong></p>*@
+
+    <p class="details">
+        @ViewBag.address
+        @*Survey No. 56/1<br>
+            Village - Morai via Vappi<br>
+            Dist. Valsad 396191*@
+    </p>
+    @*<p class="details">
+            Scheduled On June 6th at 09:32 AM<br>
+            Vehicle Capacity 4.000 MT<br>
+            Scheduled Start: June 7th at 8:00 AM<br>
+            Expected Arrival: June 9th at 2:00 PM<br>
+            Arrival: Pending<br>
+            Departure: Pending
+        </p>*@
+    <p class="details">
+        Scheduled On @ViewBag.created_on<br>
+        Vehicle Capacity @ViewBag.estimated_capacity  MT<br>
+        Scheduled Start:  @ViewBag.agent_dispatched_on<br>
+        Expected Arrival: @ViewBag.estimated_arrival<br>
+        @{string status = "";}
+        @{string statusDep = "";}
+        @if (ViewBag.actual_arrival_at_gate == null)
+        {
+            status = "Pending";
+        }
+        else
+        {
+            status = "Arrived";
+        }
+        @if (ViewBag.left_factory_on == null)
+        {
+            statusDep = "Pending";
+        }
+        else
+        {
+            statusDep = "Departed";
+        }
+
+        Arrival: @status<br>
+        Departure: @statusDep
+    </p>
+</div>
+<h2>Cargo List</h2>
+
+<div class="cargo_list">
+    <ul>
+        @foreach(var item in Model){
+        <li>
+            <div class="fix-overflow">
+                <p class="po_number"><strong>PO: @item.order_id</strong></p>
+            </div>
+
+            <p class="title"><strong>Customer Name</strong></p>
+            <p class="details">product code</p>
+            <p class="details">Qty. For Loading: @item.qty MT</p>
+        </li>
+        }
+    </ul>
+</div> <!-- .cargo_list -->

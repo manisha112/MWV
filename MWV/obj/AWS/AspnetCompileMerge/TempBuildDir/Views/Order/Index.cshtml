@@ -1,0 +1,92 @@
+﻿@model IEnumerable<MWV.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+    @*@Html.ActionLink(
+            "Create New",
+            "Create",
+            "CreateOrder"
+)*@
+
+
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.order_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Agent.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.order_date)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.requested_delivery_date)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.remarks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.amount)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.order_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Agent.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.order_date)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.requested_delivery_date)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.remarks)
+        </td>*@
+        @*<td>
+            @Html.DisplayFor(modelItem => item.amount)
+        </td>*@
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.order_id }) |
+
+            @*@Html.ActionLink(
+    linkText: "Details",
+    actionName: "Index",
+    controllerName: "ShowOrder",
+    routeValues: new { id = item.order_id },
+    htmlAttributes: null
+)*@
+            
+            
+            @Html.ActionLink("Details", "Details", new { id=item.order_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.order_id })
+        </td>
+    </tr>
+}
+
+</table>

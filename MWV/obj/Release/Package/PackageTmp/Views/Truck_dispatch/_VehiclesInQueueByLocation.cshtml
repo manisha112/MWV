@@ -1,0 +1,68 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+
+<ul>
+    @if (ViewBag.NoRecordMsg != null)
+    {
+         <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+    }
+    else
+    {
+        <li>
+           
+            <div id="VehicleInQueue">
+                @if (ViewBag.Pagesize > 5)
+                {
+                    @Html.PagedListPager((IPagedList)ViewBag.vehicleList, page => Url.Action("GetVehicleOnQueueForLocation", new { page, @class = "pagination" }), new PagedListRenderOptions { DisplayEllipsesWhenNotShowingAllPageNumbers = false, DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never })
+
+                }
+            </div>
+
+            @*<div id="VehicleInQueue">*@
+          
+            @*</div>*@
+        </li>
+        var count = 0;
+        foreach (var items in ViewBag.vehicleList)
+        {
+            <li>
+                @if(ViewBag.LoggedInAgentId == items.agent_id)
+                {
+                <p class="vehicle_number"> <strong> Vehicle # @items.truck_no </strong> </p>
+                }
+                else
+                {
+                    count = count + 1; 
+                <p class="vehicle_number"> <strong> Vehicle # @count </strong> </p>
+                }
+                <p class="details">Est. Arrival on @items.estimated_arrival.ToString("dd MMM yyyy hh:mm tt") </p>
+                <p class="details"> @items.estimated_capacity MT </p>
+
+            </li>
+        }
+    }
+</ul>
+
+<script type="text/javascript">
+    $('#VehicleInQueue').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                  
+                                    $('#SeeVehiclesQueue').show();
+                                    $('#SeeVehiclesQueue').html(result);
+                                    $('#VehiclesForLocation').show();
+                                    $('#VehiclesForLocation').html(result);
+                                    $('#VehiclesInQueue').show();
+                                    $('#VehiclesInQueue').html(result)
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+</script>

@@ -1,0 +1,333 @@
+﻿@{
+    ViewBag.Title = "MWV Dev: Production Planner";
+}
+
+<script src="~/Scripts/production-planner.js"></script>
+<div class="panel_grid panel_grid_top">
+    <div class="panel_grid_tab"><a href="#newOrders">New Orders</a></div>
+    <div class="panel_grid_tab"><a href="#pendingApprovals">Pending Approvals</a></div>
+</div>
+<!-- BEGIN: New Orders -->
+<div id="newOrdersPanel" class="new_orders_panel hidden">
+
+
+    @*@Html.DropDownList("newOrdersBulkAction", (SelectList)ViewBag.lstPapermills, "Select Bulk Action", new { @class = "select-input select_bulk_action" })*@
+
+
+    <ul id="newOrdersList" class="new_orders_list">
+        <div id="NewOrdeListDiv">
+
+        </div>
+    </ul> <!-- .new_orders_list -->
+
+    <div id="newOrderDetails" class="new_order_details hidden">
+
+        <div id="tmpOrderDetailsMst">
+        </div> <!-- calling NewOrdERSeeDetailsMst Partial view -->
+        <div id="tmpOrderDetailsChild">
+        </div> <!-- calling NewOrdERSeeDetailsChild Partial view -->
+    </div> <!-- .new_order_details -->
+</div> <!-- #newOrders -->
+<!-- END: New Orders -->
+<!-- BEGIN: Pending Approvals -->
+<div id="pendingApprovalsPanel" class="pending_approvals_panel hidden">
+
+</div> <!-- #pendingApprovals -->
+<!-- END: Pending Approvals -->
+<!-- BEGIN: Panel Grid (Quick Navigation) [Bottom Tabs] -->
+<div class="panel_grid panel_grid_bottom">
+    <div class="panel_grid_tab"><a href="#mismatches">Mismatches</a></div>
+    <div class="panel_grid_tab"><a href="#productionPlans">Production Plans</a></div>
+</div>
+<!-- END: Panel Grid (Quick Navigation) [Bottom Tabs] -->
+<!-- BEGIN: Mismatches -->
+<div id="mismatchesPanel" class="mismatches_panel hidden">
+
+</div> <!-- #mismatchesPanel -->
+<!-- END: Miplans-detailssmatches -->
+<!-- BEGIN: Production Plans -->
+<div id="productionPlansPanel" class="production_plans_panel hidden">
+
+    <div class="fix-overflow">
+        <a href="#closeProductionPlansPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+
+    <div id="productionPlansSearchPanel">
+
+        <h2>Search Production Plans</h2>
+        @*@Html.DropDownList("newOrdersBulkAction", (SelectList)ViewBag.lstPapermills, "Select Bulk Action", new { @class = "select-input select_bulk_action" })*@
+        @Html.DropDownList("SearchProductionPlanner", (SelectList)ViewBag.lstPapermills, "All PMs ", new { @class = "select-input" })
+
+        @*<select class="select-input">
+                <option>All PMs</option>
+                <option value="pm01">PM01</option>
+                <option value="pm02">PM02</option>
+                <option value="pm03">PM03</option>
+                <option value="pm04">PM04</option>
+            </select>*@
+
+        <select class="select-input" id="searchByType">
+            <option>All</option>
+            <option value="by-sr-no" selected="selected">By Sr. No.</option>
+            <option value="by-agent">By Agent</option>
+            <option value="by-customer-name">By Customer Name</option>
+        </select>
+
+
+
+        @*<input type="text" class="text-input" id="searchPlansSrNo" value="Enter Sr. No.">*@
+        <div id="searchPlansByAgent" class="hidden">
+            @*<input type="text" class="text-input" value="Enter Agent Name">*@
+            @Html.DropDownList("AgentList", (SelectList)ViewBag.lstAgent, "Select Agent Name ", new { @class = "select-input" })
+        </div>
+        <div id="searchPlansCustomerName" class="hidden">
+            @*<input type="text" class="text-input" value="Enter Customer Name">*@
+            @Html.DropDownList("CustomerList", (SelectList)ViewBag.lstCustomer, "Select Customer Name ", new { @class = "select-input" })
+
+        </div>
+        <div id="searchPlansSrNo" class="hidden">
+            @Html.DropDownList("SrnoList", (SelectList)ViewBag.lstofSrNo, "Select Sr No. ", new { @class = "select-input" })
+        </div>
+
+        <div id="srnolist" class="hidden">
+            <select class="select-input hidden" id="SrnoListBymillid">
+                @* id added by Rajni *@
+                <option>Select Sr No</option>
+            </select>
+        </div>
+
+
+        <div class="from_to">
+            <p class="form-label">From</p>
+
+            <div class="fix-overflow">
+                <select class="date-select-input" id="searchPlansFromDay">
+                    <option>DD</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+
+                <select class="date-select-input" id="searchPlansFromMonth">
+                    <option>MM</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+
+                <select class="date-select-input year" id="searchPlansFromYear">
+                    <option>YYYY</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                </select>
+            </div>
+
+            <p class="form-label to_label">To</p>
+
+            <div class="fix-overflow">
+                <select class="date-select-input" id="searchPlansToDay">
+                    <option>DD</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+
+                <select class="date-select-input" id="searchPlansToMonth">
+                    <option>MM</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+
+                <select class="date-select-input year" id="searchPlansToYear">
+                    <option>YYYY</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                </select>
+            </div>
+        </div>
+        <div id="ErrorMsgInvalidFromDate" class="hidden">
+            <p class="error-msg">Please select a Valid From date!</p>
+        </div>
+        <div id="ErrorMsgInvalidToDate" class="hidden">
+            <p class="error-msg ">Please select a Valid To date!</p>
+        </div>
+
+        &nbsp;<span id="ProductionPlannerErrors" class="error-msg"></span>
+        <a href="#searchProductionPlans" class="btn">Search</a>
+
+
+        @*<span id="PlannersrNoError"></span>*@
+
+    </div>
+    <div id="productionPlansSearchResults" class="production_plans_search_results hidden">
+
+
+    </div> <!-- #productionPlansSearchResults -->
+
+    <div id="plans-details-june182015-pm02" class="hidden production_plans_details">
+
+    </div> <!-- .production_plan_details -->
+
+</div>
+<!-- END: Production Plans -->
+<!-- ---------------------------------------------------------------------------------------------------------
+    QUICK VIEW
+---------------------------------------------------------------------------------------------------------- -->
+
+<div id="quickView" class="quick_view">
+    <h2>Quick View (Last 7 Days)</h2>
+    <div id="quickViewRecentMismatches" class="quick_view_recent">
+    </div>
+
+    <div id="quickViewRecentApprovals" class="quick_view_recent">
+
+    </div>
+
+    <div id="quickViewRecentProductionPlans" class="quick_view_recent">
+
+    </div>
+</div> <!-- #quickView -->
+
+<script type="text/javascript">
+    function RecentQuickView() {
+        //Added By Manisha
+        //Show 7 days quick view details
+
+        $.ajax({
+            url: "/ProductionPlanner/RecentMismatch/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+                            $('#quickView').show();
+                            $('#quickViewRecentMismatches').html(result);
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+
+        $.ajax({
+            url: "/ProductionPlanner/RecentPendingApproval/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+                            $('#quickView').show();
+                            $('#quickViewRecentApprovals').html(result);
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+        $.ajax({
+            url: "/ProductionPlanner/RecentProductionPlan/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+                            $('#quickView').show();
+                            $('#quickViewRecentProductionPlans').html(result);
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+    }
+
+    $(document).ready(function () {
+        RecentQuickView();
+    });
+    //setInterval(function () {
+    //
+    //    RecentQuickView() // this will run after every 5 seconds
+    //}, 1000);
+
+</script>
+
+

@@ -1,0 +1,73 @@
+﻿@model IEnumerable<MWV.Models.Truck_dispatches>
+
+
+        @if (ViewBag.NoRecordMsg != null)
+        {
+           <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+        }
+        @foreach (var item in Model)
+        {
+            <li>
+                <p class="title"><strong>@item.truck_no</strong></p>
+
+                <p class="details">Expected Arrival: @item.estimated_arrival.Value.ToString("dd MMM yyyy hh:mm tt") </p>  
+                <p class="details">
+                    Arrived on @item.actual_arrival_at_gate.Value.ToString("dd MMM yyyy hh:mm tt")
+                </p>             
+                <input type="checkbox" data-id="mh12-123-12345" class="mark_departed"> &nbsp; Departed
+
+                <div id="vehicleDepartedAttention-mh12-123-12345" class="vehicle_attention arrived hidden">
+                    <div class="fix-overflow">
+                        <a href="#closeVehicleAttention" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+                    <p class="title"><strong>Attention!</strong></p>
+
+                    <p class="details">Are you sure you want to mark vehicle @item.truck_no as departed?</p>
+                    <div class="fix-overflow">
+                        <a href="#closeVehicleAttention" class="btn">Cancel</a>
+                    </div>
+                    <div class="VehicleDeparted">
+                        <a href="/GateKeeper/SaveTruckOutward/@item.truck_dispatch_id" data-id="@item.truck_dispatch_id" class="btn">Mark Departed</a>
+                    </div>
+                        @*<a href="#markVehicleDeparted" data-id="mh12-123-12345" class="btn">Mark Departed</a>*@
+                    </div>
+            </li>
+        }
+
+    <script type="text/javascript">     
+        $('.fix-overflow').on('click', 'a', function () {
+            $.ajax({
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html',
+                context: document.body,
+            })
+                                    .success(function (result) {
+
+                                        $('a[href="#closeVehicleAttention"]').closest('.vehicle_attention').hide();
+                                        $('a[href="#closeVehicleAttention"]').closest('li').find('input[type="checkbox"].mark_departed').prop('checked', false);
+                                    })
+                                   .error(function (xhr, ajaxOptions, thrownError) {
+                                   })
+
+           
+        });
+        $('.VehicleDeparted').on('click', 'a', function () {
+            var id = $(this).attr("data-id");          
+            $.ajax({
+                url: this.href,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html',
+                context: document.body,
+            })
+                                   .success(function (result) {
+                                       $(this).closest('li').remove();
+                                   })
+                                  .error(function (xhr, ajaxOptions, thrownError) {
+                                  })
+            $(this).closest('li').remove();
+           
+        });      
+    </script>
+

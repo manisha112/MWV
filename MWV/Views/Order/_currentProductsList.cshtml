@@ -1,0 +1,829 @@
+﻿
+<ul>
+
+    @foreach (var item in ViewBag.lstTempProds)
+    {
+        //var requested_delivery_date = @item.requested_delivery_date.Value.ToShortDateString();
+        var Width = @item.width;
+        //var widthInInch = (Width * (2.5));
+        <li class="current_product" id="prod_@item.sequenceNumber">
+            <div class="fix-overflow">
+                <p class="title"><strong>@item.product_code</strong></p>
+                <div class="product_icons">
+                    <a href="#editCurrentProduct" class="edit_current_product" value="@item.sequenceNumber"><img src="/images/edit.png"></a>
+                    <a href="#duplicateCurrentProduct" class="duplicate_current_product"
+                       data-id="@item.sequenceNumber" onclick="AddDuplicateProduct(@item.sequenceNumber);"><img src="/images/duplicate.png"></a>
+                    @*<a href="@string.Format("/Order/confirmRemoveProduct/{0}", item.sequenceNumber)" class="remove_current_product"><img src="images/delete.png"></a>*@
+                    @*<a href="#removeCurrentProduct" class="remove_current_product" value="@item.sequenceNumber"><img src="images/delete.png"></a>*@
+                    <a href="#removeCurrentProduct" class="remove_current_product"><img src="/images/delete.png"></a>
+                    @*<input class="class="remove_current_product" type="button" name="confirm" value="delete" onclick="DeleteProduct(@item.sequenceNumber);">*@
+                </div>
+            </div>
+
+            <p class="details">@string.Format("{0:#.00}", item.width) cm x @item.bf_code BF @item.gsm_code GSM @item.shade_code</p>
+            <p class="details"> ( @string.Format("{0:#.00}", (item.widthInInch)) Inch) </p>
+            <p class="details">Quantity: @string.Format("{0:#.0000}", item.qty) MT</p>
+            <p class="details">Unit Price: INR @string.Format("{0:#.00}", item.unit_price)</p>
+            <p class="details">Requested Delivery Date: @item.requested_delivery_date.ToShortDateString() </p>
+
+            @* to edit a product *@
+            <div class="hidden edit_product_panel">
+                <div class="fix-overflow">
+                    <a href="#closeEditProductPanel" class="close-panel" value="@item.sequenceNumber"><img src="/images/close-panel.png"></a>
+                </div>
+
+                <h2>Edit Current Product</h2>
+                <form id="frmEditProd_@item.sequenceNumber" data-id="@item.sequenceNumber">
+                    <div class="add_product_inputs">
+                        <input type="hidden" value="@item.requested_delivery_date.Day" id="hdnDt_@item.sequenceNumber" />
+                        <input type="hidden" value="@item.requested_delivery_date.Month" id="hdnMon_@item.sequenceNumber" />
+                        <input type="hidden" value="@item.requested_delivery_date.Year" id="hdnYr_@item.sequenceNumber" />
+                        <input type="hidden" value="@item.bf_code" id="hdnBfCode_@item.sequenceNumber" />
+                        <input type="hidden" value="@item.gsm_code" id="hdnGsmCode_@item.sequenceNumber" />
+                        <input type="hidden" value="@item.shade_code" id="hdnShade_@item.sequenceNumber" />
+                        <input type="hidden" value="@item.core" id="hdnCore_@item.sequenceNumber" />
+                        <input type="hidden" value="INR @item.unit_price" id="hdnPrice_@item.sequenceNumber" />
+
+                        <script language="javascript">
+
+                            if(@item.requested_delivery_date.Day >=1 && @item.requested_delivery_date.Day<=9)
+                            {
+                                $('#frmEditProd_@item.sequenceNumber').find('#requestedDeliveryDateDay').val("0" + @item.requested_delivery_date.Day);
+                            }
+                            else
+                            {
+                                $('#frmEditProd_@item.sequenceNumber').find('#requestedDeliveryDateDay').val(@item.requested_delivery_date.Day);
+                            }
+
+                            if(@item.requested_delivery_date.Month >=1 && @item.requested_delivery_date.Month<=9)
+                            {
+                                $('#frmEditProd_@item.sequenceNumber').find('#requestedDeliveryDateMonth').val("0"+@item.requested_delivery_date.Month);
+                            }
+                            else
+                            {
+                                $('#frmEditProd_@item.sequenceNumber').find('#requestedDeliveryDateMonth').val(@item.requested_delivery_date.Month);
+                            }
+
+                            $('#frmEditProd_@item.sequenceNumber').find('#requestedDeliveryDateYear').val(@item.requested_delivery_date.Year);
+                        </script>
+
+
+                        <div id="createOrderDeliveryDate" class="delivery_date">
+                            <p>Requested Delivery Date</p>
+                            <select class="date-select-input" id="requestedDeliveryDateDay" value="@item.requested_delivery_date.Day">
+                                <option>DD</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                                <option value="31">31</option>
+                            </select>
+
+                            <select class="date-select-input" id="requestedDeliveryDateMonth" value="@item.requested_delivery_date.Month">
+                                <option>MM</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+
+                            <select class="date-select-input year" id="requestedDeliveryDateYear" value="@item.requested_delivery_date.Year">
+                                <option>YYYY</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                            </select>
+                        </div>
+
+                        @{
+        var listBf = (ViewBag.Bf_list as SelectList).ToList();
+        var listGsm = (ViewBag.Gsm_list as SelectList).ToList();
+        var listShade = (ViewBag.Shade_list as SelectList).ToList();
+        var listCore = (ViewBag.Core_list as SelectList).ToList();
+                        }
+                        @for (int count = 0; count <= listBf.Count; count++)
+                        {
+                            listBf.ForEach(i => i.Selected = false);
+                            listBf.First(i => i.Value == item.bf_code).Selected = true;
+                        }
+
+
+                        @Html.DropDownList("editselectBf", listBf, new
+                   {
+                       @class = "select-input",
+                       // @onchange = @"GetGsms(this.form);"
+                       @onchange = @"GetGsms(this.form , '" + @item.sequenceNumber + "');"
+                   })
+
+
+                        @*@for (int count = 0; count <= listGsm.Count; count++)
+                            {
+                                listGsm.ForEach(i => i.Selected = false);
+                                //listGsm.First(i => i.Value == item.gsm_code).Selected = true;
+                            }*@
+                        @Html.DropDownList("editselectGsm", listGsm, new
+                   {
+                       @class = "select-input",
+                       @onchange = "GetProductCode(this.form ,'" + @item.sequenceNumber + "');"
+                   })
+
+
+                        @*@for (int count = 0; count <= listShade.Count; count++)
+                            {
+                                listShade.ForEach(i => i.Selected = false);
+                                listShade.First(i => i.Value == item.shade_code).Selected = true;
+                            }*@
+                        @Html.DropDownList("editselectShade", listShade, new
+                   {
+                       @class = "select-input",
+                       // @onchange = @"GetProductPrice(this.form , '" + @item.sequenceNumber + "');"
+                   })
+
+                        @*@for (int count = 0; count <= listCore.Count; count++)
+                            {
+                                listCore.ForEach(i => i.Selected = false);
+                                listCore.First(i => i.Value == item.core.ToString()).Selected = true;
+                            }*@
+
+                        @Html.DropDownList("editselectCore", listCore, new { @class = "select-input" })
+                        <input type="number" id="editinputWidthCm" data-id="@item.sequenceNumber" value="@string.Format("{0:#.00}", item.width)" class="number-input" placeholder="Enter Width (40-250 CM)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Width (40-250 CM)'" onkeyup='GetWidthInInch(this.form, @item.sequenceNumber)'>
+                        <input type="number" id="editinputwidthInInch" onkeyup="GetWidthIncm(this.form, @item.sequenceNumber)" value="@string.Format("{0:#.00}", item.widthInInch)" class="number-input" placeholder="Enter Width (Inch)" onfocus="    this.placeholder = ''" onblur="    this.placeholder = 'Enter Width (Inch)'">
+                        <input type="number" step="any" id="editinputDiaCm" value="@string.Format("{0:#.00}", item.diameter)" class="number-input" placeholder="Enter DIA (5-120 CM)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter DIA (5-120 CM)'">
+                        <input type="number" step="any" id="editinputQuantityMt" value="@string.Format("{0:#.0000}", item.qty)" class="number-input" placeholder="Enter Quantity (0.500-100 MT)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Quantity (0.500-100 MT)'">
+                        <input type="number" step="any" id="editinputPrice" value="@string.Format("{0:#.00}", item.unit_price)" class="number-input" placeholder="Enter Price" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter price'">
+                    </div>
+                    <br />
+                    <div class="product_details">
+                        <p class="product_code_header"><strong>Product Code:</strong></p>
+                        <p id="editproductCode" class="product_code">@item.product_code</p>
+                        @*<p class="product_code_header"><strong>Price:</strong></p>
+                            <p id="editproductPrice_@item.sequenceNumber" class="product_price">INR  @item.unit_price</p>*@
+                        <span id="reqCustUpdatePO"></span>
+                    </div>
+                    <input class="btn" type="button" name="confirm" value="Confirm" onclick="confirmEditProduct(this.form, @item.sequenceNumber);">
+                    <a href="#cancelEditProduct" class="btn" value="@item.sequenceNumber" data-id="cancelEditProduct_@item.sequenceNumber">Cancel</a>
+                </form>
+                <div class="delivery_date_conflict hidden" id="tempScheduleError_@item.sequenceNumber">
+                    <div class=" fix-overflow">
+                        <a href="#closeAddProductPanelForErr" class="close-panel"><img src="images/close-panel.png"></a>
+                    </div>
+
+                    <p class="header"><strong>Attention!</strong></p>
+                    <p class="details">The date you have selected conflicts with a current schedule.</p>
+                    <p class="details">You may continue if you wish, however, we cannot guarantee your requested delivery date.</p>
+
+                    <a href="#closeAddProductPanelOnEdit" class="btn" id="@item.sequenceNumber">Cancel</a>
+                    <a href="#addProductToOrderOnContinue" class="btn" onclick="confirmEditProductOnShadeErr(frmEditProd_@item.sequenceNumber, @item.sequenceNumber)">Continue</a>
+                </div>
+            </div> <!-- .edit_product_panel -->
+
+            <div class="product_attention hidden">
+                <div class="fix-overflow">
+                    <a href="#closeProductAttention" class="close-panel"><img src="/images/close-panel.png"></a>
+                </div>
+                <p class="alert_title"><strong>Attention!</strong></p>
+                <p class="alert_details">Are you sure you want to remove this product?</p>
+
+                <a href="#closeProductAttention" class="btn">Cancel</a>
+
+                <a href="#confirmRemoveProduct" data-id="mh12-123-12345" onclick="DeleteProduct(@item.sequenceNumber);" class="btn">Remove</a>
+            </div>
+        </li>
+    } @*// foreach loop ends here*@
+    @*}*@
+    @*<li>total will be here</li>*@
+    <li></li>
+    @*<li>Total: INR
+        @if (ViewBag.grandtotal==0)
+        {
+            ViewBag.grandtotal=0;
+            @ViewBag.grandtotal
+        }
+        else
+        {@ViewBag.grandtotal }*@
+</ul>
+
+
+<script language="javascript">
+
+    /*By Dhananjay-
+   -To add duplicate product witihin same order.
+   -Get SeqNum of product which user want to copy to create new product.
+   */
+    function AddDuplicateProduct(ProdSeqNoToCopy) {
+        var req_del_date = TestAddProduct.requestedDeliveryDateDay.value + "/" + TestAddProduct.requestedDeliveryDateMonth.value + "/" + TestAddProduct.requestedDeliveryDateYear.value;
+        //
+        var Result = {
+            hCustomer_id: $('#selectedCustomerId').val(),
+            selectBf: $('#selectBf').val(),
+            selectGsm: $('#selectGsm').val(),
+            selectShade: $('#selectShade').val(),
+            selectWidth: $('#selectWidth').val(),
+            selectCore: $('#selectCore').val(),
+            inputDiaCm: $('#inputDiaCm').val(),
+            inputQuantityMt: $('#inputQuantityMt').val(),
+            requested_delivery_date: req_del_date,
+            unit_price: $('#editinputPrice').val(),
+        };
+        // alert("ProdSeqNoToCopy : " + $('#dp_'+ProdSeqNoToCopy).val());
+        $.ajax({
+            //async: true,
+            type: "POST",
+            url: "/Order/addProductToOrderinSession/" + ProdSeqNoToCopy,
+            data: Result,
+            dataType: "html",
+            context: document.body,
+            //contentType: 'application/html; charset=utf-8'
+        })
+                        .success(function (data) {
+                            //$('#createOrderCurrentProducts').show();
+                            $('#lstProds').html(data);
+
+                            $('#createOrderCurrentProducts .fix-overflow').show();
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+
+        $('#addProductPanel').hide();
+        $('#createOrderDeliveryDate .add_product').show();
+        $('#createOrderCurrentProducts').find('.product_totals, .order_buttons').show();
+        $('#createOrderCurrentProducts').show();
+
+        $('html,body').animate({
+            scrollTop: $('#createOrderCurrentProducts').position().top + $('#createOrderPanel').position().top
+        }, 400);
+
+    }
+    function DeleteProduct(seqNum) {
+
+        $.ajax(
+          {
+              cache: false,
+              type: "POST",
+              url: "/Order/confirmRemoveProduct/" + seqNum,
+              contentType: "application/html; charset=utf-8",
+              dataType: 'html',
+              context: document.body,
+              success: function () {
+                  $(this).closest('li').remove();
+                  //alert("product has been removed");
+                  // $('#createOrderCurrentProducts .order_buttons').hide();
+                  // to hide the second 'Add Product' link
+                  // $('#createOrderCurrentProducts .fix-overflow').hide();
+                  // to hide the div of total
+                  // $('#currentProductsTotal').hide();
+              }
+          });
+
+        var link = "#prod_" + seqNum;
+        $('.product_attention').closest(link).remove();
+        $('.product_attention').hide();
+
+        //$.ajax({
+        //    //async: true,
+        //    type: "GET",
+        //    url: "/Order/GetTotalFromSession/",
+        //    dataType: "html",
+        //    context: document.body,
+        //    contentType: 'application/html; charset=utf-8'
+        //})
+        //            .success(function (data) {
+        //                //alert("Successfully Created temp product session");
+        //                //alert("total is" + data);
+        //                if(data!=0.0)
+        //                {
+        //                    //$('#createOrderCurrentProducts').html(data); //otherwise i loose the button of 'cancel' and 'place order'
+        //                    //$('#tmpTotal').html(data);
+        //                    $('#currentProductsTotal').html("<strong>Total: INR " + data + "</span></strong>");
+        //                    $('#tmpTotalOrderConfirm').html(data);
+        //                }
+        //                else
+        //                {
+        //                    $('#tmpTotal').html("No Products to total");
+        //                    // to show the add products screen -added on 16 Jul 2015
+        //                    $('#createOrderAddProducts').show();
+        //                }
+
+        //            })
+        //           .error(function (xhr, ajaxOptions, thrownError) {
+        //           })
+
+        $('html,body').animate({
+            scrollTop: $('#createOrderPanel').position().top + 140
+        }, 400);
+
+    }
+    function confirmEditProduct(frm, seqNum) {
+        debugger;
+        var result = ValidateEditOrder(frm, seqNum);
+        if (result != true) {
+            $(frm).find('#reqCustUpdatePO').html('');
+            if (result == "Width cannot be empty !" || result == "Width should be numeric, in Cms!" || result == "Width should be between 40 and 250 CM!") {
+                $(frm).find('#reqCustUpdatePO').html('');
+                $(frm).find('#editinputWidthCm').focus();
+                $(frm).find('#reqCustUpdatePO').html("<p class='error-msg'>" + result + "</p>");
+            }
+            else if (result == "Diameter cannot be empty !" || result == "Diameter should be numeric, in Cms!" || result == "Diameter should be between 5 and 120 CM!") {
+                $(frm).find('#reqCustUpdatePO').html('');
+                $(frm).find('#editinputDiaCm').focus();
+                $(frm).find('#reqCustUpdatePO').html("<p class='error-msg'>" + result + "</p>");
+            }
+            else if (result == "Qty cannot be empty!" || result == "Qty should be numeric, in MT!" || result == "Qty should be between 0.500 and 100 MT!") {
+                $(frm).find('#reqCustUpdatePO').html('');
+                $(frm).find('#editinputQuantityMt').focus();
+                $(frm).find('#reqCustUpdatePO').html("<p class='error-msg'>" + result + "</p>");
+            }
+            else {
+                $(frm).find('#reqCustUpdatePO').html('');
+                $(frm).find('#reqCustUpdatePO').html("<p class='error-msg'>" + result + "</p>");
+
+
+            }
+
+
+
+        }
+        else {
+            var reqdeldate = frm.requestedDeliveryDateDay.value + "/" + frm.requestedDeliveryDateMonth.value + "/" + frm.requestedDeliveryDateYear.value;
+
+            var schduleCheck = validateSchedule(frm.editselectShade.value, reqdeldate);
+            //$.ajaxSetup({ cache: false });
+            if (schduleCheck != "True") {
+                $('#tempScheduleError_'+ seqNum).show();
+                $('html,body').animate({
+                    scrollTop: $(window).scrollTop() + 320
+                });
+            }
+            else {
+                $('#reqCustUpdatePO').html('');
+                var editselectBf = frm.editselectBf.value;
+                var selectGsm = frm.editselectGsm.value;
+                var selectShade = frm.editselectShade.value;
+                var selectWidth = frm.editinputWidthCm.value;
+                var selectCore = frm.editselectCore.value;
+                var inputDiaCm = frm.editinputDiaCm.value;
+                var inputQuantityMt = frm.editinputQuantityMt.value;
+
+
+                //alert(editselectBf + "/" + selectGsm + "/" + selectShade + "/" + selectWidth + "/" + selectCore + "/" + inputDiaCm + "/" + inputQuantityMt);
+
+                // call ajax to send values to the method to update the edited values
+                var datatosend = {
+                    sequenceNumber: seqNum,
+                    hCustomer_id: $('#selectedCustomerId').val(),
+                    selectBf: frm.editselectBf.value,
+                    selectGsm: frm.editselectGsm.value,
+                    selectShade: frm.editselectShade.value,
+                    selectWidth: frm.editinputWidthCm.value,
+                    selectCore: frm.editselectCore.value,
+                    inputDiaCm: frm.editinputDiaCm.value,
+                    inputQuantityMt: frm.editinputQuantityMt.value,
+                    requested_delivery_date: reqdeldate,
+                    priceText : frm.editinputPrice.value
+                };
+                // make an ajax call to the methid to show the edited product in the list of products
+                $.ajax({
+                    //async: true,
+                    type: "POST",
+                    url: "/Order/confirmEditProductinSession/",
+                    data: datatosend,
+                    dataType: "html",
+                    context: document.body,
+                    success: function (data) {
+                        //alert(data);
+                        $('#lstProds').html(data);
+                    }
+                })
+                $("#frmEditProd_" + seqNum).closest('.edit_product_panel').hide();
+
+                $('html,body').animate({
+                    scrollTop: $('#createOrderPanel').position().top + 200
+                }, 400);
+
+            }
+        }
+
+    };
+    function validateSchedule(shadeCode, req_del_date) {
+        var flag = "";
+        var data = {
+            shadeCode: shadeCode,
+            requested_delivery_date: req_del_date
+        };
+        $.ajax({
+
+            //cache: false,
+            type: "GET",
+            data: data,
+            url: "/Order/CheckShadeScheduleTime/",
+            contentType: "application/html; charset=utf-8",
+            //})
+            success: function (result) {
+                flag = result;
+
+            },
+            async: false
+        });
+
+        return flag;
+        //$.ajaxSetup({ cache: false });
+    }
+    function GetGsms(frm, SeqNo) {
+
+        ////------------code to get the Gsms------------//
+        var selectedItem = frm.editselectBf.value;
+        var gsmddl = frm.editselectGsm;
+        var ddlGsms = $(gsmddl);
+        $.ajax(
+                   {
+                       cache: false,
+                       type: "GET",
+                       url: "/Order_product/GetGsms/" + selectedItem,
+                       contentType: "application/json; charset=utf-8",
+                       success: function (data) {
+                           ddlGsms.html('');
+                           ddlGsms.append($('<option>Select Gsm</option>'));
+                           $.each(data, function (id, option) {
+
+                               ddlGsms.append($('<option></option>').val(option.id).html(option.name));
+                           });
+                       },
+                       error: function (xhr, ajaxOptions, thrownError) {
+                       }
+                   });
+        //        ////------------code to get the Gsms------------//
+        //var selectedBf = selectedItem;
+        //var selectedGsm = "";
+        //var selectShade = frm.editselectShade.value;//$("#selectShade").val(); //$(this).val();
+        //var CustId = $("#selectedCustomerId").val();
+        //var prodcode = $("#productCode").text();
+        //ProductCombinationForDupProd(selectedBf, selectedGsm, selectShade, prodcode, CustId, SeqNo);
+    }
+
+    function GetProductCode(frm, SeqNo) {
+        var selectedBf = frm.editselectBf.value;
+        var selectedGsm = frm.editselectGsm.value;
+        var hidVal = $("#selectedCustomerId").val();
+        $.ajax(
+                   {
+                       cache: false,
+                       type: "GET",
+                       url: "Order_product/GetProductCode/" + selectedBf + "/" + selectedGsm,
+                       //contentType: "application/json; charset=utf-8",
+                       success: function (data) {
+                           $(frm).find('#editproductCode').html(data);
+                       },
+                   });
+
+        //var selected_Bf = selectedBf;
+        //var selectedGsm = "";
+        //var selectShade = frm.editselectShade.value;//$("#selectShade").val(); //$(this).val();
+        //var CustId = $("#selectedCustomerId").val();
+        //var prodcode = $("#productCode").text();
+        //ProductCombinationForDupProd(selectedBf, selectedGsm, selectShade, prodcode, CustId, SeqNo);
+    }
+
+    // product combination for get the price
+    function ProductCombinationForDupProd(selectedBf, selectedGsm, selectShade, prodcode, CustId, SeqNo) {
+        //
+        var CustName = $('#selectedCustomerName').html();
+        //No Active Price available for $Customer$, $BF$ BF, $GSM$ GSM, $Shade$ Shade
+
+        var NoPricetext = "No Active Price available for " + CustName + "," + " " + selectedBf + " BF" + ", " + selectedGsm + " GSM" + ", " + "Shade" + " " + selectShade + "";
+        //alert(CustName);
+        var allvalues = {
+            CustId: CustId,
+            selectedBf: selectedBf,
+            selectedGsm: selectedGsm,
+            selectShade: selectShade,
+        }
+
+        $.ajax(
+                   {
+                       cache: false,
+                       type: "GET",
+                       url: "Order_product/GetProductCodebyCustId/",
+                       data: allvalues,
+                       //url: "/Order_product/GetPrice/" + CustId + "/" + prodcode + "/" + shade_code,
+                       contentType: "application/text; charset=utf-8",
+                       success: function (data) {
+                           //alert("Price is " + data);
+                           if (data == 0) {
+                               // $(frm).find('#editproductPrice').html(NoPricetext);
+                               //  $("#productPrice").text("" + NoPricetext);
+                               $('#editproductPrice_' + SeqNo).text("" + NoPricetext);
+
+                           }
+                           else {
+                               $('#editproductPrice_' + SeqNo).text(data);
+                               $('#reqCustUpdatePO').html('');
+
+                           }
+                       },
+                       error: function (xhr, ajaxOptions, thrownError) {
+                           // alert("ajaxOptions " + ajaxOptions);
+                       }
+                   });
+    }
+    //------------------------------
+
+    $('#createOrderCurrentProducts').on('click', 'a[href="#cancelEditProduct"]', function () {
+        debugger;
+        var id = $(this).attr("value");
+
+        $('#tempScheduleError_'+ id).hide();
+        $(this).closest('.edit_product_panel').hide();
+        //$('#reqCustUpdatePO').html('');
+
+        $('html,body').animate({
+            scrollTop: $('#createOrderPanel').position().top + 200
+        }, 400);
+        //get value of cancel button is resp. edit form, find form id by val , assign and reset
+        var editFormID = $(this).attr('value');
+        document.getElementById("frmEditProd_" + editFormID).reset();
+        document.getElementById("frmEditProd_" + editFormID).find("reqCustUpdatePO").val('');
+
+    });
+
+    $('.edit_product_panel').on('click', 'a[href="#closeEditProductPanel"]', function () {
+        debugger;
+        var id = $(this).attr("value");
+        $('#tempScheduleError_'+ id).hide();
+        $(this).closest('.edit_product_panel').hide();
+        $('html,body').animate({
+            scrollTop: $('#createOrderPanel').position().top + 200
+        }, 400);
+
+        //get value of cancel button is resp. edit form, find form id by val , assign and reset
+        var editFormID = $(this).attr('value');
+        document.getElementById("frmEditProd_" + editFormID).reset();
+        document.getElementById("frmEditProd_" + editFormID).find("reqCustUpdatePO").val('');
+
+    });
+
+
+    $('#createOrderCurrentProducts').on('click', 'a[href="#closeAddProductPanelOnEdit"]', function () {
+        debugger;
+        var id = $(this).attr("id");
+        $('.delivery_date_conflict').hide();
+        $('#tempScheduleError_'+ id).hide();
+        //$('.edit_product_panel').hide();
+        //$(this).closest('.edit_product_panel').hide();
+        //$('#reqCustUpdatePO').html('');
+
+        $('html,body').animate({
+            scrollTop: $('#createOrderPanel').position().top + 200
+        }, 400);
+        //get value of cancel button is resp. edit form, find form id by val , assign and reset
+        var editFormID = $(this).attr('value');
+        document.getElementById("frmEditProd_" + editFormID).reset();
+        document.getElementById("frmEditProd_" + editFormID).find("reqCustUpdatePO").val('');
+
+    });
+
+    $('#createOrderCurrentProducts').on('click', 'a[href="#closeAddProductPanel"]', function () {
+        var id = $(this).attr("id");
+        debugger;
+        $('#tempScheduleError_'+ id).hide();
+        $('.edit_product_panel').hide();
+        $(this).closest('.edit_product_panel').hide();
+
+        $('html,body').animate({
+            scrollTop: $('#createOrderPanel').position().top + 200
+        }, 400);
+
+        var editFormID = $(this).attr('value');
+        document.getElementById("frmEditProd_" + editFormID).reset();
+        document.getElementById("frmEditProd_" + editFormID).find("reqCustUpdatePO").val('');
+    });
+
+    $('#createOrderCurrentProducts').on('click', 'a[href="#closeAddProductPanelForErr"]', function () {
+        var id = $(this).attr("id");
+        debugger;
+        $('#tempScheduleError_'+ id).hide();
+        $('.delivery_date_conflict').hide();
+        //$(this).closest('.edit_product_panel').hide();
+
+        $('html,body').animate({
+            scrollTop: $('#createOrderPanel').position().top + 200
+        }, 400);
+
+        var editFormID = $(this).attr('value');
+        document.getElementById("frmEditProd_" + editFormID).reset();
+        document.getElementById("frmEditProd_" + editFormID).find("reqCustUpdatePO").val('');
+    });
+
+    function confirmEditProductOnShadeErr(frm, seqNum)
+    {
+        debugger;
+        var result = ValidateEditOrder(frm, seqNum);
+        if (result != true) {
+            $(frm).find('#reqCustUpdatePO').html('');
+            if (result == "Width cannot be empty !" || result == "Width should be numeric, in Cms!" || result == "Width should be between 40 and 250 CM!") {
+                $(frm).find('#reqCustUpdatePO').html('');
+                $(frm).find('#editinputWidthCm').focus();
+                $(frm).find('#reqCustUpdatePO').html("<p class='error-msg'>" + result + "</p>");
+            }
+            else if (result == "Diameter cannot be empty !" || result == "Diameter should be numeric, in Cms!" || result == "Diameter should be between 5 and 120 CM!") {
+                $(frm).find('#reqCustUpdatePO').html('');
+                $(frm).find('#editinputDiaCm').focus();
+                $(frm).find('#reqCustUpdatePO').html("<p class='error-msg'>" + result + "</p>");
+            }
+            else if (result == "Qty cannot be empty!" || result == "Qty should be numeric, in MT!" || result == "Qty should be between 0.500 and 100 MT!") {
+                $(frm).find('#reqCustUpdatePO').html('');
+                $(frm).find('#editinputQuantityMt').focus();
+                $(frm).find('#reqCustUpdatePO').html("<p class='error-msg'>" + result + "</p>");
+            }
+            else {
+                $(frm).find('#reqCustUpdatePO').html('');
+                $(frm).find('#reqCustUpdatePO').html("<p class='error-msg'>" + result + "</p>");
+
+
+            }
+
+
+
+        }
+        else {
+            var reqdeldate = frm.requestedDeliveryDateDay.value + "/" + frm.requestedDeliveryDateMonth.value + "/" + frm.requestedDeliveryDateYear.value;
+
+            $('#reqCustUpdatePO').html('');
+            var editselectBf = frm.editselectBf.value;
+            var selectGsm = frm.editselectGsm.value;
+            var selectShade = frm.editselectShade.value;
+            var selectWidth = frm.editinputWidthCm.value;
+            var selectCore = frm.editselectCore.value;
+            var inputDiaCm = frm.editinputDiaCm.value;
+            var inputQuantityMt = frm.editinputQuantityMt.value;
+
+            // call ajax to send values to the method to update the edited values
+            var datatosend = {
+                sequenceNumber: seqNum,
+                hCustomer_id: $('#selectedCustomerId').val(),
+                selectBf: frm.editselectBf.value,
+                selectGsm: frm.editselectGsm.value,
+                selectShade: frm.editselectShade.value,
+                selectWidth: frm.editinputWidthCm.value,
+                selectCore: frm.editselectCore.value,
+                inputDiaCm: frm.editinputDiaCm.value,
+                inputQuantityMt: frm.editinputQuantityMt.value,
+                requested_delivery_date: reqdeldate,
+                priceText : frm.editinputPrice.value
+            };
+            // make an ajax call to the methid to show the edited product in the list of products
+            $.ajax({
+                //async: true,
+                type: "POST",
+                url: "/Order/confirmEditProductinSession/",
+                data: datatosend,
+                dataType: "html",
+                context: document.body,
+                success: function (data) {
+                    //alert(data);
+                    $('#lstProds').html(data);
+                }
+            })
+            $("#frmEditProd_" + seqNum).closest('.edit_product_panel').hide();
+
+            $('html,body').animate({
+                scrollTop: $('#createOrderPanel').position().top + 200
+            }, 400);
+        }
+
+    };
+
+
+    $('#createOrderCurrentProducts').on('click', 'a[href="#removeCurrentProduct"]', function () {
+        if ($(this).closest('.current_product').find('.product_attention').is(':hidden')) {
+            $(this).closest('.current_product').find('.product_attention').show();
+
+            $('html,body').animate({
+                scrollTop: $(window).scrollTop() + 120
+            });
+        }
+
+
+    });
+
+    $('.product_attention').on('click', 'a[href="#closeProductAttention"]', function () {
+        $(this).closest('.product_attention').hide();
+
+        $('html,body').animate({
+            scrollTop: $(window).scrollTop() - 120
+        });
+
+
+    });
+
+    $('#createOrderCurrentProducts').on('click', 'a[href="#editCurrentProduct"]', function () {
+        // DropdownTriggerOrderEdit();
+        var id = $(this).attr("value");
+
+        $('#tempScheduleError_'+ id).hide();
+        if ($(this).closest('.current_product').find('.edit_product_panel').is(':hidden')) {
+            $(this).closest('.current_product').find('.edit_product_panel').show();
+
+            $('html,body').animate({
+                scrollTop: $(window).scrollTop() + 220
+            });
+        }
+
+
+    });
+
+    function DropdownTriggerOrderEdit() {
+        $('#requestedDeliveryDateDay').val().trigger('chosen:updated');
+        $('#requestedDeliveryDateMonth').val().trigger('chosen:updated');
+        $('#requestedDeliveryDateYear').val().trigger('chosen:updated');
+        //For Bf
+        $('#selectBf').val().trigger('chosen:updated');
+        $('#selectBf').find('option:first').prop('selected', 'selected');
+        //for Gsm
+        $('#selectGsm').val().trigger('chosen:updated');
+        $('#selectGsm').find('option:first').prop('selected', 'selected');
+        //for shade
+        $('#selectShade').val().trigger('chosen:updated');
+        $('#selectShade').find('option:first').prop('selected', 'selected');
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Agent/GetCurrentyear/",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var dafulttext = "YYYY";
+                //For Edit Order Year
+                $("#requestedDeliveryDateYear").empty();
+                $("#requestedDeliveryDateYear").append($('<option>' + dafulttext + '</option>'));
+                $("#requestedDeliveryDateYear").append($('<option value='+ data[0]+'>' + data[0] + '</option>'));
+                $("#requestedDeliveryDateYear").append($('<option value='+ data[1]+'>' + data[1] + '</option>'));
+            }
+
+        });
+    });
+
+
+    function  GetWidthInInch (frm, sqn)
+    {
+        debugger;
+        var textvalue =  $(frm).find('#editinputWidthCm').val();
+        var widthInCm = (2.54) * textvalue;
+        if (widthInCm != 0) {
+            $(frm).find('#editinputwidthInInch').val(widthInCm);
+        } else {
+            $(frm).find('#editinputwidthInInch').val('');
+        }
+    };
+    function  GetWidthIncm(frm, sqn)
+    {
+        debugger;
+        var textvalue =  $(frm).find('#editinputwidthInInch').val();
+        var widthInCm = textvalue / (2.54);
+        if (widthInCm != 0) {
+            $(frm).find('#editinputWidthCm').val(widthInCm);
+        } else {
+            $(frm).find('#editinputWidthCm').val('');
+        }
+
+    };
+</script>

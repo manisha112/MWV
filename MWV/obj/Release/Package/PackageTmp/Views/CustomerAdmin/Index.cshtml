@@ -1,0 +1,93 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@{
+    //  ViewBag.Title = "Index";
+    string msg = @ViewBag.Message;
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+        border-collapse: collapse;
+    }
+
+    #DivPaging li {
+        padding: 10px 0 20px 0;
+        line-height: 188%;
+    }
+</style>
+
+
+<h2>Customer HomePage</h2>
+<center class="form-label"><b>List Of Customers</b></center>
+<span id="ErrorMsgs"><p class='error-msg'>@msg</p></span>
+
+<div id="DivPaging">
+    @Html.PagedListPager((IPagedList)ViewBag.PageData, page => Url.Action("Index", new { page, @class = "pagination" }), new PagedListRenderOptions { DisplayEllipsesWhenNotShowingAllPageNumbers = false, DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never })
+</div>
+
+<table align="center" style="font-size: 12px;" id="tblPagingData">
+    <tr>
+        <th>
+            <h1><b>Name </b></h1>
+        </th>
+        <th>
+            <h1><b>City</b></h1>
+        </th>
+        <th>
+            <h1><b>Agent</b></h1>
+        </th>
+        <th>
+            <h1><b>Status</b></h1>
+        </th>
+        <th>
+            <h1><b>Action</b></h1>
+        </th>
+
+    </tr>
+
+    @foreach (var item in ViewBag.PageData)
+    {
+        <tr>
+
+            <td>
+                @item.name
+            </td>
+            <td>
+                @item.city
+            </td>
+            <td>
+                @*@item.Agent.name*@
+            </td>
+            <td>
+                @item.status
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = @item.customer_id }) |
+                @Html.ActionLink("Delete", "DeleteDetails", new { id = @item.customer_id })
+            </td>
+
+
+        </tr>
+    }
+
+</table>
+
+<script type="text/javascript">
+
+    $('#DivPaging').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#tblPagingData').show();
+                                    $('#tblPagingData').html(result);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+</script>
+

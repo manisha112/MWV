@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MWV.Models.Product_prices>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.gsm_code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shade.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.start_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.end_date)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.gsm_code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Shade.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.start_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.end_date)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.product_price_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.product_price_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.product_price_id })
+        </td>
+    </tr>
+}
+
+</table>

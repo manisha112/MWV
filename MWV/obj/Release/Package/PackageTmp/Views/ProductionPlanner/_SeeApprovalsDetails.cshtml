@@ -1,0 +1,307 @@
+﻿
+<div class="fix-overflow">
+    <a href="#closePendingApprovalsPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+
+<ul class="pending_approvals_list">
+    @foreach (var item in ViewBag.ApprovalPendingCust)
+    {
+           string strAddrs = "";
+                string CountryPhone = "";
+
+                strAddrs = item.Addess1 + "" + item.Addess2 + "/" + item.Addess3 + "/" + item.State;
+                CountryPhone = item.Country + "/" + item.Phone + "/" + item.fax;
+                if (item.DuplicateCustomerName != "" && (item.AgentName != item.DuplicateAgentName))
+                {
+                    <li id="@item.customer_id">
+                        <p><input type="hidden" class="StakeholderId" id="StakeholderId" name="stakeholderId" value=@item.customer_id /></p>
+                        <p class="title"><strong>Add Customer Request</strong></p>
+                        <p class="details"> @item.AgentName</p>
+                        <p class="title"><strong> @item.CustomerName</strong></p>
+                        @if (strAddrs.Contains("//"))
+                        {
+                            strAddrs = strAddrs.Remove(strAddrs.Length - 1);
+                        }
+                        @if (CountryPhone.Contains("//"))
+                        {
+                            CountryPhone = CountryPhone.Remove(CountryPhone.Length - 1);
+                        }
+                        @if (strAddrs.Substring(strAddrs.Length - 1) == "/")
+                        {
+                            strAddrs = strAddrs.Remove(strAddrs.Length - 1);
+                        }
+                        @if (CountryPhone.Substring(CountryPhone.Length - 1) == "/")
+                        {
+                            CountryPhone = CountryPhone.Remove(CountryPhone.Length - 1);
+                        }
+                        <p class="details">  @strAddrs </p>
+                        <p class="details">  @CountryPhone </p>
+                        <p class="see_conflict"><a href="#seeConflict">See Conflict</a></p>
+
+                        <div class="see_conflict_details hidden">
+                            <div class="fix-overflow close_btn">
+                                <a href="#closeSeeConflict" class="close-panel"><img src="/images/close-panel.png"></a>
+                            </div>
+
+                            <div class="details_full">
+                                <p class="title"><strong>Attention!</strong></p>
+
+                                <p class="details">1. A customer with @item.CustomerName and @strAddrs is currently assigned to another agent: @item.DuplicateAgentName.</p>
+
+                                <p class="details">Approving the assignment of @item.CustomerName to a new agent: @item.AgentName, will terminate the assignment to the  @item.DuplicateAgentName </p>
+                                @if (@item.ordStatus != "Completed")
+                                {
+                                    <p class="details">2. @item.DuplicateCustomerName has an open order with another agent: @item.DuplicateAgentName, therefore cannot be transferred to a new agent: @item.AgentName at this time.</p>
+                                }
+                            </div>
+                            @if (@item.ordStatus != "Completed")
+                            { }
+                            else
+                            {
+
+                                <select class="select-input select_action-@item.customer_id" data-id="@item.customer_id">
+                                    <option>Select Action</option>
+                                    <option value="approve">Approve</option>
+                                    <option value="deny">Deny</option>
+                                </select>
+                            }
+                            <div class="take_action_panel choose_action hidden">
+                                <div class="fix-overflow close_btn">
+                                    <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+                                </div>
+
+                                <p class="title"><strong>Confirm Action</strong></p>
+
+                                <p class="details">Are you sure you want to commit to this action?</p>
+                               
+                                <textarea class="textarea-input remark-@item.customer_id" data-id="@item.customer_id" placeholder="Type Remark" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Type Remark'"></textarea>
+                                <span id="approveQuickview-@item.customer_id" class="error-msg"></span>
+                                <a href="#confirmAssignment" class="btn" data-id="@item.customer_id">Confirm</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                else
+                    if (item.AgentName == item.DuplicateAgentName)
+                    {
+                        <li id="@item.customer_id">
+                            <p><input type="hidden" class="StakeholderId" id="StakeholderId" name="stakeholderId" value=@item.customer_id /></p>
+                            <p class="title"><strong>Add Customer Request</strong></p>
+                            <p class="details"> @item.AgentName</p>
+                            <p class="title"><strong> @item.CustomerName</strong></p>
+                            @if (strAddrs.Contains("//"))
+                            {
+                                strAddrs = strAddrs.Remove(strAddrs.Length - 1);
+                            }
+                            @if (CountryPhone.Contains("//"))
+                            {
+                                CountryPhone = CountryPhone.Remove(CountryPhone.Length - 1);
+                            }
+                            @if (strAddrs.Substring(strAddrs.Length - 1) == "/")
+                            {
+                                strAddrs = strAddrs.Remove(strAddrs.Length - 1);
+                            }
+                            @if (CountryPhone.Substring(CountryPhone.Length - 1) == "/")
+                            {
+                                CountryPhone = CountryPhone.Remove(CountryPhone.Length - 1);
+                            }
+                            <p class="details">  @strAddrs </p>
+                            <p class="details">  @CountryPhone </p>
+                            <p class="see_conflict"><a href="#seeConflict">See Conflict</a></p>
+
+                            <div class="see_conflict_details hidden">
+                                <div class="fix-overflow close_btn">
+                                    <a href="#closeSeeConflict" class="close-panel"><img src="/images/close-panel.png"></a>
+                                </div>
+
+                                <div class="details_full">
+                                    <p class="title"><strong>Attention!</strong></p>
+
+                                    <p class="details">A customer with @item.CustomerName and @strAddrs is already exist with same agent @item.AgentName .</p>
+                                    <p class="details">Reject the assignment of @item.CustomerName .</p>
+                                </div>
+                                <select class="select-input select_action-@item.customer_id" data-id="@item.customer_id">
+                                    <option>Select Action</option>
+                                    <option value="deny">Deny</option>
+                                </select>
+
+                                <div class="take_action_panel choose_action hidden">
+                                    <div class="fix-overflow close_btn">
+                                        <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+                                    </div>
+
+                                    <p class="title"><strong>Confirm Action</strong></p>
+
+                                    <p class="details">Are you sure you want to commit to this action?</p>
+                                   
+                                    <textarea class="textarea-input remark-@item.customer_id" data-id="@item.customer_id" placeholder="Type Remark" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Type Remark'"></textarea>
+                                    <span id="approveQuickview-@item.customer_id" class="error-msg"></span>
+                                    <a href="#confirmAssignment" class="btn" data-id="@item.customer_id">Confirm</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li id="@item.customer_id">
+
+                            <p><input type="hidden" class="StakeholderId" id="StakeholderId" name="stakeholderId" value=@item.customer_id /></p>
+                            <p class="title"><strong>Add Customer Request</strong></p>
+                            <p class="details"> @item.AgentName</p>
+                            <p class="title"><strong> @item.CustomerName</strong></p>
+
+                            @if (strAddrs.Contains("//"))
+                            {
+                                strAddrs = strAddrs.Replace(@"//", "/");// strAddrs.Remove(strAddrs.Length - 1);
+                            }
+                            @if (strAddrs.Substring(strAddrs.Length - 1) == "/")
+                            {
+                                strAddrs = strAddrs.Remove(strAddrs.Length - 1);
+                            }
+
+                            @if (CountryPhone.Contains("//"))
+                            {
+                                CountryPhone = CountryPhone.Replace(@"//", "/");//CountryPhone.Remove(CountryPhone.Length - 1);
+                            }
+                            @if (CountryPhone.Substring(CountryPhone.Length - 1) == "/")
+                            {
+                                CountryPhone = CountryPhone.Remove(CountryPhone.Length - 1);
+                            }
+                            <p class="details">  @strAddrs </p>
+                            <p class="details">  @CountryPhone </p>
+
+                            <select class="select-input select_action-@item.customer_id" data-id="@item.customer_id">
+                                <option>Select Action</option>
+                                <option value="approve">Approve</option>
+                                <option value="deny">Deny</option>
+                            </select>
+
+                            <div class="take_action_panel choose_action hidden" data-id="@item.customer_id">
+                                <div class="fix-overflow close_btn">
+                                    <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+                                </div>
+
+                                <p class="title"><strong>Confirm Action</strong></p>
+
+                                <p class="details">Are you sure you want to commit to this action?</p>
+                               
+                                <textarea data-id="@item.customer_id" placeholder="Type Remark" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Type Remark'" class="textarea-input remark-@item.customer_id"></textarea>
+                                <span id="approveQuickview-@item.customer_id" class="error-msg"></span>
+                                <a href="#confirmAssignment" class="btn" data-id="@item.customer_id">Confirm</a>
+                            </div>
+                        </li>
+                    }
+            }
+
+</ul>
+<script type="text/javascript">
+    $('.pending_approvals_list').on('change', 'select', function () {
+       
+        $(this).next('.take_action_panel').show();
+    });
+
+    $('.take_action_panel').on('click', 'a[href="#closeTakeAction"]', function () {
+        
+        $('.take_action_panel').find(".error-msg").hide();
+        $(this).closest('.take_action_panel').hide();
+
+
+    });
+
+    $('.take_action_panel').on('click', 'a[href="#confirmAssignment"]', function () {
+      
+
+        var id = $(this).attr('data-id');
+
+        var duplicateCustId = $('.remark-' + id).attr('id');
+        var $SelectedText = $('.select_action-' + id).val();
+        //alert(duplicateCustId);
+        if ($SelectedText == "Select Action") {
+            $(".take_action_panel").find("#approveQuickview-" + id).show();
+            $(".take_action_panel").find('#approveQuickview-' + id).html("<p class='error-msg'>Please Select Action !");
+        }
+        else if ($('.remark-' + id).val().trim() == "") {
+            $(".take_action_panel").find("#approveQuickview-" + id).show();
+            $(".take_action_panel").find('#approveQuickview-' + id).html("<p class='error-msg'>Please Enter Remark !");
+        }
+        //var allVals = [];
+        // allVals = $SelectedText + "," + id + "," + $('.remark-' + id).val();
+        else
+            {
+           if ($(this).attr('id') != 0)
+            allVals = {
+                customerAction: $SelectedText,
+                custid: id,
+                remark: $('.remark-' + id).val(),
+                conflictAgentid: $(this).attr('id'),
+                DuplicateCustId: duplicateCustId
+            }
+        else allVals = $SelectedText + "," + id + "," + $('.remark-' + id).val();
+
+        //var allVals = [];
+        ////alert("hello");
+        
+        ////$('#newOrdersList :checked').each(function () {
+        ////    allVals.push($(this).val()) + $(".select_action option:selected").val();
+        ////});
+        //allVals = $(".select_action option:selected").val() + "," + $(".StakeholderId").val() + "," + $(".textarea-input").val();
+        $.ajax({
+            url: "/ProductionPlanner/SubmitCustomerAction/?allVals=" + allVals,
+            data: allVals,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                 .success(function (result) {
+                     if ($('#mismatchesPanel').is(':hidden')) {
+                       //  $('#mismatchesPanel').show();
+                         //$('#mismatchesPanel').html(result);
+
+                         $('html,body').animate({
+                             scrollTop: $('#mismatchesPanel').position().top
+                         }, 400);
+                     } else {
+
+                         $('#mismatchesPanel').hide();
+
+                         $('html,body').animate({
+                             scrollTop: 0
+                         }, 400);
+                     }
+                     RefreshRecentPendingApproval();
+                 })
+
+        $(this).closest('.take_action_panel').hide();
+
+        if ($(this).hasClass('in_order_details')) {
+            $(this).closest('.new_order_details').hide();
+            $('#closeNewOrders').show();
+            $('#newOrdersBulkAction').show();
+            $('#newOrdersList').show();
+            $('#newOrdersPanel').show();
+        }
+        $(this).closest('li').remove();
+        }
+    });
+    function RefreshRecentPendingApproval() {
+        $.ajaxSetup({ cache: false });
+        $.ajax({
+            url: "/ProductionPlanner/RecentPendingApproval/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+               .success(function (result) {
+                   $('#quickView').show();
+                   $('#quickViewRecentApprovals').html(result);
+               })
+              .error(function (xhr, ajaxOptions, thrownError) {
+              })
+    }
+</script>
+
+
+
+

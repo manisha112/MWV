@@ -1,0 +1,1342 @@
+﻿@model MWV.Models.Customer
+@{
+    ViewBag.Title = "WESTROCK";
+}
+
+<div id="tempParentDiv">
+    <!-- -----------------------------------------------------------------------------------------------------
+        VIEW SCHEDULE
+    ------------------------------------------------------------------------------------------------------ -->
+    <div id="viewSchedulePanel" class="hidden view_schedule_panel">
+        <div class="fix-overflow">
+            <a href="#closeViewSchedulePanel" class="close-panel"><img src="images/close-panel.png"></a>
+        </div>
+
+        @Html.DropDownList("viewSchedulePaperMills", (SelectList)ViewBag.lstPapermills, "Select Papermill", new { @class = "select-input" })
+       
+         @*<select id="viewSchedulePaperMills" class="select-input">
+                <option>Select Paper Mill</option>
+                <option value="schedulePaperMill01">Paper Mill 01</option>
+                <option value="schedulePaperMill02">Paper Mill 02</option>
+                <option value="schedulePaperMill03">Paper Mill 03</option>
+            </select>*@
+
+        <div id="schedulePaperMill" class="schedule_paper_mill hidden">
+
+        </div>
+    </div>
+    <!-- #viewSchedulePanel -->
+    <!-- -----------------------------------------------------------------------------------------------------
+        Change Password
+    ------------------------------------------------------------------------------------------------------ -->
+    <!-- #changePassword -->
+    <!-- ---------------------------------------------------------------------------------------------------------
+        CREATE ORDER BUTTON
+    ---------------------------------------------------------------------------------------------------------- -->
+
+    <div id="createOrderButton" class="create_order_button">
+        <a href="#showCreateOrderPanel" class="btn create_order">Create New Order</a>
+    </div>
+
+    <!-- ---------------------------------------------------------------------------------------------------------
+        CREATE ORDER PANEL
+    ---------------------------------------------------------------------------------------------------------- -->
+
+    <div id="createOrderPanel" class="hidden create_order_panel">
+        <div class="fix-overflow">
+            <a href="#closeCreateOrderPanel" id="closeCreateOrderPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+        </div>
+
+        <!-- -----------------------------------------------------------------------------------------------------
+            CREATE ORDER: SEARCH / SELECT CUSTOMER
+        ------------------------------------------------------------------------------------------------------ -->
+
+        <div id="createOrderSelectCustomer" class="select_customer_panel">
+            <h2>Create Order - Select Customer</h2>
+
+            <div class="fix-overflow">
+                <a href="#createCustomer" class="create_customer"><img src="/images/add.png"> <span>Create Customer</span></a>
+            </div>
+
+            <div class="auto_search_input_field">
+                <input type="text" value="Search" class="search-input" id="ordersAutoSearchCustomers">
+                <a href="#clearSearch">&nbsp;</a>
+            </div>
+
+            <div class="auto_search_results">
+                <div id="ordersAutoSearchCustomersResults" class="auto-search"></div>
+            </div>
+
+            <div id="selectCustomerDropdownPanel" class="select_customer_dropdown_panel">
+                <p>or</p>
+                @Html.DropDownList("selectCustomerDropdown", (SelectList)ViewBag.customer_list, "Select Customer", new { @class = "select-input" })
+            </div>
+
+            <div id="createOrderSelectedCustomerResults" class="selected_customer_results hidden">
+                @* being shown from the partial view "_customerList"*@
+            </div> <!-- #selectedCustomerResults -->
+        </div> <!-- #createOrderSelectCustomer -->
+        <!-- -----------------------------------------------------------------------------------------------------
+            CREATE ORDER: CREATE NEW CUSTOMER
+        ------------------------------------------------------------------------------------------------------ -->
+        @using (Html.BeginForm("CreateCustomer", "Customer", FormMethod.Post, new { id = "FormcustomerDetails", name = "FormcustomerDetails" }))
+        {
+            //Added by Manisha
+            //For create customer
+            @Html.AntiForgeryToken()
+
+            <div id="createCustomerPanel" class="create_customer_panel hidden">
+                <h2>Create New Customer</h2>
+                <div class="inputs">
+                    <div class="col-md-10" id="divCustomerName">
+                        @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "text-input", @id = "txtName", @placeholder = "Name", @autocomplete = "off", @maxlength = 100, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Name'" }, })
+                        @Html.ValidationMessageFor(model => model.name)
+                    </div>
+
+                    <div class="col-md-10" id="divCustomerAddress1">
+                        @Html.EditorFor(model => model.address1, new { htmlAttributes = new { @class = "text-input", @id = "txtAddress1", @placeholder = "Address1", @maxlength = 100, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Address1'" }, })
+                        @Html.ValidationMessageFor(model => model.address1)
+                    </div>
+
+                    <div class="col-md-10" id="divCustomerAddress2">
+                        @Html.EditorFor(model => model.address2, new { htmlAttributes = new { @class = "text-input", @id = "txtAddress2", @placeholder = "Address2", @maxlength = 100, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Address2'" }, })
+                        @Html.ValidationMessageFor(model => model.address2)
+                    </div>
+
+                    <div class="col-md-10" id="divCustomerAddress3">
+                        @Html.EditorFor(model => model.address3, new { htmlAttributes = new { @class = "text-input", @id = "txtAddress3", @placeholder = "Address3", @maxlength = 100, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Address3'" }, })
+                        @Html.ValidationMessageFor(model => model.address3)
+                    </div>
+
+                    <div class="col-md-10" id="divCity">
+                        @Html.EditorFor(model => model.city, new { htmlAttributes = new { @class = "text-input", @id = "txtCity", @placeholder = "City", @maxlength = 50, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'City'" }, })
+                        @Html.ValidationMessageFor(model => model.city)
+                    </div>
+
+                    <div class="col-md-10" id="divPincode">
+                        @Html.EditorFor(model => model.pincode, new { htmlAttributes = new { @class = "text-input", @id = "txtPincode", @placeholder = "Pincode", @maxlength = 50, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Pincode'", @type = "number", @step = "any" }, })
+                        @Html.ValidationMessageFor(model => model.pincode)
+                    </div>
+
+                    <div class="col-md-10" id="divState">
+                        @Html.EditorFor(model => model.state, new { htmlAttributes = new { @class = "text-input", @id = "txtState", @placeholder = "State", @maxlength = 50, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'State'" }, })
+                        @Html.ValidationMessageFor(model => model.state)
+                    </div>
+
+                    <div class="col-md-10" id="divCountry">
+                        @Html.EditorFor(model => model.country, new { htmlAttributes = new { @class = "text-input", @id = "txtCountry", @placeholder = "Country", @maxlength = 50, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Country'" }, })
+                        @Html.ValidationMessageFor(model => model.country)
+                    </div>
+
+
+                    <div class="col-md-10" id="divPhone">
+                        @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "number-input", @id = "txtPhone", @placeholder = "Phone", @maxlength = 15, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Phone'", @type = "number", @step = "any" }, })
+                        @Html.ValidationMessageFor(model => model.phone)
+                    </div>
+
+                    <div class="col-md-10" id="divFax">
+                        @Html.EditorFor(model => model.fax, new { htmlAttributes = new { @class = "text-input", @id = "txtFax", @placeholder = "Fax", @maxlength = 50, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Fax'", @type = "number", @step = "any" }, })
+                        @Html.ValidationMessageFor(model => model.fax)
+                    </div>
+                    <div class="col-md-10" id="divEmail">
+                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "text-input", @id = "txtEmail", @placeholder = "Email", @maxlength = 100, @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Email'" }, })
+                        @Html.ValidationMessageFor(model => model.email)
+                    </div>
+
+                    @*<input type="text" class="text-input" id="customerName" value="Name">
+                        <input type="text" class="text-input" id="customerAddress1" value="Address Line 1">
+                        <input type="text" class="text-input" id="customerAddress2" value="Address Line 2">
+                        <input type="text" class="text-input" id="customerAddress3" value="Address Line 3">
+                        <input type="text" class="text-input" id="customerCity" value="City">
+                        <input type="text" class="text-input" id="customerPin" value="PIN">
+                        <input type="text" class="text-input" id="customerState" value="State">
+                        <input type="text" class="text-input" id="customerCountry" value="Country">
+                        <input type="text" class="text-input" id="customerPhone" value="Phone">
+                        <input type="text" class="text-input" id="customerFax" value="Fax">
+                        <input type="text" class="text-input" id="customerEmail" value="Email">*@
+                    @*<div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-default" />
+                        </div>*@
+
+                </div>
+                <span id="emailErrmsg" class="error-msg"></span>
+                <span id="createNewCustomerErrmsg" class="error-msg"></span>
+                <a href="#createNewCustomer" class="btn">Create</a>
+                <span id="emailErrmsg" class="error-msg"></span>
+                <span id="createNewCustomerErrmsg" class="error-msg"></span>
+            </div> <!-- #createCustomerPanel -->
+
+
+            //Modified By manisha
+            //li fields are used in Ajax (Index.js)
+            <div id="reviewCustomerPanel" class="review_customer_panel hidden">
+                <h2>Review Customer Information</h2>
+                <div id="ReviewCustomerDetails">
+                    @*<ul>
+                            <li>
+                                <div id="Name">
+                                </div>
+                            </li>
+                        <li>Address Line 1</li>
+                        <li>Address Line 2</li>
+                        <li>Address Line 3</li>
+                        <li>City</li>
+                        <li>PIN</li>
+                        <li>State</li>
+                        <li>Country</li>
+                        <li>Phone</li>
+                        <li>Fax</li>
+                        <li>Email</li>
+                        </ul>*@
+                </div>
+
+                <div class="buttons">
+                    <a href="#cancelCreateCustomer" class="btn">Cancel</a>
+                    <a href="#editCreateCustomer" class="btn">Edit Customer</a>
+                    <a href="#createCustomerConfirmation" class=" btn">Create</a>
+
+                    @*<a href="#createCustomerConfirmation" onclick="$(this).parents('form').submit()" class="btn">Create</a>*@
+
+                    @*<a href="#createCustomerConfirmation" onclick="$(this).parents('form').submit()" class="btn">Create</a>*@
+                    @*<a href="#createCustomerConfirmation" class=" btn">Create</a>*@
+                    @*<div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-default" id="btnSaveCustDetils"/>
+                        </div>*@
+                </div>
+            </div> <!-- #reviewCustomerPanel -->
+        }
+        <div id="confirmCustomerPanel" class="confirm_customer_panel hidden">
+
+        </div> <!-- #confirmCustomerPanel -->
+        @*</div>*@ <!-- #createOrderPanel -->
+        <!-- -----------------------------------------------------------------------------------------------------
+            CREATE ORDER: CREATE NEW CUSTOMER: CONFIRMATION
+        ------------------------------------------------------------------------------------------------------ -->
+
+        <div id="confirmCustomerPanel" class="confirm_customer_panel hidden">
+            <h2>Confirmation</h2>
+
+            <div class="thank_you">
+                <p class="title"><strong>Thank you for your submission</strong></p>
+
+                <p class="details">Your submission will be reviewed shortly, and you will be notified if it is approved.</p>
+            </div>
+
+            <div class="buttons">
+                <a href="#closeCreateCustomerConfirmation" class="btn">Close</a>
+                <a href="#createAnotherCustomer" class="btn">Create Another Customer</a>
+            </div>
+        </div> <!-- #confirmCustomerPanel -->
+        <!-- -----------------------------------------------------------------------------------------------------
+            CREATE ORDER: ADD PRODUCTS
+        ------------------------------------------------------------------------------------------------------ -->
+
+
+        <div id="createOrderAddProducts" class="hidden add_products_panel">
+            <div class="back-btn"><a href="#back"><img src="/images/back.png"></a></div>
+
+            <h2>Create Order - Add Products</h2>
+
+            <!-- -------------------------------------------------------------------------------------------------
+                CREATE ORDER: ADD PRODUCTS > CUSTOMER PO
+            -------------------------------------------------------------------------------------------------- -->
+            <div id="createCustomerPO" class="customer_po">
+                <input type="hidden" id="selectedCustomerId" value="">
+
+                @if ((int)Session["fromDuplicateBtn"] == 1)
+                {
+                    @Html.DropDownList("selectCustomerDropdown", (SelectList)ViewBag.customer_list, "Select Customer", new { @class = "select-input" })
+                }
+                <p class="customer_name"><strong id="selectedCustomerName"></strong></p>
+                @*<span id="tmpCustName"></span>*@
+                @* span "tmpCustName" added by Rajni to display the customer name *@
+                <p class="form-label">Customer PO</p>
+                <input type="text" placeholder="Enter Customer PO" class="text-input" id="inputCustomerpo" maxlength="30" onfocus="this.placeholder = ''" onblur="    this.placeholder = 'Enter Customer PO'">
+                <span id="reqCustPO"></span>
+                <div class="fix-overflow">
+                    <a href="#addProduct" class="add_product"><img src="/images/add.png"> <span>Add Product</span></a>
+                </div>
+            </div> <!-- #createCustomerPO -->
+            <!-- -------------------------------------------------------------------------------------------------
+                CREATE ORDER: ADD PRODUCTS > CURRENT PRODUCT LIST
+            -------------------------------------------------------------------------------------------------- -->
+            <div id="createOrderCurrentProducts" class="hidden current_products">
+                <div id="currentProductsList" class="current_products_list">
+                    @*//Rajni- created a partial view for div id '_currentProductsList'*@
+                    <div id="lstProds"></div>
+                    @*//Rajni- created a partial view for div id '_currentProductsList'*@
+                </div> <!-- #currentProductsList -->
+
+                <div class="fix-overflow">
+                    <a href="#addProduct" class="add_product"><img src="/images/add.png"> <span>Add Product</span></a>
+                </div>
+
+                <div class="product_totals">
+                    <p id="currentProductsTotal"></p>
+                    @*<strong>Total: INR <span id="tmpTotal"></span></strong>*@
+                    @*<p id="currentProductsTotal"><strong>Total: INR <span id="tmpTotal"></span></strong></p>*@
+                    @* <span added by Rajni - on clearing the session i am resetting the 'currentProductsTotal'.html(''), so make changes to it *@
+                    @* <p id="currentProductsGrandTotal"><strong>Grand Total: INR 32,335</strong></p> not needed *@
+                </div>
+
+                <div class="order_buttons">
+                    <a href="#cancelPlaceOrder" class="btn">Cancel</a>
+                    <a href="#placeOrder" class="btn">Place Order</a>
+                </div>
+
+            </div> <!-- #createOrderCurrentProducts -->
+            <!-- -------------------------------------------------------------------------------------------------
+                CREATE ORDER: ADD PRODUCTS > ADD PRODUCT
+            -------------------------------------------------------------------------------------------------- -->
+            <div id="addProductPanel" class="hidden add_product_panel">
+                <div class="fix-overflow">
+                    <a href="#closeAddProductPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+                </div>
+                <form id="TestAddProduct">
+                    <div id="createOrderDeliveryDate" class="delivery_date">
+                        <p class="form-label">Requested Delivery Date</p>
+                        <select id="requestedDeliveryDateDay" class="date-select-input">
+                            <option>DD</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+
+                        <select class="date-select-input" id="requestedDeliveryDateMonth">
+                            <option>MM</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+
+                        <select class="date-select-input year" id="requestedDeliveryDateYear">
+                            <option>YYYY</option>
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                        </select>
+
+                        <span id="tmpReqDelDateReqd"></span>
+                    </div> <!-- #createOrderDeliveryDate-->
+                    <div class="add_product_inputs">
+                        @*class="product_details"*@
+                        @Html.DropDownList("selectBf", (SelectList)ViewBag.Bf_list, "Select Bf", new { @class = "select-input" })
+                        @Html.DropDownList("selectGsm", (SelectList)ViewBag.Gsm_list, "Select Gsm", new { @class = "select-input" })
+                        @Html.DropDownList("selectShade", (SelectList)ViewBag.Shade_list, "Select Shade", new { @class = "select-input" })
+                        @Html.DropDownList("selectCore", (SelectList)ViewBag.Core_list, "Select Core", new { @class = "select-input" })
+                        @*@Html.TextBox("selectWidth", "width", new { @class = "text-input", @placeholder = "Enter width (cm)" })*@
+                        <input type="number" step="any" class="number-input" id="selectWidth" autocomplete="off" placeholder="Enter Width (40-250 CM)" onfocus="this.placeholder = ''" onblur="this.placeholder ='Enter Width (40-250 CM)'">
+                        @*@Html.TextBox("inputDiaCm", "dia", new { @class = "text-input", @placeholder = "Enter DIA (cm)" })*@
+                        <input type="number" step="any" class="number-input" id="inputDiaCm" autocomplete="off" placeholder="Enter DIA (5-120 CM)" onfocus=" this.placeholder = ''" onblur="this.placeholder = 'Enter DIA (5-120 CM)'">
+                        @*@Html.TextBox("inputQuantityMt", null, new { @class = "text-input", @placeholder = "Enter Quantity (MT)" })*@
+                        <input type="number" step="any" class="number-input" id="inputQuantityMt" autocomplete="off" placeholder="Enter Quantity (0.500-100 MT)" onfocus=" this.placeholder = ''" onblur="this.placeholder = 'Enter Quantity (0.500-100 MT)'">
+                        <input type="number" step="any" class="number-input" id="inputprice" value="" autocomplete="off" placeholder="Enter price" onfocus=" this.placeholder = ''" onblur="this.placeholder = 'Enter price'">
+                    </div> <!-- #add_product_inputs-->
+                </form>
+
+
+                <div class="product_details">
+                    <p class="product_code_header"><strong>Product Code:</strong></p>
+                    <p id="productCode" class="product_code"></p>
+                    @*<p class="product_code_header"><strong>Price:</strong></p>
+                    <p id="productPrice" class="product_price"></p>*@
+                </div>
+                <span id="AddOrdersErrorMsg"></span><br />
+                <a href="#addProductToOrder" class="btn add_product_to_order">Add</a>
+                <span id="AddOrdersErrorMsg"></span>
+                <div class="delivery_date_conflict hidden" id="viewSchedule">
+                    <div class="fix-overflow">
+                        <a href="#closeAddProductPanel1" class="close-panel"><img src="images/close-panel.png"></a>
+                    </div>
+
+                    <p class="header"><strong>Attention!</strong></p>
+
+                    <p class="details">The date you have selected conflicts with a current schedule.</p>
+                    <p class="details">You may continue if you wish, however, we cannot guarantee your requested delivery date.</p>
+
+                    <a href="#closeAddProductPanelErr" class="btn">Cancel</a>
+                    <a href="#addProductToOrderErr" class="btn">Continue</a>
+                </div>
+                @*<div class="hidden" id="viewSchedule">
+                        <p>The date you have selected conflict with current schedule.</p>
+                        <p>you may continue if you wish</p>
+                        <a href="#cancelshadeProduct" class="btn">Cancel</a>
+                        <a href="#confirmshadeProduct" class="btn">Confirm</a>
+                    </div>*@
+            </div> <!-- #addProductPanel -->
+        </div> <!-- #createOrderAddProducts -->
+        <!-- -----------------------------------------------------------------------------------------------------
+            CREATE ORDER: REVIEW ORDER
+        ------------------------------------------------------------------------------------------------------ -->
+        <div id="reviewOrder" class="hidden review_order">
+            <h2>Review Order</h2>
+            <div class="review_order_details">
+
+                @* created a partial view for order review "_OrderReview" *@
+                <div id="ShowOrderReview"></div>
+                @*div created by Rajni to hold the partial view*@
+
+                @*This block is inside the partial view to show the grand total*@
+                @*<div class="review_order_totals">
+                        <p><strong>Grand Total: @Session["grandtotal"]</strong></p>
+                    </div>*@
+
+            </div>
+
+            <div class="order_buttons">
+                <a href="#cancelOrder" class="btn">Cancel</a>
+                <a href="#editOrder" class="btn">Edit Order</a>
+                <a href="#submitOrder" class="btn" id="btnSubmitOrder">Submit Order</a>
+            </div>
+        </div> <!-- #reviewOrder -->
+        <!-- -----------------------------------------------------------------------------------------------------
+            CREATE ORDER: ORDER CONFIRMATION
+        ------------------------------------------------------------------------------------------------------ -->
+        <div id="orderConfirmation" class="hidden order_confirmation">
+            <h2>Order Confirmation</h2>
+            <div class="order_confirmation_details">
+                <p class="details">Thank you for your order.</p>
+
+
+                @*  <ul id="orderConfirmationProductList" class="product_list">*@
+                @* partial view "_orderConfirmation", div added by Rajni   *@
+                <div id="OrderConfirmed"></div>
+                @*</ul>
+                    <div id="orderConfirmationTotals" class="order_confirmation_totals">
+                        @*<p id="orderConfirmationTotalPrice"><strong>Total: INR <span id="tmpTotalOrderConfirm"></span></strong></p>*@
+                @*<p id="orderConfirmationGrandTotal"><strong>Grand Total: INR 32,335</strong></p>*@
+                @*</div>*@
+            </div>
+            <div class="order_buttons">
+                <a href="#printOrder" class="btn">Print</a>
+                <a href="#closeOrder" class="btn">Close</a>
+                <a href="#duplicateOrder" class="btn">Duplicate This Order</a>
+                <a href="#addAnotherOrder" class="btn">Add Another Order</a>
+            </div>
+        </div> <!-- #orderConfirmation -->
+    </div> <!-- #createOrderPanel -->
+    <!-- ---------------------------------------------------------------------------------------------------------
+        PANEL GRID TOP ROW
+    ---------------------------------------------------------------------------------------------------------- -->
+
+    <div class="panel_grid panel_grid_top">
+        <div class="panel_grid_tab"><a href="#orders">Orders</a></div>
+        <div class="panel_grid_tab"><a href="#customers">Customers</a></div>
+    </div>
+
+    <!-- ---------------------------------------------------------------------------------------------------------
+        CUSTOMERS PANEL
+    ---------------------------------------------------------------------------------------------------------- -->
+
+    <div id="customersPanel" class="customers_panel hidden">
+        <div class="fix-overflow">
+            <a href="#closeCustomersPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+        </div>
+
+        <!-- -----------------------------------------------------------------------------------------------------
+            CUSTOMERS PANEL: SEARCH / SELECT CUSTOMER
+        ------------------------------------------------------------------------------------------------------ -->
+
+        <div id="selectCustomer" class="select_customer">
+            @*<h2>Customers [214]</h2>*@
+            <h2>Customers [@Session["TotalCustomers"]]</h2>
+            <div class="fix-overflow">
+                <a href="#createCustomer" class="create_customer"><img src="/images/add.png"> <span>Create Customer</span></a>
+            </div>
+
+            <div class="auto_search_input_field">
+                <input type="text" value="Search" class="search-input" id="autoSearchCustomers">
+                <a href="#clearSearch">&nbsp;</a>
+            </div>
+
+            <!-- -------------------------------------------------------------------------------------------------
+                CUSTOMERS PANEL: AUTO-SEARCH
+            -------------------------------------------------------------------------------------------------- -->
+
+            <div class="auto_search_results">
+                <div id="autoSearchCustomersResults" class="auto-search"></div>
+            </div>
+
+            <!-- -------------------------------------------------------------------------------------------------
+                CUSTOMERS PANEL: SELECT FROM LIST
+            -------------------------------------------------------------------------------------------------- -->
+
+            <div id="customersSelectCustomerDropdownPanel" class="customers_select_customer_dropdown">
+                <p class="center">or</p>
+                <div class="block-small-margin">
+                    @Html.DropDownList("customersSelectCustomerDropdown", (SelectList)ViewBag.customer_list, "Select Customer", new { @class = "select-input", @autocomplete = "off", @Value = "Select Customer" })
+                    @*<select id="customersSelectCustomerDropdown" class="select-input">
+                            <option>Select Customer</option>
+                            <option value="customer-a">Customer A</option>
+                            <option value="customer-b">Customer B</option>
+                            <option value="customer-c">Customer C</option>
+                        </select>*@
+                </div>
+            </div>
+
+            <div id="selectedCustomerResults" class="selected_customer_results hidden">
+                @* created a partial view "_CustDetailsWithOrderSearch"*@
+                <span id="tmpselectedCustomerResults"></span>
+            </div> <!-- #selectedCustomerResults -->
+            <!-- -------------------------------------------------------------------------------------------------
+                CUSTOMERS PANEL: BROWSE ALPHABETICALLY
+            -------------------------------------------------------------------------------------------------- -->
+
+            <div id="browseCustomerAlphabetically">
+                <p class="center">or</p>
+
+                <div class="block-small-margin">
+                    @Html.DropDownList("selectCustomerAlphabetically", (SelectList)ViewBag.custlist_alphabetically, "Browse Alphabetically", new { @class = "select-input", @autocomplete = "off" })
+                    @*<select id="selectCustomerAlphabetically" class="select-input">
+                            <option>Browse Alphabetically</option>
+                            <option value="a">A</option>
+                            <option value="b">B</option>
+                            <option value="c">C</option>
+                        </select>*@
+                </div>
+            </div>
+
+            <div id="alphabetCustomerResults" class="alphabet_customer_results hidden">
+                <div class="fix-overflow">
+                    <a href="#closeCustomerResults" class="close-panel"><img src="/images/close-panel.png"></a>
+                </div>
+
+                @* a partialview "_SearchResultsCustomersAlphabetically" *@
+                <div id="tmpSearchResCustsAlphabetically"></div>
+            </div>
+        </div> <!-- #selectCustomer -->
+    </div> <!-- #customersPanel -->
+    <!-- ---------------------------------------------------------------------------------------------------------
+        ORDERS PANEL
+    ---------------------------------------------------------------------------------------------------------- -->
+
+    <div id="ordersPanel" class="orders_panel hidden">
+        <div class="fix-overflow close_orders_panel">
+            <a href="#closeOrdersPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+        </div>
+
+        <!-- -----------------------------------------------------------------------------------------------------
+            ORDERS: SEARCH / SELECT ORDER
+        ------------------------------------------------------------------------------------------------------ -->
+
+        <div id="selectOrder" class="select_order">
+            <h2>Orders</h2>
+
+            <div id="selectOrderPanel" class="select_order_panel">
+                <select id="selectOrderTypeDropdown" class="select-input" autocomplete="off">
+                    <option value="All-Orders">All Orders</option>
+                    <option value="Under-Planning">Under Planning</option> @*Open*@
+                    <option value="Dispatched">Dispatched</option> @*Completed*@
+                    <option value="Planned">Planned</option> @*Schedule Ready*@
+                    <option value="In-Warehouse">In Warehouse</option> @*Dispatch Ready*@
+                    <option value="Purchase-Order-Number">Purchase Order Number</option>
+                </select>
+
+                <div id="orderByDateRange" class="order_by_date_range">
+                    <p class="form-label">From</p>
+
+                    <div class="fix-overflow" id="orderFromDate">
+                        <select class="date-select-input" id="orderFromDateDay">
+                            <option>DD</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+
+                        <select class="date-select-input" id="orderFromDateMonth">
+                            <option>MM</option>
+                            <option value="Jan">01</option>
+                            <option value="Feb">02</option>
+                            <option value="Mar">03</option>
+                            <option value="Apr">04</option>
+                            <option value="May">05</option>
+                            <option value="Jun">06</option>
+                            <option value="Jul">07</option>
+                            <option value="Aug">08</option>
+                            <option value="Sep">09</option>
+                            <option value="Oct">10</option>
+                            <option value="Nov">11</option>
+                            <option value="Dec">12</option>
+                        </select>
+
+                        <select class="date-select-input year" id="orderFromDateYear">
+                            <option>YYYY</option>
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                        </select>
+                    </div>
+
+                    <p class="form-label">To</p>
+
+                    <div class="fix-overflow" id="orderToDate">
+                        <select class="date-select-input" id="orderToDateDay">
+                            <option>DD</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+
+                        <select class="date-select-input" id="orderToDateMonth">
+                            <option>MM</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+
+                        <select class="date-select-input year" id="orderToDateYear">
+                            <option>YYYY</option>
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="orderByPurchaseOrderNumber" class="hidden order_by_purchase_order_number">
+                    <input type="number" step="any" id="orderPurchaseOrderNumber" class="number-input" placeholder="Type Purchase Order #" autocomplete="off" onfocus="this.placeholder = ''" onblur="    this.placeholder = 'Type Purchase Order #'" onkeydown="return (event.keyCode == 190) || (event.keyCode == 46) || (event.keyCode == 8) || (event.keyCode >= 37 && event.keyCode <= 40) || (event.keyCode >= 96 &amp;&amp; event.keyCode <= 105) || (event.keyCode >= 48 && event.keyCode <= 57)">
+                </div>
+                <div id="ErrorMsgInvalidFromTODate" class="hidden">
+                    <p class="error-msg ">Please select a Valid From Date and To Date!</p>
+                </div>
+                <div id="ErrorMsgInvalidFromDate" class="hidden">
+                    <p class="error-msg ">Please select a Valid From date!</p>
+                </div>
+                <div id="ErrorMsgInvalidToDate" class="hidden">
+                    <p class="error-msg ">Please select a Valid To date!</p>
+                </div>
+                <div id="DateGreaterError" class="hidden">
+                    <p class="error-msg ">To Date should be greater than equal to From Date!</p>
+                </div>
+                <div id="PONoErrors" class="hidden">
+                    <p class="error-msg ">Please Enter Purchase Order No!</p>
+                </div>
+
+                <a href="#searchOrders" class="btn search_orders">Search</a>
+            </div> <!-- #selectOrderPanel --> @*SearchPOErrors*@
+            <!-- -----------------------------------------------------------------------------------------------------
+                ORDERS: SEARCH RESULTS
+            ------------------------------------------------------------------------------------------------------ -->
+
+            <div id="ordersResultsPanel" class="hidden orders_results_panel">
+                @*  url: "/Order/OrdersSearchResults/", *@
+                @* partial view "_OrdersSearchResults" *@
+            </div> <!-- #ordersResultsPanel -->
+        </div> <!-- #selectOrder -->
+        <!-- -------------------------------------------------------------------------------------------------
+            ORDERS: SEARCH RESULTS > ORDER DETAILS
+        -------------------------------------------------------------------------------------------------- -->
+
+        <div id="orderDetails" class="order_details hidden">
+            <div id="tmpOrderDetails">
+                @* url: "/quickView/GetOrderDetailsMaster/" + id, *@
+                @* partial view "_OrderDetailsMaster"" *@
+            </div>
+
+
+            <a href="#arrangeTransportation" class="btn arrange_transportation_button">Arrange Transportation</a>
+
+            <!-- ---------------------------------------------------------------------------------------------
+                ORDERS: SEARCH RESULTS > ORDER DETAILS > ARRANGE TRANSPORTATION
+            ---------------------------------------------------------------------------------------------- -->
+
+            <div class="arrange_new_transportation hidden">
+
+                <div id="tmpOrderDetailsArrNewTransportation">
+                    @* partial view "_OrderDetailsArrNewTransportation" *@
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------
+                    ORDERS: SEARCH RESULTS > ORDER DETAILS > ARRANGE TRANSPORTATION > CARGO LIST
+                ---------------------------------------------------------------------------------------------- -->
+
+                <div class="cargo_list hidden">
+                    <div id="tmpOrderSearchshowCargoList">
+                        @* partial view  "_OrderSearchCurrentCargoList.cshtml" *@
+                    </div>
+                </div>
+                <span id="EditCargoToerrorMsg" class="error-msg"></span>
+                <span id="EditCargoToerrorMsg1" class="error-msg"></span>
+                <div class="fix-overflow">
+                    <a href="#addCargoToTransportation" class="add_cargo"><img src="/images/add.png"> <span>Add Cargo</span></a>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------
+                    ORDERS: SEARCH RESULTS > ORDER DETAILS > ARRANGE TRANSPORTATION > ADD CARGO
+                ---------------------------------------------------------------------------------------------- -->
+
+                <div class="add_cargo_panel hidden">
+                    <div class="fix-overflow">
+                        <a href="#closeAddCargoPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+
+                    <h2>Add Cargo Item</h2>
+
+                    <div class="add_cargo_panel_details">
+                        <select class="select-input" id="tmpOrderddl">
+                            @* id added by Rajni *@
+                            <option>Select PO #</option>
+                        </select>
+
+                        <select class="select-input" id="tmpProductsddl">
+                            @* id added by Rajni *@
+                            <option>Select Product</option>
+                        </select>
+                        <input type="text" class="text-input" id="ordersAddCargoEnterQuantity" placeholder="Enter Quantity (MT)">
+                        @* added by Rajni to display the message of available quantity *@
+                        <span id="tmpProdAvailableQty"></span>
+                        <a href="#addNewCargoItem" class="btn">Add Cargo</a>
+                        <span id="addCargoMsg" class="error-msg"></span>
+                        <input type="hidden" id="OnAddCargoAvailableQty" value="">
+                    </div>
+                </div>
+
+                <div class="submit_transportation_button hidden">
+                    <a href="#submitTransportation" class="btn">Submit Transportation</a>
+                </div>
+            </div> <!-- .arrange_new_transportation -->
+            <!-- -------------------------------------------------------------------------------------------------
+                ORDERS: SEARCH RESULTS > ORDER DETAILS > REVIEW TRANSPORTATION
+            -------------------------------------------------------------------------------------------------- -->
+
+            <div class="transportation_details hidden">
+                <div id="tmpOrderSearchReviewTransportation">
+                    @* partial view : "_OrderSearchReviewTransportation"" *@
+                    @*url: "/Truck_dispatch/OrderSearchReviewEditTransportation/"*@
+                </div>
+
+                <div class="review_transportation_details_buttons">
+                    <a href="#cancelReviewDetails" class="btn">Cancel</a>
+                    <a href="#editReviewDetails" class="btn">Edit</a>
+                    <a href="#submitReviewDetails" class="btn" id="SubmitReviewDetails">Submit Transportation</a>
+                </div>
+            </div> <!-- .transportation_details -->
+            <!-- -------------------------------------------------------------------------------------------------
+                ORDERS: SEARCH RESULTS > ORDER DETAILS > TRANSPORTATION CONFRIMATION
+            -------------------------------------------------------------------------------------------------- -->
+
+            <div class="review_transportation_confirmation hidden">
+                <div class="fix-overflow">
+                    <a href="#closeTransportationConfirmation" class="close-panel"><img src="/images/close-panel.png"></a>
+                </div>
+
+                <h2>Confirmation</h2>
+
+                <p class="title"><strong>Transportation Setup Complete</strong></p>
+
+                <p class="details">Your transportation information has been received and recorded in our system.</p>
+
+                <a href="#closeTransportationConfirmation" class="btn">Close</a>
+            </div> <!-- .review_transportation_confirmation -->
+
+            <div class="order_details_full">
+                <div class="scheduled_transportation hidden">
+                    <p class="scheduled_header">Scheduled Transportation:</p>
+                    <ul>
+                        <li>
+                            <div class="fix-overflow vehicle_number">
+                                <a href="#editTransportation"><img src="/images/edit.png"></a>
+                                <a href="#removeTransportation"><img src="/images/delete.png"></a>
+
+                                <p class="title"><strong>Vehicle # MH-123-1234</strong></p>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="title"><strong>Vehicle # MH-567-2345</strong></p>
+                            <p class="details">Arrived on June 9th at 05:27 PM</p>
+                            <p class="details">Departure: Pending</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- -----------------------------------------------------------------------------------------
+                    ORDERS: SEARCH RESULTS > ORDER DETAILS > TRANSPORTATION CONFIRMATION > PRODUCTS LIST
+                ------------------------------------------------------------------------------------------ -->
+
+            </div> <!-- .order_details_full -->
+            @* this is added, not there in the html, because the arrange button is in the middle *@
+            <div id="tmpOrderProdsList" class="order_details_full">
+                @* url: "/quickView/GetOrderDetailsChild/" + id *@
+                @* partial view "_OrderDetailsChild" *@
+            </div>
+        </div> <!-- .order_details -->
+
+        <div id="ordersArrangeNewTransportation" class="arrange_new_transportation hidden">
+            <div class="fix-overflow">
+                <a href="#closeArrangeNewTransportation" class="close-panel"><img src="/images/close-panel.png"></a>
+            </div>
+
+            <h2>Arrange New Transportation</h2>
+
+            <div class="transportation_location">
+                <p class="location"><strong>Location: Morai Division</strong></p>
+
+                <p>
+                    Survey No. 56/1<br>
+                    Village - Morai via Vappi<br>
+                    Dist. Valsad 396191
+                </p>
+            </div>
+
+            <input type="text" class="text-input" value="Type Vehicle Number">
+            <input type="text" class="text-input" value="Type Vehicle Capacity (MT)">
+
+            <div class="start_time">
+                <p class="form-label">Start</p>
+
+                <div class="start_date">
+                    <input type="text" class="date-input" value="DD">
+                    <input type="text" class="date-input" value="MM">
+                    <input type="text" class="date-input-year" value="YYYY">
+                </div>
+                <div class="fix-overflow start_time">
+                    <select class="select-input time">
+                        <option value="1:00">1:00</option>
+                        <option value="2:00">2:00</option>
+                        <option value="3:00">3:00</option>
+                        <option value="4:00">4:00</option>
+                        <option value="5:00">5:00</option>
+                        <option value="6:00">6:00</option>
+                        <option value="7:00">7:00</option>
+                        <option value="8:00">8:00</option>
+                        <option value="9:00">9:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                    </select>
+                    <select class="select-input time_am_pm">
+                        <option value="am">AM</option>
+                        <option value="pm">PM</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="arrival_time">
+                <p class="form-label">Expected Arrival Time</p>
+
+                <div class="start_date">
+                    <input type="text" class="date-input" value="DD">
+                    <input type="text" class="date-input" value="MM">
+                    <input type="text" class="date-input-year" value="YYYY">
+                </div>
+                <div class="fix-overflow start_time">
+                    <select class="select-input time">
+                        <option value="1:00">1:00</option>
+                        <option value="2:00">2:00</option>
+                        <option value="3:00">3:00</option>
+                        <option value="4:00">4:00</option>
+                        <option value="5:00">5:00</option>
+                        <option value="6:00">6:00</option>
+                        <option value="7:00">7:00</option>
+                        <option value="8:00">8:00</option>
+                        <option value="9:00">9:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                    </select>
+                    <select class="select-input time_am_pm">
+                        <option value="am">AM</option>
+                        <option value="pm">PM</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr>
+
+            <div id="ordersExistingTransportationCargo" class="existing_cargo hidden">
+                <ul>
+                    <li>
+                        <p class="po_num">
+                            <strong>PO: MWV-1234-123456-4759</strong>
+                            <a href="#removeCargo"><img src="/images/delete.png"></a>
+                        </p>
+                        <p><strong>TK-144.0-185-40RGMP</strong></p>
+                        <p>Qty. For Loading: 1.000 MT</p>
+                    </li>
+                    <li>
+                        <p class="po_num">
+                            <strong>PO: MWV-1234-123456-4759</strong>
+                            <a href="#removeCargo"><img src="/images/delete.png"></a>
+                        </p>
+                        <p><strong>TK-144.0-185-40RGMP</strong></p>
+                        <p>Qty. For Loading: 1.000 MT</p>
+                    </li>
+                </ul>
+
+                <div class="fix-overflow">
+                    <a href="#addCargo" class="add_cargo"><img src="/images/add.png"> <span>Add Cargo</span></a>
+                </div>
+
+                <a href="#submitTransportation" class="btn">Submit Transportation</a>
+            </div>
+
+            <div class="fix-overflow">
+                <a href="#addCargo" class="add_cargo"><img src="/images/add.png"> <span>Add Cargo</span></a>
+            </div>
+
+            <div id="ordersAddCargoPanel" class="add_cargo_panel hidden">
+                <div class="fix-overflow">
+                    <a href="#closeAddCargoPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+                </div>
+
+                <p>Add Cargo Item</p>
+
+                <select class="select-input">
+                    <option>Select Purchase Order #</option>
+                </select>
+
+                <select class="select-input">
+                    <option>Select Product</option>
+                </select>
+
+                <input type="text" class="text-input" value="Enter Quantity (MT)">
+
+                <a href="#addCargoToTransportation" class="btn">Add Cargo</a>
+            </div>
+        </div> <!-- #arrangeNewTransportation -->
+
+
+    </div> <!-- #ordersPanel -->
+    <!-- ---------------------------------------------------------------------------------------------------------
+        PANEL GRID BOTTOM ROW
+    ---------------------------------------------------------------------------------------------------------- -->
+
+    <div class="panel_grid panel_grid_bottom">
+        <div class="panel_grid_tab"><a href="#transportation">Transportation</a></div>
+        <div class="panel_grid_tab"><a href="#reports">Reports</a></div>
+    </div>
+
+    <!-- ---------------------------------------------------------------------------------------------------------
+        TRANSPORTATION PANEL
+    ---------------------------------------------------------------------------------------------------------- -->
+
+    <div id="transportationPanel" class="transportation_panel hidden">
+        <div class="fix-overflow">
+            <a href="#closeTransportationPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+        </div>
+
+        <div id="selectTransportation">
+            <h2>Transportation</h2>
+
+            <div id="selectTransportationPanel" class="select_transportation_panel">
+                <select id="selectVehicleTypeDropdown" class="select-input select_vehicle_type" autocomplete="off">
+                    <option value="All-Vehicles">All Vehicles</option>
+                    <option value="Departed-Vehicles">Departed Vehicles</option>
+                    <option value="Scheduled-Vehicles">Scheduled Vehicles</option>
+                    <option value="Vehicle-Number">Vehicle Number</option>
+                </select>
+
+                <div id="transportationFromTo" class="transportation_from_to">
+                    <p class="form-label">From</p>
+
+                    <div class="fix-overflow">
+                        <select class="date-select-input" id="transportationFromDateDay" autocomplete="off">
+                            <option>DD</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+
+                        <select class="date-select-input" id="transportationFromDateMonth">
+                            <option>MM</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+
+                        <select class="date-select-input year" id="transportationFromDateYear">
+                            <option>YYYY</option>
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                        </select>
+                    </div>
+
+                    <p class="form-label">To</p>
+
+                    <div class="fix-overflow">
+                        <select class="date-select-input" id="transportationToDateDay">
+                            <option>DD</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+
+                        <select class="date-select-input" id="transportationToDateMonth">
+                            <option>MM</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+
+                        <select class="date-select-input year" id="transportationToDateYear">
+                            <option>YYYY</option>
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="vehicleNumberInput" class="vehicle_number_input hidden">
+                    <input type="text" value="Type Vehicle Number" class="text-input" id="transportationVehicleNumber">
+                </div>
+                <span id="searchTransportationErrmsg" class="error-msg"> </span>
+                <span id="searchTransportationErrmsg1" class="error-msg"> </span>
+                <div class="search_button">
+                    <a href="#searchTransportation" class="btn">Search</a>
+                </div>
+                <div id="transportationResultsPanel" class="hidden transportation_results_panel">
+                    @*  url: "/Truck_dispatch/searchResultTransportation/" *@
+                    @*  partial view "_searchResultTransportation" *@
+                </div> <!-- #transportationResultsPanel -->
+
+                <div id="transportationDetails" class="transportation_details hidden">
+                    @*<div id="tmpTransportationDetailsMaster">*@
+                    @* partial view  _TransportationDetails*@
+                    @* url: "/quickView/seeTransportationDetails/" + id, *@
+                    @*</div>*@
+                    @*<div id="tmpTransportationDetailsChild">
+                        @* partial view  _TransportationDetailsChild*@
+                    @* url: "/quickView/seeTransportationDetailsChild/" + id
+                        </div>*@
+
+                </div> <!-- .transportation_details -->
+
+
+                <div class="transportation_button">
+                    <p class="or_wording">or</p>
+                    <a href="#arrangeTransportation" class="btn arrange">Arrange Transportation</a>
+                </div>
+                <div id="RemoveVehiclesAlert">
+
+                </div>
+                <div id="arrangeNewTransportation" class="arrange_new_transportation hidden">
+                    <div class="fix-overflow">
+                        <a href="#closeArrangeTransportationPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+                    <div id="tmpArrangeNewTransportation">
+                        @* arrange new transportation form is in the partial view "_ArrangeNewTransportation" *@
+                    </div>
+
+                    <div class="cargo_list hidden">
+                        <div id="showCargoList" class="showCargoList">
+                            @* partial view  - "_currentCargoList.cshtml" *@
+                        </div>
+                    </div>
+
+                    <div class="fix-overflow">
+                        <a href="#addCargoToTransportation" class="add_cargo"><img src="/images/add.png"> <span>Add Cargo</span></a>
+                    </div>
+                    <span id="addCargoErrMsg" class="error-msg"></span>
+                    <span id="addCargoErrMsg1" class="error-msg"></span>
+                    <div class="add_cargo_panel hidden">
+                        <div class="fix-overflow">
+                            <a href="#closeAddCargoPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+                        </div>
+
+                        <h2>Add Cargo Item</h2>
+
+                        <div class="add_cargo_panel_details">
+                            <select class="select-input" id="Orderddl" autocomplete="off">
+                                @* id added by Rajni *@
+                                <option>Select PO #</option>
+                            </select>
+
+                            <select class="select-input" id="Productsddl" autocomplete="off">
+                                @* id added by Rajni *@
+                                <option>Select Product</option>
+                            </select>
+
+                            <input type="number" step="any" class="number-input" id="addCargoPanelEnterQuantity" placeholder="Enter Quantity (MT)" onkeydown="return (event.keyCode == 190) || (event.keyCode == 46) || (event.keyCode == 8) || (event.keyCode >= 37 && event.keyCode <= 40) || (event.keyCode >= 96 && event.keyCode <= 105) || (event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode == 110" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Quantity (MT)'">
+                            @* added by Rajni to display the message of available quantity *@
+                            <span id="tmpAvailableQty"></span>     <br />
+                            <span id="qtyErrorMsg" class="error-msg"></span>
+                            <input type="hidden" id="AvailableQty" value="" />
+
+                            <a href="#addNewCargoItem" class="btn">Add Cargo</a>
+                        </div>
+                    </div>
+                    <div class="submit_transportation_button hidden" style="display: block;">
+                        <a href="#submitTransportation" class="btn">Submit Transportation</a>
+                    </div>
+
+                    @*<div class="submit_transportation_button hidden">
+                            <a href="#submitTransportation" class="btn">Submit Transportation</a>
+                        </div>*@
+                </div> <!-- #arrangeNewTransportation -->
+
+                <div id="reviewTransportationDetails" class="transportation_details hidden">
+                    <div class="fix-overflow">
+                        <a href="#closeReviewTransportationDetails" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+
+                    <h2>Review Transportation Details</h2>
+
+                    <div class="cargo_list">
+                        <div id="reviewTransport"></div>
+                        @*created partial view for "_reviewTransportation.cshtml"  *@
+                    </div>
+                    <!-- .cargo_list -->
+                    @* taken the cargo list in the "_reviewTransportation.cshtml" *@
+
+                    <div class="review_transportation_details_buttons">
+                        <a href="#cancelReviewDetails" class="btn">Cancel</a>
+                        <a href="#editReviewDetails" class="btn">Edit</a>
+                        <a href="#submitReviewDetails" id="tmpSubmitTransportation" class="btn">Submit Transportation</a>
+                    </div>
+                </div> <!-- #reviewTransportationDetails -->
+
+                <div id="reviewTransportationConfirmation" class="review_transportation_confirmation hidden">
+                    <div class="fix-overflow">
+                        <a href="#closeConfirmation" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+
+                    <h2>Confirmation</h2>
+
+                    <p class="title"><strong>Transportation Setup Complete</strong></p>
+
+                    <p class="details">Your transportation information has been received and recorded in our system.</p>
+
+                    <a href="#closeConfirmation" class="btn">Close</a>
+                </div> <!-- #reviewTransportationConfirmation -->
+            </div> <!-- #selectTransportationPanel -->
+        </div> <!-- #selectTransportation -->
+    </div> <!-- #transportationPanel -->
+    <!-- ---------------------------------------------------------------------------------------------------------
+        QUICK VIEW
+    ---------------------------------------------------------------------------------------------------------- -->
+
+    <div id="quickView" class="quick_view">
+        <h2>Quick View (Last 7 Days)</h2>
+
+        <div id="quickViewRecentOrders" class="quick_view_recent_orders">
+            <div class="fix-overflow">
+                @*<h3>Recent Orders</h3>*@
+                @*<a href="#seeAllRecentOrders" class="see_all">See All</a>*@
+            </div>
+        </div>
+
+        <div id="quickViewRecentTransportationUpdates" class="quick_view_recent_transportation">
+            <div class="fix-overflow">
+                @*<h3>Recent Transportation Updates</h3>*@
+                @*<a href="#seeAllRecentTransportation" class="see_all">See All</a>*@
+            </div>
+        </div>
+    </div> <!-- #quickView -->
+    @*</div>*@
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        //Added By Manisha
+        //Show 7 days quick view details
+
+        $.ajax({
+            url: "/QuickView/QuickViewDetails/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+                            $('#quickViewRecentOrders').html(result);
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+    });
+
+
+    var bAlertCalled = false;
+</script>

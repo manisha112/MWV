@@ -1,0 +1,25 @@
+﻿
+
+@*<p class="title">
+    <strong>@ViewBag.filepath</strong>*@
+    @*<a href="/home/Download/@ViewBag.finalPath/@ViewBag.filepath" /><img src="/images/download.png"></a>
+    <a href="/home/Download?filename=@ViewBag.finalPath/@ViewBag.filepath"><img src="/images/download.png"></a>
+   
+</p>*@
+
+
+
+<div class="fix-overflow">
+    <a href="#closeReportResultsPanel" class="close-panel"><img src="../images/close-panel.png"></a>
+</div>
+
+<ul>
+    <li>
+        <div class="fix-overflow">
+            <p class="title"><strong> @ViewBag.name </strong></p>
+            <a href="/home/Download?filename=@ViewBag.finalPath/@ViewBag.filepath"><img src="/images/download.png"></a>
+
+            @*<a href="#downloadReport" class="download_report"><img src="images/download.png"></a>*@
+        </div>
+    </li>
+</ul>

@@ -1,0 +1,472 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+<div id="yourMessages" class="your_messages">
+    @*&nbsp;<a href="#backtoDash">Back To Dashboard </a>*@
+    <div class="fix-overflow">
+        <a href="#close-panel" class="close-panel"><img src="images/close-panel.png"></a>
+    </div>
+    <h2>Your Messages</h2>
+
+    <div class="fix-overflow delete_messages" id="divHeader">
+        <input type="checkbox" id="deleteSelectedMessages" class="delete_selected_messages">
+        <p class="delete_messages_text"><a href="#deleteMsg"> Delete Selected Messages</a></p>
+    </div>
+
+    <div class="hidden delete_messages_alert" id="deleteMessagesAlert">
+        <div class="fix-overflow">
+            <a href="#closeDeleteAlert" class="close-panel"><img src="/images/close-panel.png"></a>
+        </div>
+
+        <p>Are you sure you want to delete the selected Messages?</p>
+        <span id="Errormsg" class="error-msg"></span>
+        <a href="#deleteMessages" class="btn delete_btn">Delete</a>
+        <a href="#closeDeleteAlert" class="btn">Close</a>
+    </div>
+    <input type="hidden" value="@ViewBag.Rollname" id="hfBackBtn">
+    <div class="hr"></div>
+    <span id="errormsg" class="hidden error-msg">@ViewBag.Errormsg</span>
+    @*@Html.PagedListPager((IPagedList)ViewBag.alertLst, page => Url.Action("ShowAleartMsg", new { page, @class = "pagination" }))*@
+    <div id="individualMessages" class="individual_messages">
+        <ul>
+            @{
+                var path1 = ""; var path2 = "";
+                foreach (var items in ViewBag.MsgLst)
+                {
+
+                    <li>
+                        <p class="date_line">@items.created_on.ToString("dd MMM yyyy hh:mm tt")</p>
+
+                        <div class="fix-overflow">
+                            @{
+                    string curRole = items.alert_action;
+                    if (curRole == "OrderCompleted")
+                    {
+                        <span class="no_checkbox">&nbsp;</span>
+
+                                @*<input type="checkbox" name="Msgchk" class="select_message feedback" id="@items.alert_id">*@
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="Msgchk" class="select_message" id="@items.alert_id">
+                    }
+
+
+                            }
+                            @{
+                    Int32 alrtid = items.viewed;
+                    if (alrtid == 1)
+                    {
+                        if (curRole == "OrderCompleted")
+                        {
+                            <a class="message_subject message_rate" href="#openRateExperience">Please Rate PO #@items.order_id_feedback</a>
+
+                        }
+                        else
+                        {
+                            <a class="message_subject unread" data-id="@items.alert_id" href="#openMessage">@items.alert_subject</a>
+                        }
+
+
+                    }
+                    else
+                    {
+                        if (curRole == "OrderCompleted")
+                        {
+                            <a class="message_subject message_rate" href="#openRateExperience">Please Rate PO #@items.order_id_feedback</a>
+                        }
+                        else
+                        {
+                            <a class="message_subject" data-id="@items.alert_id" href="#openMessage">@items.alert_subject</a>
+                        }
+
+                    }
+
+
+                            }
+
+                        </div>
+                        @{ if (curRole == "OrderCompleted")
+                         {
+                            <div class="hidden message_content rate_experience">
+                                <div class="fix-overflow">
+                                    <a href="#closeCurrentMessage" class="close-panel"><img src="images/close-panel.png"></a>
+                                </div>
+                                <p class="message_title">Rate Your Experience</p>
+                                <p class="message_text">Our records indicate that PO #@items.order_id_feedback has been shipped. Please rate your satisfaction below so we may serve you better.</p>
+                                <div class="rate_satisfaction">
+                                    <div class="color_bands">
+                                        <a href="#rate" data-rating="1">&nbsp;</a>
+                                        <a href="#rate" data-rating="2">&nbsp;</a>
+                                        <a href="#rate" data-rating="3">&nbsp;</a>
+                                        <a href="#rate" data-rating="4">&nbsp;</a>
+                                        <a href="#rate" data-rating="5">&nbsp;</a>
+                                    </div>
+                                    <ul class="radio_options">
+                                        <li>
+                                            <input type="radio" name="rating" value="1">
+                                            Low
+                                        </li>
+                                        <li><input type="radio" name="rating" value="2"></li>
+                                        <li><input type="radio" name="rating" value="3"></li>
+                                        <li><input type="radio" name="rating" value="4"></li>
+                                        <li>
+                                            <input type="radio" name="rating" value="5" checked>
+                                            High
+                                        </li>
+                                    </ul>
+                                </div>
+                                <p class="message_title">Type Your Message (Optional)</p>
+                                <textarea class="textarea-input"></textarea>
+                                <a href="#closeCurrentMessage" class="btn">Cancel</a>
+                                <a href="#submitRating" class="btn" data-id="@items.alert_id" id="@items.order_id_feedback">Submit</a>
+                            </div>
+                            <div class="hidden message_content rate_experience_confirm">
+                                <div class="fix-overflow">
+                                    <a href="#deleteCurrentMessage" data-id="@items.alert_id" class="close-panel"><img src="images/close-panel.png"></a>
+                                </div>
+                                <p class="message_title">Confirmation</p>
+                                <p class="message_text">Thank you for submitting your satisfaction rating.</p>
+                                <a href="#deleteCurrentMessage" data-id="@items.alert_id" class="btn">Done</a>
+                            </div>
+                         }
+
+                         else
+                         {
+                            <div class="hidden message_content">
+                                <div class="fix-overflow">
+                                    <a href="#closeCurrentMessage" class="close-panel"><img src="/images/close-panel.png"></a>
+                                </div>
+
+                                <p class="message_title">@items.alert_subject</p>
+                                <div>
+                                    @*<p class="message_text">@items.alert_text</p>*@
+                                    &nbsp; @Html.Raw(items.alert_text)
+                                </div>
+                                @{
+
+
+                             path1 = items.attachment1;
+                             path2 = items.attachment2;
+                             if (path1 == null || path1 == "" && path2 == null || path2 == "")
+                             {
+
+                             }
+
+                             else
+                             {<p class="message_title">Avalible Downloads</p> }
+                             if (path1 == null || path1 == "" || string.IsNullOrEmpty(path1) == true || string.IsNullOrWhiteSpace(path1) == true)
+                             { }
+                             else
+                             {
+                                 string filenameNoExtension = Path.GetFileNameWithoutExtension(path1);
+                                <p class="message_text"><a href=@items.alert_id id="file1">@filenameNoExtension</a></p>
+
+                             }
+                             if (path2 == null || path2 == "" || string.IsNullOrEmpty(path2) == true || string.IsNullOrWhiteSpace(path2) == true)
+                             { }
+                             else
+                             {
+                                 string filenameNoExtension1 = Path.GetFileNameWithoutExtension(path2);
+                                <p class="message_text"><a href="@items.alert_id" id="file2">@filenameNoExtension1</a></p>
+
+                             }
+
+
+                                }
+
+
+                                <a href="#deleteCurrentMessage" data-id="@items.alert_id" class="btn delete_btn">Delete</a>
+                                <a href="#closeCurrentMessage" class="btn">Close</a>
+                            </div>
+                         }
+
+                        }
+
+
+
+
+
+                    </li>
+                }
+            }
+
+        </ul>
+    </div>
+</div>
+<script>
+    $('#tempbodySection').on('click', '#file1', function () {
+        var custId = $(this).attr("href");
+        var type = "1";
+        window.location = "UserAlerts/DownloadFiles?Custid=" + custId + "&type=" + type;
+    });
+    $('#tempbodySection').on('click', '#file2', function () {
+        var custId = $(this).attr("href");
+        var type = "2";
+        window.location = "UserAlerts/DownloadFiles?Custid=" + custId + "&type=" + type;
+    });
+</script>
+
+<script>
+    $("#errormsg").hide();
+    var StringText = $("#errormsg").text();
+    if (StringText != "") {
+        $("#errormsg").removeClass(".hidden");
+        $("#errormsg").show();
+        $('#yourMessages').find(".delete_messages").hide();
+        $('#yourMessages').find(".hr").hide();
+    }
+    $('#CustomerByAlpha').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#yourMessages').show();
+                                    $('#yourMessages').html(result);
+
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+    $('#yourMessages').on('click', 'a[href="#deleteMsg"]', function () {
+        $("#Errormsg").html('');
+        $('#deleteMessagesAlert').show();
+    });
+    $('#yourMessages').on('change', '#deleteSelectedMessages', function () {
+        if ($(this).is(':checked')) {
+            $("input:checkbox").prop('checked', $(this).prop("checked"));
+            //$('#deleteMessagesAlert').show();
+        }
+        else {
+            $('#deleteMessagesAlert').hide();
+            $("input:checkbox").prop('checked', false);
+        }
+    });
+    $('#tempbodySection').on('click', 'a[href="#deleteMessages"]', function () {
+
+        $("#Errormsg").html('');
+        if ($('.select_message:checked').length > 0) {
+            $("input:checkbox[name=Msgchk]:checked").each(function () {
+                var selectedCustomer = $(this).attr("id");
+                var allValues = {
+                    selectedCustomerid: $(this).attr("id"),
+                }
+                $.ajax({
+
+                    type: "GET",
+                    url: "/UserAlerts/deleteMessages/",
+                    data: allValues,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                    }
+                });
+                $(this).closest('li').remove();
+                $('#reviewOrder').hide();
+                $('#orderConfirmation').show();
+                $('#deleteMessagesAlert').hide();
+                $('#deleteSelectedMessages').attr('checked', false);
+                $('#welcomePanel').find('#showMessages').click();
+
+            });
+            var count = $("#individualMessages ul").children().length;
+            if (count == 0) {
+
+                $(".delete_messages").html('');
+                $(".hr").hide();
+                $("#errormsg").show();
+                $("#errormsg").html('');
+                $("#errormsg").html('No data available!');
+
+
+            }
+        }
+        else {
+            $("#Errormsg").html('Please Select atleast one Message!');
+            $('#deleteMessagesAlert').show();
+        }
+        SetalertsMessages();
+    });
+    $('#tempbodySection').on('click', 'a[href="#closeDeleteAlert"]', function () {
+        $('input:checkbox').removeAttr('checked');
+        $('#deleteMessagesAlert').hide();
+    });
+    // save Feedback Sucess
+    $('#yourMessages').on('click', 'a[href="#submitRating"]', function () {
+        
+        $(this).closest('li').find('.rate_experience').hide();
+        $(this).closest('li').find('.rate_experience_confirm').show();
+        $("#feedbackErr").html('');
+        var feedback = $(".textarea-input").val();
+        var orderid = $(this).attr("id");
+        var ratingcount = $("input:radio[name=rating]:checked").val();
+        if (ratingcount == null || ratingcount == undefined) {
+            $("#feedbackErr").html('');
+            $("#feedbackErr").html('Please Select Ratings!');
+        }
+         
+        var allvals = {
+            feedback: feedback,
+            orderid: orderid,
+            ratingcount: ratingcount
+        }
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/UserAlerts/SaveFeedback/",
+            data: allvals,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+             
+                
+            }
+
+        });
+        var count = $("#individualMessages ul").children().length;
+        if (count == 0) {
+
+            $(".delete_messages").html('');
+            $(".hr").hide();
+            $("#errormsg").show();
+            $("#errormsg").html('');
+            $("#errormsg").html('No data available!');
+
+
+        }
+    });
+    $('#tempbodySection').on('click', 'a[href="#deleteCurrentMessage"]', function () {
+        var DeleteID = $(this).attr("data-id");
+        var allValues = {
+            selectedCustomerid: $(this).attr("data-id"),
+        }
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/UserAlerts/deleteMessages/",
+            data: allValues,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(this).closest('li').remove();
+            }
+        });
+        var count = $("#individualMessages ul").children().length;
+        if (count == 0) {
+
+            $(".delete_messages").html('');
+            $(".hr").hide();
+            $("#errormsg").show();
+            $("#errormsg").html('');
+            $("#errormsg").html('No data available!');
+
+
+        }
+    });
+    $('#tempbodySection').on('click', 'a[href="#closeCurrentMessage"]', function () {
+        $(this).closest('.message_content').hide();
+        $('html,body').animate({
+            scrollTop: $(window).scrollTop() - 75
+        });
+    });
+    //Feedback cancel button Click
+    $('.message_content').on('click', 'a[href="#closeTakeAction"]', function () {
+        var DeleteID = $(this).attr("data-id");
+        DeleteFeedback(DeleteID);
+        SetalertsMessages();
+        $(this).closest('li').remove();
+        var count = $("#individualMessages ul").children().length;
+        if (count == 0) {
+
+            $(".delete_messages").html('');
+            $(".hr").hide();
+            $("#errormsg").show();
+            $("#errormsg").html('');
+            $("#errormsg").html('No data available!');
+
+
+        }
+    });
+    //Done button of feedback
+    $('.message_content').on('click', 'a[href="#donefeedback"]', function () {
+        var DeleteID = $(this).attr("data-id");
+        DeleteFeedback(DeleteID);
+        SetalertsMessages();
+        $(this).closest('li').remove();
+        var count = $("#individualMessages ul").children().length;
+        if (count == 0) {
+
+            $(".delete_messages").html('');
+            $(".hr").hide();
+            $("#errormsg").show();
+            $("#errormsg").html('');
+            $("#errormsg").html('No data available!');
+
+
+        }
+    });
+    //delete user feedback from message table
+    function DeleteFeedback(ordid) {
+        var allValues = {
+            selectedCustomerid: ordid,
+        }
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/UserAlerts/deleteMessages/",
+            data: allValues,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+            }
+        });
+    }
+    //Update Messgaes Image on delete
+    function SetalertsMessages() {
+        $.ajaxSetup({ cache: false });
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/UserAlerts/SetAlertIntervalsAlerts/",
+            contentType: "application/json; charset=utf-8",
+
+            success: function (data) {
+                if (data != 0) {
+                    $("#dashboard").find("#imgAlert").attr("src", data);
+
+
+                }
+
+            }
+        });
+        $.ajaxSetup({ cache: false });
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/UserAlerts/SetAlertIntervalsMessages/",
+            contentType: "application/json; charset=utf-8",
+
+            success: function (data) {
+                if (data != 0) {
+                    $("#dashboard").find("#imgMsg").attr("src", data);
+
+                }
+
+            }
+        });
+
+    }
+
+    $('#individualMessages').on('click', 'a[href="#openRateExperience"]', function () {
+        $(this).closest('li').find('.rate_experience').show();
+
+        $('html,body').animate({
+            scrollTop: $(window).scrollTop() + 250
+        });
+    });
+    $('#yourMessages').on('click', 'a[href="#submitRating"]', function () {
+      
+    });
+</script>
+

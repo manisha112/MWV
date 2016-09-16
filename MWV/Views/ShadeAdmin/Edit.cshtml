@@ -1,0 +1,126 @@
+﻿@model MWV.Models.Shade
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<br />
+
+<h2><b> Edit Shade ->@Html.ActionLink("Goto Home", "Index")</b></h2>
+
+<br /><br />
+    &nbsp;<span id="ErrorMsgs"></span>
+<br />
+
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    @Html.ValidationSummary(true)
+
+    <input type="hidden" value="@Model.shade_code" id="hdnShadeCodeToEdit" />
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Shade Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.shade_code, new { @class = "text-input", id = "ShadeCode", @placeholder = "Enter Shade Code(upto 15 char)", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp; Shade Description</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "ShadeDescription", @placeholder = "Enter Shade Description(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Shade Description(upto 100 char)'" })
+        </div>
+    </div>
+    <br /><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" id="btnEditShade" value="Save" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" title="Cancel" class="btn btn-default" value="Cancel" id="btnCancelShade" onclick="location.href='@Url.Action("Index", "ShadeAdmin")'" />
+        </div>
+    </div><br /><br />
+</div>
+
+
+<script type="text/javascript">
+    function CheckShadeValidation() {
+        var ShadeCode = $('#ShadeCode').val();
+        var ShadeDescription = $('#ShadeDescription').val();
+
+        if ($('#ShadeCode').val() == "Enter Shade Code(upto 15 char)" || $('#ShadeCode').val().trim() == "" || $('#ShadeCode').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter ShadeCode!</p>");
+            return false;
+        }
+        else if ($('#ShadeCode').val().length > 15) {
+            $('#ErrorMsgs').html("<p class='error-msg'>ShadeCode should contain 15 characters.!</p>");
+            return false;
+        }
+        else if ($('#ShadeDescription').val() == "Enter Shade Description(upto 100 char)" || $('#ShadeDescription').val().trim() == "" || $('#ShadeDescription').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter Shade Description!</p>");
+            return false;
+        }
+        else if ($('#ShadeDescription').val().length > 100) {
+            $('#ErrorMsgs').html("<p class='error-msg'>Shade Description should contain 100 characters.!</p>");
+            return false;
+        }
+
+        else {
+            return true;
+        }
+    }
+
+    $('#btnEditShade').click(function () {
+        // 
+        var ShadeCodeToEdit = $('#hdnShadeCodeToEdit').val();
+        var ShadeCode = $('#ShadeCode').val();
+        var ShadeDescription = $('#ShadeDescription').val();
+        var msg = "";
+
+        if (CheckShadeValidation() == true) {
+            var datatosend = {
+                ShadeCodeToEdit: ShadeCodeToEdit,
+                ShadeCode: ShadeCode,
+                ShadeDescription: ShadeDescription
+            }
+
+            $.ajax({
+                url: "/ShadeAdmin/EditShade/",
+                data: datatosend,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html'
+            })
+                      .success(function (result) {
+                          if (result == "True") {
+                              msg = 'Shade details updated successfully.!';
+                              window.location.href = "/ShadeAdmin/Index?msg=" + msg;
+                          }
+                          else {
+                              $("#ErrorMsgs").html("<p class='error-msg'>" + 'Can not edit.Shade Code is already in use.!' + "</p>");
+                          }
+
+                      })
+                     .error(function (xhr, ajaxOptions, thrownError) {
+                     })
+        }
+
+    });
+</script>
+
+
+
+
+

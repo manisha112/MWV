@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "MWV Dev: Gatekeeper";
+}
+
+    <div id="incomingVehicles" class="incoming_vehicles">
+        <a href="#incomingVehicles" class="tab-link">Incoming Vehicles</a>
+
+        <div id="incomingVehiclesPanel" class="incoming_vehicles_panel hidden">
+
+        </div>
+    </div> <!-- #incomingVehicles -->
+
+    <div id="arrivedVehicles" class="arrived_vehicles">
+        <a href="#arrivedVehicles" class="tab-link">Outgoing Vehicles</a>
+
+        <div id="arrivedVehiclesPanel" class="arrived_vehicles_panel hidden">
+            <div class="fix-overflow">
+                <a href="#closeArrivedVehicles" class="close-panel"><img src="/images/close-panel.png"></a>
+            </div>
+
+            <h2>Arrived Vehicles</h2>
+            <ul id="arrivedVehiclesList" class="arrived_vehicles_list">
+              @*Added by manisha for render the li *@ 
+                <div id="arrivedVehiclesListDiv" class="arrived_vehicles_list">
+
+                </div>
+            </ul>
+
+        </div>
+    </div> <!-- #arrivedVehicles -->
+
+@*<body>
+    <div id="loading"><img src="~/images/loading.gif" alt="loading..." title="loading..."></div>
+</body>*@

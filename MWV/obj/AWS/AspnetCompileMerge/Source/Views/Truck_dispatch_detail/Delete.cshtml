@@ -1,0 +1,56 @@
+﻿@model MWV.Models.Truck_dispatch_details
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Truck_dispatch_details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Order.status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Order_products.product_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Order_products.product_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Truck_dispatches.truck_no)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Truck_dispatches.truck_no)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qty)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

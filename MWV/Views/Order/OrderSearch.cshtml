@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "OrderSearch";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#0rdSearchDDL').change(function () {
+            //
+            //alert("Hello");
+            $.ajax({
+                type: 'Get',
+                url: '/Order/OrderSearchPartial',
+                contentType : 'Application/html; charset=utf-8',
+                data: objectToPass,
+                success: function (data) {
+                    $('#divOrdSearch').innerHtml = data;
+                }
+            });
+        });
+    });
+
+    @*$(document).ready(function () {
+        $('#BtnSearch').click(function () {
+            
+            $('#divOrdSearch').load('@Url.Action("OrderSearchPartial", "Order")');
+        });
+    });*@
+</script>
+<h2>OrderSearch</h2>
+
+<div id="OrdSearchDDL">
+    <table>
+        <tr>
+            <td>
+                OrderSearch
+            </td>
+            <td>
+                @Html.DropDownList("0rdSearchDDL", new List<SelectListItem>()
+    {
+        new SelectListItem() { Text= "ALL", Value = "ALL" },
+        new SelectListItem() { Text= "Created", Value = "Created"}
+    }, "Select ...")
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" id="BtnSearch">
+                    Search
+                </button>
+
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="divOrdSearch">
+</div>
+
+@*<form method="post" action="@Url.Action("OrderSearch", "Order")" class="form-horizontal" role="form">
+    <table>
+        <tr>
+            <td>
+                OrderSearch
+            </td>
+            <td>
+                @Html.DropDownList("0rdSearchDDL", new List<SelectListItem>()
+    {
+        new SelectListItem() { Text= "ALL", Value = "ALL" },
+        new SelectListItem() { Text= "Created", Value = "Created"}
+    }, "Select ...")
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" name="pCommand">
+                    Search
+                </button>
+            </td>
+        </tr>
+    </table>
+    </form>*@

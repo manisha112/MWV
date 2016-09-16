@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MWV.Models.Papermill>
+@{
+    //  ViewBag.Title = "Index";
+    string msg = @ViewBag.Message;
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+        border-collapse:collapse;
+    }
+</style>
+
+<h2>Papermill HomePage->@Html.ActionLink("Create New Papermill", "Create")</h2>
+
+<center class="form-label"><b>List Of Papermill's</b></center>
+<span id="ErrorMsgs"><p class='error-msg'>@msg</p></span>
+
+<table align="center">
+    <tr>
+        <th>
+            <h1><b>Location</b></h1>
+        </th>
+        <th>
+            <h1><b>Name</b></h1>
+        </th>
+        <th>
+            <h1><b>Adderss</b></h1>
+        </th>
+        <th>
+            <h1><b>Capacity</b></h1>
+        </th>
+        <th>
+            <h1><b>Status</b></h1>
+        </th>
+        <th>
+            <h1><b>Action</b></h1>
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Details", new { id = item.papermill_id }) |
+                @Html.ActionLink("Delete", "DeleteDetails", new { id = item.papermill_id })
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+

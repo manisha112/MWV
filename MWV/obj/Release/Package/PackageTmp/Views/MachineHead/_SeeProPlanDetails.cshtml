@@ -1,0 +1,618 @@
+﻿
+
+<div class="fix-overflow">
+    <a href="#closePlanDetails" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+
+@if (ViewBag.NoRecordMsg != null)
+{
+    <p class="error-msg"> @ViewBag.NoRecordMsg </p>
+}
+else
+{
+    foreach (var item in ViewBag.ProPlanDetails)
+    {
+
+        <div class="details_header" id="header_@item.srNo">
+            <blockquote>
+                <div class="fix-overflow">
+                    <p class="date_header"><strong> @item.SchStart.ToString("dd MMM yyy") </strong></p>
+                    <a href="#downloadOrder" class="download_order" data-id="@item.srNo"><img src="/images/download.png"></a>
+                </div>
+
+                <div class="fix-overflow switch_container" data-id="@item.srNo" id="switchContainer">
+                    <div class="switch-wrapper">
+                        @if (@item.actualStart == null)
+                        {
+                            <input type="checkbox" class="toggle-switch" value="0" style="display: none;">
+                            <a href="#switchbtnOff" class="switch-button-label btnoff_@item.srNo on" data-id="@item.srNo">OFF</a>
+                            <div class="switch-button-background" style="width: 60px; height: 20px;" id="@item.srNo">
+                                <div class="switch-button-button" style="width: 30px; height: 20px; left: -1px;" id="switch_@item.srNo"></div>
+                            </div>
+                            <a href="#switchbtnOn" class="switch-button-label btnon_@item.srNo off" data-id="@item.srNo"> ON</a>
+                            <div style="clear: left;"></div>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="toggle-switch" value="0" style="display: none;">
+                            <a href="#switchbtnOff" class="switch-button-label btnoff_@item.srNo  off" data-id="@item.srNo">OFF</a>
+                            <div class="switch-button-background checked" style="width: 60px; height: 20px;" id="@item.srNo">
+                                <div class="switch-button-button" style="width: 30px; height: 20px; left: 29px;" id="switch_@item.srNo"></div>
+                            </div>
+                            <a href="#switchbtnOn" class="switch-button-label btnon_@item.srNo on" data-id="@item.srNo"> ON</a>
+                            <div style="clear: left;"></div>
+                        }
+                    </div>
+
+                    <p class="date_header"><strong>Plan No: @item.srNo</strong></p>
+                </div>
+            </blockquote>
+            <ul>
+                <li>
+                    <p class="details"> Est. Start Time: @item.estimated_start.ToString("dd MMM yyy hh:mm tt") </p>
+                    <p class="details"> Est. End Time: @item.EstimatedEndDate.ToString("dd MMM yyy hh:mm tt") </p>
+                    <p class="details">Total Est. RunTime: @item.EstimatedRunTime min</p>
+                    @*<p class="details">Planned Qty:  @item.plannedQty.ToString("0.00") MT</p>*@
+                    <p class="details">Planned Qty: @string.Format("{0:n2}", item.plannedQty) MT</p>@* here we rouding the qty*@
+
+                    <p class="details">Total No. of Jumbos: @item.jumbo_no </p>
+
+                    @{
+                        var Jumboes = ViewBag.NoOfJumboes;
+                        int flag = 0;
+
+                        for (var i = 0; i <= Jumboes.Count - 1; i++)
+                        {
+
+                            if (Jumboes[i].srNo == @item.srNo)
+                            {
+
+                                var Jumbodetails = ViewBag.JumbosDetails;
+                                foreach (var items in Jumbodetails)
+                                {
+                                    if (Jumboes[i].jumboNo == items.jumboNo)
+                                    {
+
+                                        <p class="title"> <strong>  Jumbo No: @items.jumboNo </strong> </p>
+                                        <p class="details">
+                                            @items.BF BF @items.GSM GSM @items.shade<br>
+                                            Planned Qty:  @string.Format("{0:n2}", items.plannedQty) MT
+                                        </p>
+                                        DateTime? planStartdt = new DateTime();
+                                        planStartdt = item.actualStart;
+
+                                        var item1 = ViewBag.Lots;
+                                        string size = "";
+                                        string sizeWithName = "";
+                                        decimal Decklesize = 0;
+                                        decimal Qty = 0;
+                                        int sequ = 0;
+                                        string ordid = "";
+                                        DateTime? lotEnddt = new DateTime();
+
+                                        for (var j = 0; j <= item1.Count - 1; j++)
+                                        {
+                                            if (item1[j].jumboNo == @items.jumboNo && Jumboes[i].srNo == @item.srNo)
+                                            {
+                                                if (item1[j].Sequence == sequ || sequ == 0)
+                                                {
+                                                    size = size + item1[j].Width.ToString("0.00") + " cm + ";
+
+                                                    sizeWithName = sizeWithName + item1[j].Width.ToString("0.00") + " cm - " + @item1[j].CustomerName + "<br />";
+                                                    if (item1[j].order_product_id == null)
+                                                        sizeWithName = sizeWithName.Remove(sizeWithName.Length - 6) + "side cut";
+                                                    else
+                                                        sizeWithName = sizeWithName;
+
+                                                    Decklesize += item1[j].Width;
+                                                    Qty += item1[j].DeckleQty;
+                                                    lotEnddt = item1[j].actual_end;
+
+                                                }
+                                                else if (sequ != 0)
+                                                {
+                                                    <blockquote>
+                                                        <p class="title"><strong>  Lot. No: @sequ </strong></p>
+
+                                                        <p class="details">
+
+                                                            @size.Remove(size.Length - 2)  <br>
+                                                            Deckle: @Decklesize.ToString("0.00") cm,  Qty: @Qty.ToString("0.00") MT <br>
+                                                            @Html.Raw(@sizeWithName)
+                                                        </p>
+                                                        @if (lotEnddt == null && planStartdt == null)
+                                                        {
+
+                                                            <p class="details">
+                                                                <strong>
+                                                                    <input type="checkbox" value="@sequ" id="@items.srNo" data-id="proChild_@items.srNo" disabled="disabled" class="selectAllCheckbox_@item.srNo"> Lot @sequ Completed
+                                                                </strong>
+                                                            </p>
+
+                                                        }
+                                                        else if (lotEnddt == null && planStartdt != null)
+                                                        {
+
+                                                            <p class="details">
+                                                                <strong>
+                                                                    <input type="checkbox" value="@sequ" id="@items.srNo" data-id="proChild_@items.srNo" class="selectAllCheckbox_@item.srNo"> Lot @sequ Completed
+                                                                </strong>
+                                                            </p>
+
+                                                        }
+                                                        else if (lotEnddt != null && planStartdt != null)
+                                                        {
+                                                            <p class="details"><strong> <input type="checkbox" value="@sequ" id="@items.srNo" disabled="disabled" checked="checked" data-id="proChild_@items.srNo" class="selectAllCheckbox_@item.srNo"> Lot @sequ Completed  </strong></p>
+                                                        }
+                                                    </blockquote>
+                                                        size = "";
+                                                        sizeWithName = "";
+                                                        Decklesize = 0;
+                                                        Qty = 0;
+                                                        size = size + item1[j].Width.ToString("0.00") + " cm + ";
+                                                        sizeWithName = item1[j].Width.ToString("0.00") + " cm - " + @item1[j].CustomerName + "<br />" + sizeWithName;
+                                                        Decklesize += item1[j].Width;
+                                                        Qty += item1[j].DeckleQty;
+                                                }
+                                                sequ = item1[j].Sequence;
+
+                                            }
+
+                                        }
+                                        <blockquote>
+                                            <p class="title"><strong> Lot. No: @sequ </strong></p>
+
+                                            <p class="details">
+                                                @size.Remove(size.Length - 2)  <br>
+                                                Deckle: @Decklesize.ToString("0.00") cm,  Qty: @Qty.ToString("0.00") MT<br>
+                                                @Html.Raw(@sizeWithName)
+                                            </p>
+
+
+                                            @{
+                                        //if (flag == 1 || planStartdt == null)
+                                        if (lotEnddt == null && planStartdt == null)
+                                        {
+                                            <p class="details"><strong> <input type="checkbox" value="@sequ" id="@items.srNo" data-id="proChild_@items.srNo" disabled="disabled" class="selectAllCheckbox_@item.srNo"> Lot @sequ Completed </strong></p>
+                                        }
+                                        else if (lotEnddt == null && planStartdt != null)
+                                        {
+                                            <p class="details"><strong> <input type="checkbox" value="@sequ" id="@items.srNo" data-id="proChild_@items.srNo" class="selectAllCheckbox_@item.srNo"> Lot @sequ Completed </strong></p>
+                                        }
+                                        else if (lotEnddt != null && planStartdt != null)
+                                        {
+                                            <p class="details"><strong> <input type="checkbox" value="@sequ" id="@items.srNo" data-id="proChild_@items.srNo" disabled="disabled" checked="checked" class="selectAllCheckbox_@item.srNo"> Lot @sequ Completed </strong></p>
+                                        }
+                                            }
+                                        </blockquote>
+                                        //if (@items.actual_end != null || planStartdt == null)
+                                        if (@items.actual_end != null && planStartdt != null)
+                                        {
+                                            <p class="details">
+                                                <strong>
+                                                    <input type="checkbox" value="@items.jumboNo" data-id="projumbo_@items.srNo" checked="checked" disabled="disabled" class="selectAllCheckbox_@item.srNo"> Jumbo @items.jumboNo Completed
+                                                </strong>
+                                            </p>
+                                        }
+                                        else if (@items.actual_end == null && planStartdt != null)
+                                        {
+                                            <p class="details">
+                                                <strong>
+                                                    <input type="checkbox" value="@items.jumboNo" data-id="projumbo_@items.srNo" class="selectAllCheckbox_@item.srNo"> Jumbo @items.jumboNo Completed
+                                                </strong>
+                                            </p>
+                                        }
+                                        else if (@items.actual_end == null && planStartdt == null)
+                                        {
+                                            <p class="details">
+                                                <strong>
+                                                    <input type="checkbox" value="@items.jumboNo" data-id="projumbo_@items.srNo" disabled="disabled" class="selectAllCheckbox_@item.srNo"> Jumbo @items.jumboNo Completed
+                                                </strong>
+                                            </p>
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @*@if (@item.actual_end != null || @item.actualStart == null)*@
+                    @if (@item.actual_end == null && @item.actualStart == null)
+                    {
+                        <p class="details">
+                            <strong>
+                                <input type="checkbox" value="@item.srNo" data-id="proPlan_@item.srNo" disabled="disabled" class="selectAllCheckbox_@item.srNo"> Plan Completed
+                            </strong>
+                        </p>
+                    }
+                    else
+                        if (@item.actual_end == null && @item.actualStart != null)
+                        {
+                            <p class="details">
+                                <strong>
+                                    <input type="checkbox" value="@item.srNo" data-id="proPlan_@item.srNo" class="selectAllCheckbox_@item.srNo"> Plan Completed
+                                </strong>
+                            </p>
+                        }
+                        else if (@item.actual_end != null && @item.actualStart != null)
+                        {
+                            <p class="details">
+                                <strong>
+                                    <input type="checkbox" value="@item.srNo" data-id="proPlan_@item.srNo" class="selectAllCheckbox_@item.srNo" disabled="disabled" checked="checked"> Plan Completed
+                                </strong>
+                            </p>
+                        }
+
+                </li>
+            </ul>
+        </div>
+    }
+
+}
+
+<script type="text/javascript">
+
+    $('.switch-button-background').on('click', function () {
+        //debugger;
+        var id = $(this).attr("id");
+        var planNo = $(this).attr("id");
+        //var className = $('.switch-button-background').attr('class');
+        var className = $('#' + id).attr('class');
+
+        if (className == "switch-button-background" && id == planNo) {
+
+            if ($('.selectAllCheckbox_' + planNo + ':disabled').length > 0) {
+                $('.selectAllCheckbox_' + planNo).attr("disabled", false);
+                //$('.selectAllCheckbox_' + planNo).attr("checked", false);
+            }
+            //  var planNo = $(this).attr("id");
+            $('#switch_' + planNo).removeAttr('style');
+            $('#switch_' + planNo).css({ "width": "30px", "height": "20px", "left": "29px" });  //css('width: 30px; height: 20px; left: 29px;');
+            $('.btnon_' + planNo).addClass('on');
+            $('.btnon_' + planNo).removeClass('off');
+            $('.btnon_' + planNo).addClass('on');
+            $('.btnoff_' + planNo).removeClass('on');
+            $('.btnoff_' + planNo).addClass('off');
+            $("#" + planNo).addClass('checked');
+            SaveProductionRunActualTime(planNo);
+        }
+        else if (className == "switch-button-background checked" && id == planNo) {
+            var planNo = $(this).attr("id");
+            var uniqueId = 'header_' + planNo;
+            var allVals = [0];
+
+            $('#header_' + planNo + ' :checked').each(function () {
+                allVals.push($(this).val());
+            });
+
+            if (allVals == allVals[0]) {
+                $('.selectAllCheckbox_' + planNo).each(function () { //loop through each checkbox
+                    //this.checked = true;
+                    this.disabled = true;
+                });
+                $('#switch_' + planNo).removeAttr('style');
+                $('#switch_' + planNo).css({ "width": "30px", "height": "20px", "left": "-1px" });  //css('width: 30px; height: 20px; left: 29px;');
+
+                $('.btnon_' + planNo).removeClass('on');
+                $('.btnon_' + planNo).addClass('off');
+                $('.btnoff_' + planNo).removeClass('off');
+                $('.btnoff_' + planNo).addClass('on');
+                $("#" + planNo).removeClass('checked');
+                planOff(planNo);
+            }
+            else {
+
+            }
+        }
+    });
+
+    $('input[type=checkbox]').click(function (e) {
+        debugger;
+        var uniqueStr = $(this).attr("data-id");
+        if (uniqueStr.indexOf('proPlan_') !== -1) {
+            var planNo = $(this).attr("value");
+            if ($('.selectAllCheckbox_' + planNo + ':checked').length != $('.selectAllCheckbox_' + planNo).length - 1) {
+                //  e.stopPropagation();
+                //$(this).attr("checked", false);
+            }
+        }
+        else
+            if ($(this).is(':checked')) {
+                //  e.stopPropagation();
+                $(this).attr("disabled", true);
+            }
+
+    });
+
+    $('.switch-wrapper').on('click', 'a[href="#switchbtnOn"]', function () {
+        debugger;
+        var planNo = $(this).attr("data-id");
+
+        if ($('.selectAllCheckbox_' + planNo + ':checked').length == 0 || ($('.selectAllCheckbox_' + planNo + ':checked').length == $('.selectAllCheckbox_' + planNo).length)) {
+            $(this).attr("checked", false);
+
+            if ($('.selectAllCheckbox_' + planNo + ':disabled').length > 0) {
+                $('.selectAllCheckbox_' + planNo).attr("disabled", false);
+                //$('.selectAllCheckbox_' + planNo).attr("checked", false);
+                //}
+                //var planNo = $(this).attr("data-id");
+
+                // $('.switch-button-button').css('width: ""; height: ""; left: "";');
+                $('#switch_' + planNo).removeAttr('style');
+                $('#switch_' + planNo).css({ "width": "30px", "height": "20px", "left": "29px" });  //css('width: 30px; height: 20px; left: 29px;');
+                $('.btnon_' + planNo).addClass('on');
+                $('.btnon_' + planNo).removeClass('off');
+                $('.btnon_' + planNo).addClass('on');
+                $('.btnoff_' + planNo).removeClass('on');
+                $('.btnoff_' + planNo).addClass('off');
+                $("#" + planNo).addClass('checked');
+
+                SaveProductionRunActualTime(planNo);
+            }
+
+        }
+    });
+
+    $('.switch-wrapper').on('click', 'a[href="#switchbtnOff"]', function () {
+        debugger;
+        var planNo = $(this).attr("data-id");
+        var uniqueId = 'header_' + planNo;
+        var allVals = [0];
+
+        $('#header_' + planNo + ' :disabled').each(function () {
+            allVals.push($(this).val());
+        });
+
+        if (allVals == allVals[0]) {
+            $('.selectAllCheckbox_' + planNo).each(function () { //loop through each checkbox
+                //this.checked = true;
+                this.disabled = true;
+            });
+            $('#switch_' + planNo).removeAttr('style');
+            $('#switch_' + planNo).css({ "width": "30px", "height": "20px", "left": "-1px" });  //css('width: 30px; height: 20px; left: 29px;');
+
+            $('.btnon_' + planNo).removeClass('on');
+            $('.btnon_' + planNo).addClass('off');
+            $('.btnoff_' + planNo).removeClass('off');
+            $('.btnoff_' + planNo).addClass('on');
+            $("#" + planNo).removeClass('checked');
+            planOff(planNo);
+        }
+        else {
+
+        }
+    });
+
+    $('#planDetails-Today input[type="checkbox"]').click(function () {
+        debugger;
+        var uniqueStr = $(this).attr("data-id");
+
+        if (uniqueStr.indexOf('projumbo') !== -1) {
+            var jumboNo = $(this).attr("value");
+            SaveProductionJumboActualTime(jumboNo)
+        }
+        else if (uniqueStr.indexOf('proChild') !== -1) {
+            var planNo = $(this).attr("id");
+            var lotNo = $(this).attr("value");
+            SaveProductionChildActualTime(lotNo, planNo);
+        }
+        else if (uniqueStr.indexOf('proPlan_') !== -1) {
+            var planNo = $(this).attr("value");
+
+            if (uniqueStr.indexOf('proPlan_') !== -1) {
+                if ($('.selectAllCheckbox_' + planNo + ':checked').length != $('.selectAllCheckbox_' + planNo).length) {
+                    if ($(this).is(':checked')) {
+                        $(this).attr("checked", false);
+                    }
+                }
+                else
+                    if ($('.selectAllCheckbox_' + planNo + ':checked').length == $('.selectAllCheckbox_' + planNo).length) {
+                        $(this).attr("checked", true);
+                        $(this).attr("disabled", true);
+                        SaveProductionActualEndTime(planNo);
+                    }
+            }
+            //if ($('.selectAllCheckbox_' + planNo + ':checked').length == $('.selectAllCheckbox_' + planNo).length) {
+            //SaveProductionChildActualEndTime(planNo);
+        }
+    });
+
+    $('#planDetails-Tomorrow input[type="checkbox"]').click(function () {
+        debugger;
+        var uniqueStr = $(this).attr("data-id");
+
+        if (uniqueStr.indexOf('projumbo') !== -1) {
+            var jumboNo = $(this).attr("value");
+            SaveProductionJumboActualTime(jumboNo)
+        }
+        else if (uniqueStr.indexOf('proChild') !== -1) {
+            var planNo = $(this).attr("id");
+            var lotNo = $(this).attr("value");
+            SaveProductionChildActualTime(lotNo, planNo);
+        }
+        else if (uniqueStr.indexOf('proPlan_') !== -1) {
+            var planNo = $(this).attr("value");
+
+            if (uniqueStr.indexOf('proPlan_') !== -1) {
+                if ($('.selectAllCheckbox_' + planNo + ':checked').length != $('.selectAllCheckbox_' + planNo).length) {
+                    if ($(this).is(':checked')) {
+                        $(this).attr("checked", false);
+                    }
+                }
+                else
+                    if ($('.selectAllCheckbox_' + planNo + ':checked').length == $('.selectAllCheckbox_' + planNo).length) {
+                        $(this).attr("checked", true);
+                        $(this).attr("disabled", true);
+                        SaveProductionActualEndTime(planNo);
+                    }
+            }
+            //if ($('.selectAllCheckbox_' + planNo + ':checked').length == $('.selectAllCheckbox_' + planNo).length) {
+            //SaveProductionChildActualEndTime(planNo);
+        }
+    });
+
+    $('#planDetails-Tomorrow input[type="checkbox"]').click(function () {
+        debugger;
+        var uniqueStr = $(this).attr("data-id");
+
+        if (uniqueStr.indexOf('projumbo') !== -1) {
+            var jumboNo = $(this).attr("value");
+            SaveProductionJumboActualTime(jumboNo)
+        }
+        else if (uniqueStr.indexOf('proChild') !== -1) {
+            var planNo = $(this).attr("id");
+            var lotNo = $(this).attr("value");
+            SaveProductionChildActualTime(lotNo, planNo);
+        }
+        else if (uniqueStr.indexOf('proPlan_') !== -1) {
+            var planNo = $(this).attr("value");
+
+            if (uniqueStr.indexOf('proPlan_') !== -1) {
+                if ($('.selectAllCheckbox_' + planNo + ':checked').length != $('.selectAllCheckbox_' + planNo).length) {
+                    if ($(this).is(':checked')) {
+                        $(this).attr("checked", false);
+                    }
+                }
+                else
+                    if ($('.selectAllCheckbox_' + planNo + ':checked').length == $('.selectAllCheckbox_' + planNo).length) {
+                        $(this).attr("checked", true);
+                        $(this).attr("disabled", true);
+                        SaveProductionActualEndTime(planNo);
+                    }
+            }
+            //if ($('.selectAllCheckbox_' + planNo + ':checked').length == $('.selectAllCheckbox_' + planNo).length) {
+            //SaveProductionChildActualEndTime(planNo);
+        }
+    });
+
+    $('#planDetails-NextDate input[type="checkbox"]').click(function () {
+        debugger;
+        var uniqueStr = $(this).attr("data-id");
+
+        if (uniqueStr.indexOf('projumbo') !== -1) {
+            var jumboNo = $(this).attr("value");
+            SaveProductionJumboActualTime(jumboNo)
+        }
+        else if (uniqueStr.indexOf('proChild') !== -1) {
+            var planNo = $(this).attr("id");
+            var lotNo = $(this).attr("value");
+            SaveProductionChildActualTime(lotNo, planNo);
+        }
+        else if (uniqueStr.indexOf('proPlan_') !== -1) {
+            var planNo = $(this).attr("value");
+
+            if (uniqueStr.indexOf('proPlan_') !== -1) {
+                if ($('.selectAllCheckbox_' + planNo + ':checked').length != $('.selectAllCheckbox_' + planNo).length) {
+                    if ($(this).is(':checked')) {
+                        $(this).attr("checked", false);
+                    }
+                }
+                else
+                    if ($('.selectAllCheckbox_' + planNo + ':checked').length == $('.selectAllCheckbox_' + planNo).length) {
+                        $(this).attr("checked", true);
+                        $(this).attr("disabled", true);
+                        SaveProductionActualEndTime(planNo);
+                    }
+            }
+            //if ($('.selectAllCheckbox_' + planNo + ':checked').length == $('.selectAllCheckbox_' + planNo).length) {
+            //SaveProductionChildActualEndTime(planNo);
+        }
+    });
+
+    function SaveProductionRunActualTime(planNo) {
+        $.ajax(
+                         {
+                             cache: false,
+                             type: "GET",
+                             url: "/MachineHead/SaveProductionRunActualTime/" + planNo,
+                             contentType: "application/text; charset=utf-8",
+                             success: function (data) {
+
+                             },
+                             error: function (xhr, ajaxOptions, thrownError) {
+
+                             }
+                         });
+    }
+
+    function SaveProductionJumboActualTime(jumboNo) {
+
+        $.ajax(
+                  {
+                      cache: false,
+                      type: "post",
+                      url: "/MachineHead/SaveProductionJumboActualTime/" + jumboNo,
+                      contentType: "application/text; charset=utf-8",
+                      success: function (data) {
+
+                      },
+                      error: function (xhr, ajaxOptions, thrownError) {
+
+                      }
+                  });
+    }
+
+    function SaveProductionChildActualTime(lotNo, planNo) {
+        var data =
+            {
+                planNo: planNo
+            }
+        $.ajax(
+                  {
+                      cache: false,
+                      type: "GET",
+                      data: data,
+                      url: "/MachineHead/SaveProductionChildActualTime/" + lotNo,
+                      contentType: "application/text; charset=utf-8",
+                      success: function (data) {
+
+                      },
+                      error: function (xhr, ajaxOptions, thrownError) {
+
+                      }
+                  });
+    }
+
+    function SaveProductionActualEndTime(planNo) {
+
+        $.ajax(
+                  {
+                      cache: false,
+                      type: "GET",
+                      url: "/MachineHead/SaveProductiionPlanEndTime/" + planNo,
+                      contentType: "application/text; charset=utf-8",
+                      success: function (data) {
+
+                      },
+                      error: function (xhr, ajaxOptions, thrownError) {
+
+                      }
+                  });
+    }
+
+    function planOff(planNo) {
+
+        $.ajax(
+                       {
+                           cache: false,
+                           type: "GET",
+                           url: "/MachineHead/SaveProductionPlanOff/" + planNo,
+                           contentType: "application/text; charset=utf-8",
+                           success: function (data) {
+
+                           },
+                           error: function (xhr, ajaxOptions, thrownError) {
+
+                           }
+                       });
+    }
+
+    $('.details_header').on('click', 'a[href="#downloadOrder"]', function () {
+
+        var orderid = $(this).attr("data-id");
+        window.location = "ProductionPlanner/GetPdffileForPP?orderid=" + orderid
+
+
+    });
+
+</script>

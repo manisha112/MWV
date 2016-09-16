@@ -1,0 +1,26 @@
+﻿@model MWV.Models.Order_products
+
+<li style="padding-bottom:15px">
+    @using (Html.BeginCollectionItem("OrderProducts"))
+    {
+        <img src="@Url.Content("~/Content/images/draggable-icon.png")" style="cursor: move" alt="" />
+
+        @Html.LabelFor(model => model.product_code)
+        @Html.EditorFor(model => model.product_code)
+        @Html.ValidationMessageFor(model => model.product_code)
+
+        @Html.LabelFor(model => model.shade_code)
+        @Html.EditorFor(model => model.shade_code)
+        @Html.ValidationMessageFor(model => model.shade_code)
+        
+        @Html.LabelFor(model => model.width)
+        @Html.EditorFor(model => model.width)
+        @Html.ValidationMessageFor(model => model.width)
+        
+        @Html.LabelFor(model => model.unit_price)
+        @Html.EditorFor(model => model.unit_price)
+        @Html.ValidationMessageFor(model => model.unit_price)                
+
+        <a href="#" onclick="$(this).parent().remove();">Delete</a>
+    }
+</li>

@@ -1,0 +1,95 @@
+﻿@model IEnumerable<MWV.Models.Truck_dispatches>
+
+    <h4><strong>TRUCK DISPATCH VIEW </strong> </h4>
+    <div class="fix-overflow">
+        <a href="#closeTransportationResultsPanel" class="close-panel"><img src="images/close-panel.png"></a>
+        Sort By + -
+    </div>
+    <table class="table" cellspacing="5" cellpadding="2" style="padding:10px">
+        <div style="padding:10px">
+            @ViewBag.noTruckCroMsg
+        </div>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    <strong> Truck No </strong>  : @item.truck_no
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Estimated Arrival :   @item.estimated_arrival
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Estimated Capacity :  @item.estimated_capacity
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Agent_Dispatched On :   @item.agent_dispatched_on
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Status :  @item.status
+                </td>
+            </tr>
+            <tr></tr>
+        }
+
+    </table>
+    @*<ul>
+            <li>
+                <div class="fix-overflow">
+                    <a href="#" class="remove_vehicle">-</a>
+                    <a href="#" class="edit_vehicle">ed</a>
+                    <strong>Vehicle # MH-123-1234</strong>
+                </div>
+
+                <p>Scheduled on June 6 at 9:03 AM</p>
+                <p>Arrival: Pending</p>
+                <p>Departure: Pending</p>
+
+                <a href="#">[See Details]</a>
+            </li>
+            <li>
+                <div class="fix-overflow">
+                    <strong>Vehicle # MH-123-1234</strong>
+                </div>
+
+                <p>Scheduled on June 6 at 9:03 AM</p>
+                <p>Arrived on June 9th at 5:27 PM</p>
+                <p>Departure: Pending</p>
+
+                <a href="#">[See Details]</a>
+            </li>
+            <li>
+                <div class="fix-overflow">
+                    <strong>Vehicle # MH-123-1234</strong>
+                </div>
+
+                <p>Scheduled on June 6 at 9:03 AM</p>
+                <p>Arrived on June 9th at 5:27 PM</p>
+                <p>Departed on June 11th at 3:30 PM</p>
+
+                <a href="#">[See Details]</a>
+            </li>
+            <li>
+                <div class="fix-overflow">
+                    <a href="#" class="remove_vehicle">-</a>
+                    <a href="#" class="edit_vehicle">ed</a>
+
+                    <strong>Vehicle # MH-123-1234</strong>
+                </div>
+
+                <p>Scheduled June 6 at 9:03 AM</p>
+                <p>Arrival: Pending</p>
+                <p>Departure: Pending</p>
+
+                <a href="#">[See Details]</a>
+            </li>
+        </ul>*@
+

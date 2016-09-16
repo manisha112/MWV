@@ -1,0 +1,265 @@
+﻿@{
+    ViewBag.Title = "MWV Dev: Dispatch";
+}
+
+@*<h2>DashBoard</h2>*@
+
+<div class="vehicle_schedule">
+    <div class="tab-link tab-a">
+        <p class="schedule_title"><strong>Today's Vehicle Schedule</strong></p>
+        @{
+            DateTime TodayDate = DateTime.Now;
+        }
+        <a href="#seeScheduleDetails" data-id="@TodayDate.ToShortDateString()" class="see_details_link" id="Today">See Details</a>
+    </div>
+
+    <div id="vehicleDetails-Today" class="vehicle_schedule_details hidden">
+        <div id="vehicleDetailsMst-Today">
+
+        </div>
+        <div id="vehicleDetailsChild-Today">
+
+        </div>
+    </div> <!-- .vehicle_schedule_details -->
+
+    <div id="dispatchDetails-Today" class="dispatch_details hidden">
+
+    </div> <!-- .dispatch_details -->
+</div> <!-- .vehicle_schedule -->
+
+<div class="vehicle_schedule">
+    <div class="tab-link tab-b">
+        <p class="schedule_title">
+            <strong>
+                @{
+                    DateTime TomorrowDate = DateTime.Now.AddDays(1);
+                }
+                @TomorrowDate.ToString("dd MMM yyyy")
+            </strong>
+        </p>
+
+        <a href="#seeScheduleDetails" data-id="@TomorrowDate.ToShortDateString()" class="see_details_link" id="Tomorrow">See Details</a>
+    </div>
+
+    <div id="vehicleDetails-Tomorrow" class="vehicle_schedule_details hidden">
+        <div id="vehicleDetailsMst-Tomorrow">
+
+        </div>
+        <div id="vehicleDetailsChild-Tomorrow">
+
+        </div>
+        <!-- .vehicle_results -->
+    </div> <!-- .vehicle_schedule_details -->
+
+    <div id="dispatchDetails-Tomorrow" class="dispatch_details hidden">
+
+    </div>
+</div> <!-- .vehicle_schedule -->
+
+<div class="vehicle_schedule">
+    <div class="tab-link tab-a">
+        <p class="schedule_title">
+            <strong>
+                @{
+                    DateTime NextDay = DateTime.Now.AddDays(2);
+                }
+                @NextDay.ToString("dd MMM yyyy")
+            </strong>
+        </p>
+
+        <a href="#seeScheduleDetails" data-id="@NextDay.ToShortDateString()" class="see_details_link" id="NextDay">See Details</a>
+    </div>
+
+    <div id="vehicleDetails-NextDay" class="vehicle_schedule_details hidden">
+        @* partial view : vehicledispatch details *@
+        <div id="vehicleDetailsMst-NextDay">
+
+        </div>
+        <div id="vehicleDetailsChild-NextDay">
+
+        </div>
+        <!-- .vehicle_results -->
+    </div> <!-- .vehicle_schedule_details -->
+
+    <div id="dispatchDetails-NextDay" class="dispatch_details hidden">
+
+    </div>
+</div> <!-- .vehicle_schedule -->
+
+<div id="searchVehicles" class="search_vehicles">
+    <h2>Search Vehicles</h2>
+    <select class="select-input search_by">
+        <option value="agent-name">By Agent Name</option>
+        <option value="product-code">By Product Code</option>
+        <option value="vehicle-no">By Vehicle #</option>
+    </select>
+
+    <div id="searchByName">
+        @*<input type="text" class="text-input search_by" value="Type Name">*@
+        @Html.DropDownList("AgentList", (SelectList)ViewBag.lstAgent, "Select Agent Name ", new { @class = "select-input search_by" })
+    </div>
+    <div id="searchByProductCode" class="hidden">
+        @*<input type="text" class="text-input search_by" value="Type Product Code">*@
+        @Html.DropDownList("ProductCodeList", (SelectList)ViewBag.lstProductCode, "Select by ProductCode  ", new { @class = "select-input search_by" })
+    </div>
+    <div id="searchByVehicleNo" class="hidden">
+        <input type="text" class="text-input search_by" value="Type Vehicle #">
+    </div>
+
+    <div class="time_frame">
+        <p class="form-label">From</p>
+
+        <div class="fix-overflow start_stop_time">
+            <select class="date-select-input" id="searchVehiclesFromDay">
+                <option>DD</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select class="date-select-input" id="searchVehiclesFromMonth">
+                <option>MM</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select class="date-select-input year" id="searchVehiclesFromYear">
+                <option>YYYY</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+        <p class="form-label">To</p>
+
+        <div class="fix-overflow start_stop_time">
+            <select class="date-select-input" id="searchVehiclesToDay">
+                <option>DD</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select class="date-select-input" id="searchVehiclesToMonth">
+                <option>MM</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select class="date-select-input year" id="searchVehiclesToYear">
+                <option>YYYY</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+    </div>
+    <span id="ErrorMsgInvalidFromDate"></span>
+
+    <span id="ErrorMsgInvalidToDate"></span>
+    <span id="ProductionPlannerErrors"></span>
+    <a href="#searchVehicles" class="btn">Search</a>
+
+   
+    @*<div id="ErrorMsgInvalidFromDate" class="hidden error-msg">
+        <p class="error-msg">Please select a Valid From date</p>
+    </div>
+    <div id="ErrorMsgInvalidToDate" class="hidden error-msg">
+        <p class="error-msg">Please select a Valid To date</p>
+    </div>*@
+   
+
+        <div id="vehiclesSearchResults" class="vehicles_search_results hidden">
+            <div id="vehiclessearchresultsMst">
+
+            </div>
+            <div id="vehiclessearchresultsChild">
+
+            </div>
+            @* partial view: "_VehicleSearchResults"  *@
+            @*  *@
+        </div>
+</div> <!-- #searchVehicles -->
+ 

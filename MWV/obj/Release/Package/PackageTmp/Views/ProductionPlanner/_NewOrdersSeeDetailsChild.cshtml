@@ -1,0 +1,27 @@
+﻿
+
+<div class="order_details_full">
+    @*<span id="spanForSeeErrors" class="error-msg"></span>*@
+    <p class="title"><strong> @ViewBag.AgentName </strong></p>
+    <p class="title"><strong> @ViewBag.CustomerName </strong></p>
+
+    <p class="details">Placed On: @ViewBag.ordDate.ToString("dd MMM yyy hh:mm tt")</p>
+    @*<p class="details">Requested Delivery Date: @ViewBag.reqDelivery_date.ToString("dd MMM yyy hh:mm tt")</p>*@
+</div>
+
+<ul class="individual_orders">
+    @foreach (var item in ViewBag.ProductList)
+    {
+        <li>
+            <p class="details"><strong> @item.width cm x @item.BF BF @item.GSM GSM @item.shade </strong> </p>
+            @if (item.custpo != null)
+            { 
+             <p class="details">Customer PO: @item.custpo</p>
+            }
+            <p class="details">Qty. Ordered: @item.qty MT</p>
+            <p class="details">Requested Delivery Date: @item.RequestedDate.ToShortDateString() </p>
+        </li>
+    }
+</ul>
+
+ 

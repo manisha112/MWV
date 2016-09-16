@@ -1,0 +1,98 @@
+﻿
+<div class="fix-overflow">
+    <a href="#closeOrderDetails" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+<div class="order_details_full">
+    @{
+        var isCreated = 0;
+    }
+    @foreach (var item in Model.OrderDetails)
+    {
+        <script language="javascript">
+            /* in need to set the hidden value of  $('#selectedCustomerId')
+               so that on duplicate order, this value is found by the method 'addOrderinSession()' */
+            $('#selectedCustomerId').val(@item.Customer.customer_id);
+        </script>
+        <input type="hidden" id="tmporderid" value="@item.order_id" />
+        <p>Order Details For:</p>
+
+        <div class="fix-overflow">
+            <p class="po_number"><strong>PO: @item.order_id</strong></p>
+
+            <div class="order_details_icons">
+                <a href="#downloadOrder" class="download_order"><img src="/images/download.png"></a>
+                <a href="#duplicateOrder" class="duplicate_order" data-id="@item.order_id" data-value="@item.Customer.name"><img src="/images/duplicate.png"></a>
+            </div>
+        </div>
+
+        if (item.status == "Under Planning") // Open = "Under Planning"
+        {
+            if (@item.is_deckled == true)
+            {
+                isCreated = 0;
+            }
+            else
+            { isCreated = 1; }
+            <span class="order-status os-open" data-status="Open">@item.status</span>
+
+        }
+        else if (item.status == "Created") // Used internally by the application
+        {
+            <span class="order-status os-created" data-status="Created">@item.status</span>
+            isCreated = 1;
+
+        }
+        else if (item.status == "In Warehouse") //Dispatch Ready = "In Warehouse"
+        {
+            <span class="order-status os-dispatch-ready" data-status="In-Warehouse">@item.status</span>
+        }
+        else if (item.status == "Planned")
+        {
+            <div class="order-status up_top os-schedule-ready" data-status="Planned">@item.status</div> // schedule ready = "Planned"
+        }
+        else if (item.status == "Dispatched") // Used internally by the application
+        {
+            <span class="order-status os-complete">@item.status</span>
+        }
+
+        <div class="customer_name">
+            <p class="name"><strong>@item.Customer.name</strong></p>
+
+            <p class="details">
+                Placed On: @item.created_on.ToString("dd MMM yyy hh:mm tt") <br>
+                Customer PO: @item.customerpo
+            </p>
+        </div>
+
+        //this Location id is needed to 'Arrange Transportation buttons fill purchase orders'
+        <div class="customer_name">
+            @if (item.status != "Created")
+            {
+                if (ViewBag.selectedpm != null)
+                {
+                    <input type="hidden" id="tmplocationid" value="@ViewBag.selectedpm" />
+                    @*<p class="name"><strong>Location: @item.papermill.location</strong></p>
+                    <p class="details">
+                        @item.papermill.address
+                    </p>*@
+                }
+            }
+        </div>
+    }
+
+</div>
+
+
+@if (isCreated == 1)
+{
+    <script language="javascript">
+        $(".orders_panel .order_details .arrange_transportation_button").hide();
+
+    </script>
+}
+else if (isCreated == 0)
+{
+    <script language="javascript">
+        $(".orders_panel .order_details .arrange_transportation_button").show();
+    </script>
+}

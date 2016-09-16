@@ -1,0 +1,100 @@
+﻿@model MWV.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt style="width:auto">
+            @Html.DisplayNameFor(model => model.Agent.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Agent.name)
+        </dd>
+
+        <dt style ="width:auto">
+            @Html.DisplayNameFor(model => model.Customer.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.name)
+        </dd>
+
+        <dt style="width:auto">
+            @Html.DisplayNameFor(model => model.order_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.order_date)
+        </dd>
+
+        <dt style="width:auto">
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt style="width:auto">
+            @Html.DisplayNameFor(model => model.requested_delivery_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.requested_delivery_date)
+        </dd>
+
+        <p>&nbsp;</p>
+        <hr />
+
+        @* display the list of order products  *@
+        
+        @if (Model.OrderProducts.Count != 0)
+        {
+        <dt style="width:auto">
+            List of Order Products
+            @*@Html.DisplayNameFor(model => model.OrderProducts)*@
+        </dt>
+        <dd>
+            @* list to show the list of order products starts *@
+            <table class="table">
+                <tr>
+                    <th>Order Product ID</th>
+                    <td><b>Product Code</b></td>
+                    <td><b>Unit Price</b></td>
+                    <td><b>Quantity</b></td>
+                    <td><b>Amount</b></td>
+                </tr>
+                @foreach (var item in Model.OrderProducts)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.order_product_id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.product_code)</td>
+                        <td>@Html.DisplayFor(modelItem => item.unit_price)</td>
+                        <td>@Html.DisplayFor(modelItem => item.qty)</td>
+                        <td>@Html.DisplayFor(modelItem => item.amount)</td>
+                    </tr>
+                }
+            </table>
+        </dd>
+            
+        }
+        else 
+        {
+            @Html.ActionLink("Add New Order Product", "Create", "Order_product", new { id = Model.order_id }, null)
+        }
+            
+        
+    </dl>
+</div>
+<hr />
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.order_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

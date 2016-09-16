@@ -1,0 +1,365 @@
+﻿@using MWV.DBContext;
+
+<div class="fix-overflow">
+    <a href="#closeDispatchDetails" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+
+<h2>Dispatch Details</h2>
+@{
+    string vehicleStatus = string.Empty;
+    int truck_dispatch_id = 0;
+    string truckStatus = "";
+}
+
+@foreach (var item in ViewBag.Vehicle)
+{
+    truck_dispatch_id = item.truck_dispatch_id;
+
+    <div class="dispatch_details_header">
+        <p class="title"><strong>Vehicle # @item.truck_no</strong></p>
+
+        <p class="title"><strong>@item.agentdetails.name</strong></p>
+
+        <p class="details">
+            Est. Arrival: @item.estimated_arrival.ToString("dd MMM yyyy hh:mm tt")<br>
+
+            @* the gatekeeper has to first mark the vehicle as inward, so this actual arrival at gate will always have a date  *@
+
+            @{string status = "";}
+            @{string statusDispatch = "";}
+            @if (@item.actual_arrival_at_gate == null)
+            {
+                status = " Arrival: Pending";
+            }
+            else
+            {
+                status = "Arrived: " + @item.actual_arrival_at_gate.ToString("dd MMM yyyy hh:mm tt");
+            }
+            @if (@item.status == "Dispatched") //if  truck is loaded by dispature the status will be dispatched.
+            {
+                statusDispatch = "Departure: Loading Completed";
+            }
+            else if (@item.status == "Completed")  //if  truck is left on factory then the status will be Completed.
+            {
+                statusDispatch = "Departed: " + @item.left_factory_on.ToString("dd MMM yyyy hh:mm tt");
+            }
+            else
+            {
+                statusDispatch = "Departure: Pending";
+            }
+
+            @status<br>
+            @statusDispatch
+
+            @{
+    truckStatus = @item.status;
+            }
+        <p class="title" value="@item.estimated_capacity" id="truckCapacity">Est. Capacity @item.estimated_capacity</p>
+        </p>
+
+        
+
+    </div>
+}
+<h2>Cargo List</h2>
+
+<ul class="cargo_list">
+
+    @foreach (var item in ViewBag.Vehicle)
+    {
+        vehicleStatus = item.status;
+        foreach (var itemdetail in item.Truckdispatchdetails)
+        {
+            <li>
+                <p class="title"><strong>PO: @itemdetail.order_id</strong></p>
+                <p class="title"><strong>@itemdetail.Order.Customer.name</strong></p>
+                <p class="title"><strong>@itemdetail.Order_products.product_code</strong></p>
+                <p class="details" value="@itemdetail.qty" id="productQty_@itemdetail.Order_products.order_product_id">Qty. For Loading: @itemdetail.qty MT</p>
+
+
+                @if (@item.status == "Dispatched" || @item.status == "Completed" || @item.status == "Created") { }
+                else
+                {
+                    <div class="fix-overflow">
+                        <h3></h3>
+                        <a href="#addReels" data-id="@itemdetail.Order_products.order_product_id">Add Reels</a>
+                    </div>
+                    <div id="rollChildDiv_@itemdetail.Order_products.order_product_id" data-id="" class="hidden">
+                        @foreach (var rollsDetails in ViewBag.rollDetails)
+                        {
+                            if (@itemdetail.Order_products.order_product_id == @rollsDetails.order_product_id)
+                            {
+                                <div>
+                                    <input type="checkbox" id="@rollsDetails.child_rollno" value="@rollsDetails.qty" class="reelscheckbox_@itemdetail.Order_products.order_product_id" data-id="@itemdetail.Order_products.order_product_id"> @rollsDetails.child_rollno
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div>
+                        Qty loaded for product:
+                        <span id="total_@itemdetail.Order_products.order_product_id" class="orderCapacity">  </span>
+                        @*<input type="checkbox" name="isLoaded" data-id="@truck_dispatch_id" value="@itemdetail.order_product_id">*@
+                        @*&nbsp; Loading Complete*@
+                    </div>
+                }
+
+            </li>
+        }
+    }
+</ul>
+
+
+<span id="dispatchCompleted" class="error-msg"></span>
+<p class="title">Loaded capacity on Vehicle: <span id="truckLoadedCapacity"> </span>  </p>
+
+@if (truckStatus == "Created" || truckStatus == "Dispatched" || truckStatus == "Completed")
+{ }
+else
+{   <a href="#dispatchComplete" class="btn" data-id="@truck_dispatch_id" id="@ViewBag.cargocount">Dispatch Complete</a>}
+
+
+@* onclick="AreAllchecked(@ViewBag.totalProds);" *@
+<div class="dispatch_complete_attention take_action_panel hidden">
+    <div class="fix-overflow">
+        <a href="#closeAttention" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+    <p class="title"><strong>Attention!</strong></p>
+    <p class="details">This action will notify all departments that this dispatch is complete.</p>
+    <p class="details">Please confirm this action, or click &quot;Cancel&quot; to deny this action.</p>
+    <a href="#closeAttention" class="btn">Cancel</a>
+    <a href="#confirmComplete" data-id="@truck_dispatch_id" class="btn">Confirm Complete</a>
+
+</div>
+
+<script language="javascript">
+
+    //when we mark as reel loading on truck
+    $("input[type='checkbox']").click(function () {
+        var ordproductid = $(this).attr('data-id');
+        var qty = 0;
+        debugger;
+        var total = 0;
+        $(".reelscheckbox_" + ordproductid + ":checked").each(function () {
+            total += +this.value; // sum of reells which is mark as loaded
+        });
+
+        //if reels loaded qty is greater then Qty. For Loading
+        var productQty = $('#productQty_' + ordproductid).attr('value');
+        if (Math.round(total * 100) > Math.round(productQty * 100)) {
+            $('#total_' + ordproductid).css({ "color": "red" }).show();
+            $('#total_' + ordproductid).html(total.toFixed(4));
+        }
+        else {
+            $('#total_' + ordproductid).removeAttr('style').show();
+            $('#total_' + ordproductid).html(total.toFixed(4));
+        }
+
+        var truckCapacity = $('#truckCapacity').attr('value');
+        var totalCapacity = 0;
+
+        $(':checkbox:checked').each(function () { 
+            totalCapacity += +this.value; // sum of reells which is mark as loaded
+        });
+
+        if (Math.round(totalCapacity * 100) > Math.round(truckCapacity * 100)) {
+            $('#truckLoadedCapacity').css({ "color": "red" }).show();
+            $('#truckLoadedCapacity').html(totalCapacity.toFixed(4));
+        }
+        else {
+            $('#truckLoadedCapacity').removeAttr('style').show();
+            $('#truckLoadedCapacity').html(totalCapacity.toFixed(4));
+        }
+
+
+    });
+    function AreAllchecked(totalCheckBoxes) {
+
+        var NumsChecked = $('input[name="isLoaded"]:checked').length;
+        if (NumsChecked == totalCheckBoxes) {
+
+            return true;
+        }
+        else {
+
+        }
+    }
+
+    $('.vehicle_schedule').on('click', 'a[href="#dispatchComplete"]', function () {
+        $('#dispatchCompleted').hide();
+        //if (AreAllchecked($(this).attr('id')) == true) {
+        $(this).next('.dispatch_complete_attention').show();
+        $('html,body').animate({
+            scrollTop: $(window).scrollTop() + 175
+        });
+        //}
+        //else {
+        //   $('#dispatchCompleted').show();
+        //    $('#dispatchCompleted').html('All cargo needs to be selected !');
+        //}
+
+    });
+
+    $('.dispatch_complete_attention').on('click', 'a[href="#closeAttention"]', function () {
+        $(this).closest('.take_action_panel').hide();
+
+
+    });
+
+    $('.dispatch_complete_attention').on('click', 'a[href="#confirmComplete"]', function () {
+        debugger;
+        var todayvalue = $(this).closest('div[class^="today"]').attr('id'); //$('.messages').closest("div").attr("id");
+        var tomorrowvalue = $(this).closest('div[class^="tomorrow"]').attr('id');
+        var nextdayvalue = $(this).closest('div[class^="nextday"]').attr('id');
+
+        var d = new Date();
+
+
+        $('#dispatchCompleted').hide();
+        //    if (AreAllchecked($('a[href="#dispatchComplete"]').attr('id')) == true)
+        //  {
+        var $detailsPanel = $(this).closest('.dispatch_details');
+        $(this).closest('take_action_panel').remove();
+        $detailsPanel.hide();
+        $detailsPanel.prev('.vehicle_schedule_details').show();
+        var allVals = [];
+        $('#dispatchDetails-Today :checked').each(function () {
+            allVals.push($(this).attr("id"));
+        });
+
+        $('#dispatchDetails-Tomorrow :checked').each(function () {
+            allVals.push($(this).attr("id"));
+        });
+
+        $('#dispatchDetails-NextDay :checked').each(function () {
+            allVals.push($(this).attr("id"));
+        });
+        allVals = $(this).attr('data-id') + "," + allVals;
+        $.ajax({
+            async: false,
+            url: "/Dispatch/DispatchComplete/?allVals=" + allVals,
+            //data: truckid,
+            contentType: "application/html; charset=utf-8",
+            type: "Post",
+            dataType: 'html',
+            context: document.body,
+            async: false
+        })
+                        .success(function (result) {
+                            $('html,body').animate({
+                                scrollTop: $detailsPanel.position().top
+                            }, 400);
+
+
+                        })
+                            .error(function (xhr, ajaxOptions, thrownError) {
+                            })
+
+        if (todayvalue == "dispatchDetails-Today") {
+            //var strDate = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+            //TodayArrivedVechicle(strDate, "Today")
+        }
+        else if (tomorrowvalue == "dispatchDetails-Tomorrow") {
+            //var tomorrowdt = d.getDate() + 1 + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+            //  TomorrowArrivedVechicle(tomorrowdt, "tomorrow");
+        }
+        else if (nextdayvalue == "dispatchDetails-NextDay") {
+            //var nextdt = d.getDate() + 2 + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+            //  NextDayArrivedVechicle(nextdt, "nextday");
+        }
+
+        // }
+        // else {
+        //     $('#dispatchCompleted').show();
+        //      $('#dispatchCompleted').html('All cargo needs to be selected !');
+        //  }
+    });
+
+    $('.cargo_list').on('click', 'a[href="#addReels"]', function () {
+        debugger;
+        var ordproId = $(this).attr('data-id');
+        $('#rollChildDiv_' + ordproId).show();
+    });
+
+    function TodayArrivedVechicle(currentVal, date) {
+
+        //alert($(this).attr('data-id'));
+        var datatosend =
+   {
+       VehicleScheduleDate: date,
+       SelectedValue: currentVal,
+   }
+        $.ajax({
+            url: "/Dispatch/VehicleScheduleDetailsToday/",
+            data: datatosend,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+
+                            $('#vehicleDetails-Today').show();
+                            $('#vehicleDetailsMst-Today').show();
+                            $('#vehicleDetailsChild-Today').html(result);
+                            // ')
+
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+    }
+    function TomorrowArrivedVechicle(currentVal, date) {
+
+        //alert($(this).attr('data-id'));
+        var datatosend =
+   {
+       VehicleScheduleDate: date,
+       SelectedValue: currentVal,
+   }
+        $.ajax({
+            url: "/Dispatch/VehicleScheduleDetailsByTomorrow/",
+            data: datatosend,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+                            $('#vehicleDetails-Tomorrow').show();
+                            $('#vehicleDetailsMst-Tomorrow').show();
+                            $('#vehicleDetailsChild-Tomorrow').html(result);
+                            // ')
+
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+    }
+    function NextDayArrivedVechicle(currentVal, date) {
+
+        //alert($(this).attr('data-id'));
+        var datatosend =
+   {
+       VehicleScheduleDate: date,
+       SelectedValue: currentVal,
+   }
+        $.ajax({
+            url: "/Dispatch/VehicleScheduleDetailsByNextDay/",
+            data: datatosend,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+                            $('#vehicleDetails-NextDay').show();
+                            $('#vehicleDetailsMst-NextDay').show();
+                            $('#vehicleDetailsChild-NextDay').html(result);
+                            // ')
+
+                        })
+                       .error(function (xhr, ajaxOptions, thrownError) {
+                       })
+
+    }
+</script>

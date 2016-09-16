@@ -1,0 +1,165 @@
+﻿@{
+    var Action = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+
+
+
+    <div class="vehicle_results">
+        <ul>
+            @if (ViewBag.NoRecordMsg != null)
+            {
+               <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+            }
+            else
+                {
+                foreach (var item in ViewBag.VehiclesToday)
+                {
+                    <li class="not_arrived not_departed">
+                        <p class="title"><strong>Vehicle # @item.truck_no</strong></p>
+                        <p class="title"><strong>@item.agentdetails.name</strong></p>
+
+                        <p class="details">
+
+                            Est. Arrival: @item.estimated_arrival.ToString("dd MMM yyyy hh:mm tt")<br>
+                            @{string status = "";}
+                            @{string statusDispatch = "";}
+                            @if (@item.actual_arrival_at_gate == null)
+                            {
+                                status = " Arrival: Pending";
+                            }
+                            else
+                            {
+                                status = "Arrived: " + @item.actual_arrival_at_gate.ToString("dd MMM yyyy hh:mm tt");
+                            }
+                            @if (@item.status == "Dispatched") //if  truck is loaded by dispature the status will be dispatched.
+                            {
+                                statusDispatch = "Departure: Loading Completed";
+                            }
+                            else if (@item.status == "Completed")  //if  truck is left on factory then the status will be Completed.
+                            {
+                                statusDispatch = "Departed: " + @item.left_factory_on.ToString("dd MMM yyyy hh:mm tt");
+                            }
+                            else
+                            {
+                                statusDispatch = "Departure: Pending";
+                            }
+                          
+                            @status<br>
+                            @statusDispatch
+                        </p>
+                        @if (Action == "VehicleScheduleDetailsToday")
+                        {
+                            <a href="#seeVehicleDetails" data-id="@item.truck_dispatch_id" id="Today">See Details</a>
+                        }
+                        else if (Action == "VehicleScheduleDetailsByTomorrow")
+                        {
+                            <a href="#seeVehicleDetails" data-id="@item.truck_dispatch_id" id="Tomorrow">See Details</a>
+                        }
+                        else if (Action == "VehicleScheduleDetailsByNextDay")
+                        {
+                            <a href="#seeVehicleDetails" data-id="@item.truck_dispatch_id" id="NextDay">See Details</a>
+                        }
+
+                    </li>
+                }
+            }
+            @*//foreach loop ends here*@
+        </ul>
+    </div> <!-- .vehicle_results -->
+}
+
+<script language="javascript">
+    $('.vehicle_results').on('click', 'a[href="#seeVehicleDetails"]', function () {
+        
+
+        var text = $(this).attr('id');
+
+        var $vehicleDetails = $('#dispatchDetails-' + $(this).attr('id'));
+
+        var id = $(this).attr('data-id');
+      //  alert(id );
+        var datatosend =
+      {
+          tdId: $(this).attr('data-id')
+      }
+        if (text == "Today") {
+            $.ajax({
+                url: "/Dispatch/VehicleDispatchDetails/",
+                data: datatosend,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html',
+                context: document.body,
+            })
+                       .success(function (result) {
+                           //    vehicleDetails - Today
+                           $('#vehicleDetails-Today').hide();
+                           if ($vehicleDetails.is(':hidden')) {
+                               $(this).closest('.vehicle_schedule_details').hide();
+                               $vehicleDetails.show();
+                               $vehicleDetails.html(result);
+
+                               $('html,body').animate({
+                                   scrollTop: $vehicleDetails.position().top
+                               }, 400);
+                           }
+                       })
+                      .error(function (xhr, ajaxOptions, thrownError) {
+                      })
+
+        }
+        else if (text == "Tomorrow") {
+            $.ajax({
+                url: "/Dispatch/VehicleDispatchDetails/",
+                data: datatosend,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html',
+                context: document.body,
+            })
+                       .success(function (result) {
+                           //    vehicleDetails - Today
+                           $('#vehicleDetails-Tomorrow').hide();
+                           if ($vehicleDetails.is(':hidden')) {
+                               $(this).closest('.vehicle_schedule_details').hide();
+                               $vehicleDetails.show();
+                               $vehicleDetails.html(result);
+
+                               $('html,body').animate({
+                                   scrollTop: $vehicleDetails.position().top
+                               }, 400);
+                           }
+                       })
+                      .error(function (xhr, ajaxOptions, thrownError) {
+                      })
+
+        } else
+            if (text == "NextDay") {
+                $.ajax({
+                    url: "/Dispatch/VehicleDispatchDetails/",
+                    data: datatosend,
+                    contentType: "application/html; charset=utf-8",
+                    type: "GET",
+                    dataType: 'html',
+                    context: document.body,
+                })
+                           .success(function (result) {
+                               //    vehicleDetails - Today
+                               $('#vehicleDetails-NextDay').hide();
+                               if ($vehicleDetails.is(':hidden')) {
+                                   $(this).closest('.vehicle_schedule_details').hide();
+                                   $vehicleDetails.show();
+                                   $vehicleDetails.html(result);
+
+                                   $('html,body').animate({
+                                       scrollTop: $vehicleDetails.position().top
+                                   }, 400);
+                               }
+                           })
+                          .error(function (xhr, ajaxOptions, thrownError) {
+                          })
+
+            }
+
+    });
+
+</script>

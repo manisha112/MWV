@@ -1,0 +1,88 @@
+﻿@model IEnumerable<MWV.Models.Truck_dispatches>
+                     
+                      @*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+                      <script type="text/javascript">
+                          $("#chkArrived").change(function () {
+                              
+                              alert(selectedItem);
+                             
+                          });
+                          </script>*@
+
+                      <div class="fix-overflow">
+                          <a href="#closeIncomingVehicles" class="close-panel"><img src="images/close-panel.png"></a>
+                      </div>
+                          <h4>Truck Inward</h4>
+                    
+                          @*<p>@Html.ActionLink("Create New", "Create")</p>*@
+                          <table class="table">
+                              <tr>
+                                  @*<th>
+            @Html.DisplayNameFor(model => model.agent_id)
+        </th>*@
+                                  @*<th>
+                                      @Html.DisplayNameFor(model => model.truck_no)
+                                  </th>*@
+                                  @*<th>
+                                      @Html.DisplayNameFor(model => model.estimated_arrival)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.estimated_capacity)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.actual_arrival_at_gate)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.agent_dispatched_on)
+                                  </th>*@
+                                  @*<th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>*@
+                                  @*<th>
+                                      @Html.DisplayNameFor(model => model.left_factory_on)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.loaded_capacity)
+                                  </th>*@
+                                  <th></th>
+                              </tr>
+
+                          @foreach (var item in Model) {
+    <tr>
+                                  @*<td>
+            @Html.DisplayFor(modelItem => item.agent_id)
+        </td>*@
+                                  <td>
+                                      @Html.DisplayFor(modelItem => item.truck_no)
+                                  </td>
+                                  <td>
+                                      @Html.DisplayFor(modelItem => item.estimated_arrival)
+                                  </td>
+                                  <td>
+                                      @Html.DisplayFor(modelItem => item.estimated_capacity)
+                                  </td>
+                                  <td>
+                                      @Html.DisplayFor(modelItem => item.actual_arrival_at_gate)
+                                  </td>
+                                  <td>
+                                      @Html.DisplayFor(modelItem => item.agent_dispatched_on)
+                                  </td>
+                                  @*<td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>*@
+                                  @*<td>
+                                      @Html.DisplayFor(modelItem => item.left_factory_on)
+                                  </td>
+                                  <td>
+                                      @Html.DisplayFor(modelItem => item.loaded_capacity)
+                                  </td>*@
+
+                                  <td>@*Arrived @Html.CheckBox("chkArrived",true)    Departed @Html.CheckBox("chkDeparted")*@
+                                      @Html.ActionLink("Enter arrival time", "EditTruckInward", new { id=item.truck_dispatch_id }) 
+           @* | @Html.ActionLink("Details", "Details", new { id=item.truck_dispatch_id }) |
+    @Html.ActionLink("Delete", "Delete", new { id=item.truck_dispatch_id })*@
+                                  </td>
+                              </tr>
+}
+
+                          </table>

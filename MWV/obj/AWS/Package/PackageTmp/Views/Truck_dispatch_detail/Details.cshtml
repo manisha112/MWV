@@ -1,0 +1,50 @@
+﻿@model MWV.Models.Truck_dispatch_details
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Truck_dispatch_details</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Order.status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Order_products.product_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Order_products.product_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Truck_dispatches.truck_no)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Truck_dispatches.truck_no)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qty)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.truck_dispatch_details_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

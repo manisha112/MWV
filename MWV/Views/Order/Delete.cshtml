@@ -1,0 +1,116 @@
+﻿@model MWV.Models.Order
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Agent.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Agent.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.order_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.order_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.requested_delivery_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.requested_delivery_date)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.remarks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.remarks)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.amount)
+        </dd>*@
+
+    </dl>
+
+    @* display the list of order products  *@
+
+@if (Model.OrderProducts.Count != 0)
+{
+    <dt style="width:auto">
+        List of Order Products
+        @*@Html.DisplayNameFor(model => model.OrderProducts)*@
+    </dt>
+    <dd>
+        @* list to show the list of order products starts *@
+        <table class="table">
+            <tr>
+                <td><b>Product Code</b></td>
+                <td><b>Unit Price</b></td>
+                <td><b>Quantity</b></td>
+                <td><b>Amount</b></td>
+            </tr>
+            @foreach (var item in Model.OrderProducts)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.product_code)</td>
+                    <td>@Html.DisplayFor(modelItem => item.unit_price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.qty)</td>
+                    <td>@Html.DisplayFor(modelItem => item.amount)</td>
+                </tr>
+            }
+        </table>
+    </dd>
+
+}
+else
+{
+    @Html.ActionLink("Add New Order Product", "Create", "Order_product", new { id = Model.order_id }, null)
+}
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

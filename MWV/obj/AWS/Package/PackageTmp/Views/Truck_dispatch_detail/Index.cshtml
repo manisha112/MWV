@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MWV.Models.Truck_dispatch_details>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Order.status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Order_products.product_code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Truck_dispatches.truck_no)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qty)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Order.status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Order_products.product_code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Truck_dispatches.truck_no)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qty)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.truck_dispatch_details_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.truck_dispatch_details_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.truck_dispatch_details_id })
+        </td>
+    </tr>
+}
+
+</table>

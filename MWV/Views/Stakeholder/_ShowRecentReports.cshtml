@@ -1,0 +1,32 @@
+﻿
+
+
+<ul>
+    @{
+        
+        
+        if (ViewBag.recordsDataCount > 0)
+        { 
+         foreach (var items in ViewBag.recordsData)
+        {
+            <li>
+                <div class="fix-overflow">
+                    <p class="dl_title"><strong>@items.report_name</strong> [@items.created_on.ToString("dd MMM yyyy hh:mm tt")]</p>
+
+                    <a href="@items.file_name" class="download_report" data-id="@items.report_id"><img src="images/download.png"></a>
+                </div>
+            </li>
+        }
+        
+        }
+        else
+        { 
+            <li class="error-msg">No Records Found!</li>
+        }
+        
+       
+    }
+
+
+
+</ul>

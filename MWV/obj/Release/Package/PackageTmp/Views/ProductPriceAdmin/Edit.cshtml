@@ -1,0 +1,283 @@
+﻿@model MWV.Models.Product_prices
+@{
+
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<br />
+
+<h2><b> Edit ProductPrice ->@Html.ActionLink("Goto Home", "Index")</b></h2>
+
+<br /><br />
+  &nbsp;<span id="ErrorMsgs"></span>
+<br />
+
+
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    @Html.ValidationSummary(true)
+
+    @{
+        int stDtDay = Convert.ToDateTime(Model.start_date).Day;
+        int stDtMon = Convert.ToDateTime(Model.start_date).Month;
+        int stDtYear = Convert.ToDateTime(Model.start_date).Year;
+
+        int EndDtDay = Convert.ToDateTime(Model.end_date).Day;
+        int EndDtMon = Convert.ToDateTime(Model.end_date).Month;
+        int EndDtYear = Convert.ToDateTime(Model.end_date).Year;
+
+        decimal UnitPrice = Math.Round(Model.unit_price, 2);
+
+    }
+
+    <input type="hidden" value="@Model.product_price_id" id="hdnProductPriceIDToEdit" />
+    <input type="hidden" value="@Model.customer_id" id="hdnCustomerID" />
+    <input type="hidden" value="@Model.product_code" id="hdnProductCode" />
+    <input type="hidden" value="@Model.shade_code" id="hdnShadeCode" />
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Customer Name</p>
+
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Customer.name, new { @class = "text-input", id = "Customer", @readonly = "readonly", disabled = "disabled"})
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Product Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.product_code, new { @class = "text-input", id = "ProductCode", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Shade Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.shade_code, new { @class = "text-input", id = "ShadeCode", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp; Unit Price</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.unit_price, new { @class = "text-input", id = "UnitPrice", @placeholder = "Enter UnitPrice(upto 4 decimal digit)", @maxlength = "7", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter UnitPrice(upto 4 decimal digit)'", @type = "number", @step = "any" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Start Date</p>
+        <div id="divStartDate" class="col-md-10">
+
+            <select class="date-select-input" id="StartDate">
+                <option>DD</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select class="date-select-input" id="StartMonth">
+                <option>MM</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select class="date-select-input year" id="StartYear">
+                <option>YYYY</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+
+        </div>
+    </div>
+
+    <br /><br /> <br />
+    <div class="form-group">
+        <div id="divEndDate" class="col-md-10">
+            <p class="form-label">&nbsp;End Date</p>
+            <select class="date-select-input" id="EndDate">
+                <option>DD</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select class="date-select-input" id="EndMonth">
+                <option>MM</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select class="date-select-input year" id="EndYear">
+                <option>YYYY</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+    </div>
+
+    <script language="javascript">
+
+       // 
+        ///set start date
+        if(@stDtDay>=1 && @stDtDay<=9)
+        {
+            $('#StartDate').val("0" + @stDtDay);
+        }
+        else
+        {
+            $('#StartDate').val(@stDtDay);
+        }
+        if(@stDtMon >=1 && @stDtMon<=9)
+        {
+            $('#StartMonth').val("0"+@stDtMon);
+        }
+        else
+        {
+            $('#StartMonth').val(@stDtMon);
+        }
+        $('#StartYear').val(@stDtYear);
+
+        ///set end date
+        if(@EndDtDay>=1 && @EndDtDay<=9)
+        {
+            $('#EndDate').val("0" + @EndDtDay);
+        }
+        else
+        {
+            $('#EndDate').val(@EndDtDay);
+        }
+        if(@EndDtMon >=1 && @EndDtMon<=9)
+        {
+            $('#EndMonth').val("0"+@EndDtMon);
+        }
+        else
+        {
+            $('#EndMonth').val(@EndDtMon);
+        }
+
+        if(@EndDtYear=="2099")
+        {
+            $("#EndYear").append('<option value=@EndDtYear>@EndDtYear</option>')
+            $("#EndYear option[value=@EndDtYear]").attr("selected","selected");
+        }
+        else
+            $('#EndYear').val(@EndDtYear);
+
+
+
+
+    </script>
+
+    <br /><br /><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" id="btnEditProductPrice" value="Save" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("index", "ProductPriceAdmin" )'" />
+        </div>
+    </div><br /><br />
+    <br /><br />
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+
+

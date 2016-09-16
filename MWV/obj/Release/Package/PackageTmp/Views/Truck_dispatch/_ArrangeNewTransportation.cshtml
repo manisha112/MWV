@@ -1,0 +1,686 @@
+﻿@{
+    var papermills = (ViewBag.papermill_list as SelectList).ToList();
+}
+
+
+@if (ViewBag.VehicleDetails == null) // coming from 'Arrange New Transportation'
+{
+    @*<p>coming from arrange transportation</p>*@
+    @Html.DropDownList("editTransportationLocation", papermills.Distinct(), "Choose Papermill Location", new { @class = "select-input location_select" })
+
+
+    <div class="vehicles_for_location_panel hidden" id="vehicles_forlocationpanel">
+        <a href="#seeVehiclesForLocation" class="see_vehicles">See Vehicle Queue For This Location</a>
+
+
+        <div class="vehicles_for_location hidden">
+            <div class="fix-overflow">
+                <a href="#closeVehiclesForLocation" class="close-panel"><img src="/images/close-panel.png"></a>
+            </div>
+            <div id="SeeVehiclesQueue" class="hidden">
+            </div> <!-- .vehicles_for_location -->
+        </div>
+    </div>
+
+
+    @Html.TextBox("newTransportationVehicleNumber", "", new { @class = "text-input", @placeholder = "Type Vehicle Number", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Type Vehicle Number'" })
+    @*@Html.TextBox("newTransportationVehicleCapacity", "", new { @class = "text-input", @placeholder = "Type Vehicle Capacity (MT)" })*@
+
+    @*<input class="text-input" id="newTransportationVehicleCapacity" name="newTransportationVehicleCapacity" placeholder="Type Vehicle Capacity (MT)" type="text" value="">*@
+
+    <input class="number-input" id="newTransportationVehicleCapacity" name="newTransportationVehicleCapacity" placeholder="Type Vehicle Capacity (MT)" type="number" step="any" value="" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Type Vehicle Capacity (MT)'">
+
+
+    <div class="start_arrival_times">
+        <div class="start_time">
+            <p class="form-label">Start</p>
+
+            <div class="fix-overflow">
+                <select class="date-select-input" id="newTransportationStartDay">
+                    <option>DD</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+
+                <select class="date-select-input" id="newTransportationStartMonth">
+                    <option>MM</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+
+                <select class="date-select-input year" id="newTransportationStartYear">
+                  
+                </select>
+            </div>
+        </div>
+
+        <div class="time_selects">
+            <select id="newTransportationStartTime" class="select-input time">
+                <option value="1:00">1:00</option>
+                <option value="2:00">2:00</option>
+                <option value="3:00">3:00</option>
+                <option value="4:00">4:00</option>
+                <option value="5:00">5:00</option>
+                <option value="6:00">6:00</option>
+                <option value="7:00">7:00</option>
+                <option value="8:00">8:00</option>
+                <option value="9:00">9:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+            </select>
+            <select id="newTransportationStatTimeAmPm" class="select-input time_am_pm">
+                <option value="am">AM</option>
+                <option value="pm">PM</option>
+            </select>
+        </div>
+
+        <div class="arrival_time">
+            <p class="form-label">Expected Arrival Time</p>
+
+            <div class="fix-overflow">
+                <select class="date-select-input" id="newTransportationArrivalDay">
+                    <option>DD</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+
+                <select class="date-select-input" id="newTransportationArrivalMonth">
+                    <option>MM</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+
+                <select class="date-select-input year" id="newTransportationArrivalYear">
+                  
+                </select>
+            </div>
+        </div>
+
+        <div class="time_selects">
+            <select id="newTransportationArrivalTime" class="select-input time">
+                <option value="1:00">1:00</option>
+                <option value="2:00">2:00</option>
+                <option value="3:00">3:00</option>
+                <option value="4:00">4:00</option>
+                <option value="5:00">5:00</option>
+                <option value="6:00">6:00</option>
+                <option value="7:00">7:00</option>
+                <option value="8:00">8:00</option>
+                <option value="9:00">9:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+            </select>
+            <select id="newTransportationArrivalTimeAmPm" class="select-input time_am_pm">
+                <option value="am">AM</option>
+                <option value="pm">PM</option>
+            </select>
+        </div>
+    </div>
+}
+else // coming from 'Edit Vehicle'
+{
+    @*<p>coming from edit vehicle page</p>*@
+    foreach (var item in ViewBag.VehicleDetails)
+    {
+
+        DateTime newTransportationStartDate = item.agent_dispatched_on;
+        DateTime newTransportationArrivalDate = item.estimated_arrival;
+
+        // disable this, as we do not want the user to edit it
+        @Html.DropDownList("editTransportationLocation", papermills.Distinct(), "Choose Papermill Location", new { @class = "select-input location_select", @disabled = "disabled" })
+
+
+        <div class="vehicles_for_location_panel" id="vehicles_forlocationpanel">
+            <a href="#seeVehiclesForLocation" class="see_vehicles">See Vehicle Queue For This Location</a>
+
+            <div class="vehicles_for_location hidden">
+                <div class="fix-overflow">
+                    <a href="#closeVehiclesForLocation" class="close-panel"><img src="/images/close-panel.png"></a>
+                </div>
+                <div id="VehiclesInQueue" class="hidden">
+                </div> <!-- .vehicles_for_location -->
+            </div>
+        </div>
+
+
+        @Html.TextBox("newTransportationVehicleNumber", "", new { @class = "text-input", @placeholder = "Type Vehicle Number", Value = item.truck_no, @disabled = "disabled" })
+
+        @Html.TextBox("newTransportationVehicleCapacity", "", new { @class = "text-input", @placeholder = "Type Vehicle Capacity (MT)", Value = item.estimated_capacity, @disabled = "disabled" })
+        <div class="start_arrival_times">
+            <div class="start_time">
+                <p class="form-label">Start</p>
+
+                <div class="fix-overflow">
+                    <select class="date-select-input" id="newTransportationStartDay">
+                        <option>DD</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                    </select>
+
+                    <select class="date-select-input" id="newTransportationStartMonth">
+                        <option>MM</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+
+                    <select class="date-select-input year" id="newTransportationStartYear">
+                        
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="time_selects">
+                <select id="newTransportationStartTime" class="select-input time">
+                    <option value="1:00">1:00</option>
+                    <option value="2:00">2:00</option>
+                    <option value="3:00">3:00</option>
+                    <option value="4:00">4:00</option>
+                    <option value="5:00">5:00</option>
+                    <option value="6:00">6:00</option>
+                    <option value="7:00">7:00</option>
+                    <option value="8:00">8:00</option>
+                    <option value="9:00">9:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                </select>
+                <select id="newTransportationStatTimeAmPm" class="select-input time_am_pm">
+                    <option value="am">AM</option>
+                    <option value="pm">PM</option>
+                </select>
+            </div>
+
+            <div class="arrival_time">
+                <p class="form-label">Expected Arrival Time</p>
+
+                <div class="fix-overflow">
+                    <select class="date-select-input" id="newTransportationArrivalDay">
+                        <option>DD</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                    </select>
+
+                    <select class="date-select-input" id="newTransportationArrivalMonth">
+                        <option>MM</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+
+                    <select class="date-select-input year" id="newTransportationArrivalYear">
+                        
+                    </select>
+                </div>
+            </div>
+
+            <div class="time_selects">
+                <select id="newTransportationArrivalTime" class="select-input time">
+                    <option value="1:00">1:00</option>
+                    <option value="2:00">2:00</option>
+                    <option value="3:00">3:00</option>
+                    <option value="4:00">4:00</option>
+                    <option value="5:00">5:00</option>
+                    <option value="6:00">6:00</option>
+                    <option value="7:00">7:00</option>
+                    <option value="8:00">8:00</option>
+                    <option value="9:00">9:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                </select>
+                <select id="newTransportationArrivalTimeAmPm" class="select-input time_am_pm">
+                    <option value="am">AM</option>
+                    <option value="pm">PM</option>
+                </select>
+            </div>
+        </div>
+    <input type="hidden" id="transpoStart" />
+    <input type="hidden" id="transpoArr" />
+        <script language="javascript">
+            if(@newTransportationStartDate.Day >=1 && @newTransportationStartDate.Day<=9)
+            {
+                $('#newTransportationStartDay').val("0" + @newTransportationStartDate.Day);
+            } 
+            else
+            {
+                $('#newTransportationStartDay').val(@newTransportationStartDate.Day); }
+
+            if(@newTransportationStartDate.Month >=1 && @newTransportationStartDate.Month<=9)
+            {
+                $('#newTransportationStartMonth').val("0"+@newTransportationStartDate.Month); }
+            else
+            {
+                $('#newTransportationStartMonth').val(@newTransportationStartDate.Month);  }
+            $("#transpoStart").val(@newTransportationStartDate.Year);
+            $('#newTransportationStartYear').val(@newTransportationStartDate.Year);
+            if(@newTransportationStartDate.Hour==0)
+            {
+                $('#newTransportationStartTime').val("12:00"); }
+            else if(@newTransportationStartDate.Hour>12)
+            {
+                var newTime = @newTransportationStartDate.Hour - 12;
+                if(newTime >=1 && newTime <=9){
+                    newTime = newTime + ":00" ;
+                    $('#newTransportationStartTime').val(newTime);
+                }
+                $('#newTransportationStatTimeAmPm').val("pm");
+            }
+            else
+            {
+                $('#newTransportationStartTime').val(@newTransportationStartDate.Hour+":"+@newTransportationStartDate.Minute+"0"); }
+
+            if(@newTransportationArrivalDate.Day >=1 && @newTransportationArrivalDate.Day<=9)
+            {
+                $('#newTransportationArrivalDay').val("0" + @newTransportationArrivalDate.Day); }
+            else
+            {
+                $('#newTransportationArrivalDay').val(@newTransportationArrivalDate.Day); }
+
+
+            if(@newTransportationArrivalDate.Month >=1 && @newTransportationArrivalDate.Month<=9)
+            {
+                $('#newTransportationArrivalMonth').val("0" + @newTransportationArrivalDate.Month); }
+            else
+            { $('#newTransportationArrivalMonth').val(@newTransportationArrivalDate.Month); }
+            $("#transpoArr").val(@newTransportationArrivalDate.Year)
+            $('#newTransportationArrivalYear').val(@newTransportationArrivalDate.Year);
+
+            if(@newTransportationArrivalDate.Hour==0)
+            {
+                $('#newTransportationArrivalTime').val("12:00"); }
+            else if(@newTransportationArrivalDate.Hour>12)
+            {
+                var newTime = @newTransportationArrivalDate.Hour - 12;
+                if(newTime >=1 && newTime <=9){
+                    newTime = newTime + ":00" ;
+                    $('#newTransportationArrivalTime').val(newTime);
+                }
+
+                $('#newTransportationArrivalTimeAmPm').val("pm");
+            }
+            else {
+                $('#newTransportationArrivalTime').val(@newTransportationArrivalDate.Hour+":"+@newTransportationArrivalDate.Minute+"0");
+            }
+        </script>
+    }
+}
+
+
+
+
+
+<script language="javascript">
+
+    $('#VehiclesForLocation').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#VehiclesForLocation').show();
+                                    $('#VehiclesForLocation').html(result)
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+
+    $('#arrangeNewTransportation').on('click', 'a[href="#seeVehiclesForLocation"]', function () {
+
+        debugger;
+        var locationId =
+            {
+                locationId:   $('#editTransportationLocation').val()
+            }
+
+        $.ajax({
+            //async: true,
+            type: "Get",
+            url: "/Truck_dispatch/GetVehicleOnQueueForLocation/",
+            data: locationId,
+            dataType: "html",
+            context: document.body,
+            //contentType: 'application/json; charset=utf-8'
+        })
+
+                  .success(function (result) {
+                      $('#VehiclesInQueue').show();
+                      $('#VehiclesInQueue').html(result)
+                      $('#SeeVehiclesQueue').show();
+                      $('#SeeVehiclesQueue').html(result)
+                  })
+                 .error(function (xhr, ajaxOptions, thrownError) {
+                 })
+
+        $('html,body').animate({
+            scrollTop: $('#transportationPanel').position().top + 600
+        }, 400);
+
+        //return false;
+    });
+
+    $('#arrangeNewTransportation').on('click', 'a[href="#closeVehiclesForLocation"]', function () {
+        $(this).closest('.vehicles_for_location').hide();
+
+        $('html,body').animate({
+            scrollTop: $('#transportationPanel').position().top + 600
+        }, 400);
+
+        //return false;
+    });
+
+
+
+    // Transportation --> Arrange New Transportation --> Choose Papermill-->
+    // on change of LOCATION of papermill - orders are listed in selectOrder
+    //$('#frmEditNewTransportation').find('#newTransportationLocation').on('change', function () {
+    //$('#frmNewTransportation').find('#newTransportationLocation').on('change', function () {
+    $('.transportation_details').on('click', 'a[href="#removeVehicle"]', function () {
+        $('.transportation_button').show();
+        var id = $(this).attr("data-id");
+        $('.product_attention-' + id).show();
+    });
+    $('#editTransportationLocation').on('change', function () {
+
+        $('.vehicles_for_location_panel').show();
+        $('.vehicles_for_location').hide();
+        // $(this).next('.vehicles_for_location_panel').show();
+        //
+        ////------------code to get the Orders------------//
+        var selectedItem = $(this).val();
+        var ddlOrders = $('#arrangeNewTransportation').find("#Orderddl");
+        // alert("Selected location is " + selectedItem);
+        $('#addCargoToExrrorMsg').hide();
+        $.ajax(
+                   {
+                       cache: false,
+                       type: "GET",
+                       url: "/Home/GetAllOrdersbyAgentandLocation/" + selectedItem,
+                       contentType: "application/json; charset=utf-8",
+                       success: function (data) {
+                           ddlOrders.html('');
+                           if(data==''){
+                               // alert("data is null");
+                               $('#qtyErrorMsg').show();
+                               ddlOrders.append($('<option>Select Purchase Order</option>'));
+                               $('#qtyErrorMsg').text("Orders not available at the selected location.");
+                           }
+                           else
+                           {
+
+                               ddlOrders.append($('<option>Select Purchase Order</option>'));
+
+                               $.each(data, function (id, option) {
+
+                                   ddlOrders.append($('<option></option>').val(option.id).html((option.id) + ", " + option.name));
+                               }
+                           );
+                               $('#qtyErrorMsg').hide();
+                           }
+                           //alert("success " + data);
+                       },
+                       error: function (xhr, ajaxOptions, thrownError) {
+                           //alert("ajaxOptions " + ajaxOptions);
+                           //alert('Failed to retrieve Orders for this location.');
+                       }
+                   });
+
+        //        ////------------code to get the Orders------------//
+    });
+    $('#newTransportationLocation').on('change', function () {
+
+
+        ////------------code to get the Orders------------//
+        var selectedItem = $(this).val();
+        var ddlOrders = $('#arrangeNewTransportation').find("#Orderddl");
+        // alert("Selected location is " + selectedItem);
+
+        $.ajax(
+                   {
+                       cache: false,
+                       type: "GET",
+                       url: "/Home/GetAllOrdersbyAgentandLocation/" + selectedItem,
+                       contentType: "application/json; charset=utf-8",
+                       success: function (data) {
+                           ddlOrders.html('');
+                           if(data==''){
+                               // alert("data is null");
+                               $('#qtyErrorMsg').show();
+                               ddlOrders.append($('<option</option>'));
+                               $('#qtyErrorMsg').text("Orders not available at the selected location");
+                           }
+                           else
+                           {
+
+                               ddlOrders.append($('<option>Select Purchase Order</option>'));
+
+                               $.each(data, function (id, option) {
+
+                                   ddlOrders.append($('<option></option>').val(option.id).html((option.id) + ", " + option.name));
+                               }
+                           );
+                               $('#qtyErrorMsg').hide();
+                           }
+                           //alert("success " + data);
+                       },
+                       error: function (xhr, ajaxOptions, thrownError) {
+                           //alert("ajaxOptions " + ajaxOptions);
+                           //alert('Failed to retrieve Orders for this location.');
+                       }
+                   });
+
+        //        ////------------code to get the Orders------------//
+    });
+
+
+    $(document).ready(function(){
+       
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Agent/GetCurrentyear/",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var dafulttext = "YYYY";
+
+                //New Transportion
+                $("#newTransportationStartYear").empty();
+                $("#newTransportationStartYear").append($('<option>' + dafulttext + '</option>'));
+                $("#newTransportationStartYear").append($('<option value='+ data[0]+'>' + data[0] + '</option>'));
+                $("#newTransportationStartYear").append($('<option value='+data[1]+'>' + data[1] + '</option>'));
+                var temp= $("#transpoStart").val();
+                if(temp !=undefined)
+                {
+                    $("#newTransportationStartYear").val(temp);
+                }
+
+            }
+
+        });
+    });
+
+    $(document).ready(function(){
+      
+        $.ajax({
+                
+            type: "POST",
+            url: "/Agent/GetCurrentyear/",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var dafulttext = "YYYY";
+              
+                $("#newTransportationArrivalYear").empty();
+                $("#newTransportationArrivalYear").append($('<option>' + dafulttext + '</option>'));
+                $("#newTransportationArrivalYear").append($('<option value='+ data[0]+'>' + data[0] + '</option>'));
+                $("#newTransportationArrivalYear").append($('<option value='+data[1]+'>' + data[1] + '</option>'));
+                var temp= $("#transpoArr").val();
+                 
+                if(temp != undefined)
+                {
+                    $("#newTransportationArrivalYear").val(temp);
+                }
+            }
+
+        });
+    });
+</script>

@@ -1,0 +1,41 @@
+﻿
+
+<p class="title">
+    <strong>@ViewBag.filepath</strong>
+    @*<a href="/home/Download/@ViewBag.finalPath/@ViewBag.filepath" /><img src="/images/download.png"></a>*@
+    <a href="/home/Download?filename=@ViewBag.finalPath/@ViewBag.filepath"><img src="/images/download.png"></a>
+   
+</p>
+<script type="text/javascript">
+
+    //$('#downloadAgentReport').on('click', 'a[href="#downloadReport"]', function () {
+    //    var orderid = $(this).attr("data-id");
+    //    window.location = "Agent/GetPdffile?filename=" + orderid
+    //    //    debugger;
+    //    //    var filename = $(this).val('value');
+    //    //    var finalpath = $(this).val('id');
+    //    //    var allvalues = {
+    //    //        filename: filename,
+    //    //        finalpath: finalpath
+    //    //    }
+    //    //    $.ajax(
+    //    //{
+    //    //    cache: false,
+    //    //    type: "GET",
+    //    //    url: "/home/Download/",
+    //    //    data: allvalues,
+    //    //    contentType: "application/excel",
+    //    //    success: function (data) {
+    //    //        window.location = data;
+    //    //        //$('#downloadAgentReport').show();
+    //    //        //$('#downloadAgentReport').html(data);
+    //    //    },
+    //    //    error: function (xhr, ajaxOptions, thrownError) {
+
+    //    //    }
+    //    //});
+
+    //});
+
+
+</script>

@@ -1,0 +1,288 @@
+﻿
+<div class="fix-overflow">
+    <a href="#closeArrangeTransportationPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+
+<h2>Arrange New Transportation</h2>
+
+@foreach (var item in Model)
+{
+    <div>
+       
+        <input type="hidden" id="tmplocationid" value=@item.papermill_id />
+        <select class="select-input location_select" disabled="disabled" id="TransportationLocationInUnderPlanning" name="TransportationLocationInUnderPlanning">
+            <option value="5">@item.location                                             </option>
+        </select>
+        <p class="title"><strong>@*Location: @item.location*@</strong></p>
+        <div class="vehicles_for_location_panel" id="vehicles_forlocationpanel">
+            <a href="#seeVehiclesForLocation" class="see_vehicles">See Vehicle Queue For This Location</a>
+            <div class="vehicles_for_location hidden">
+                <div class="fix-overflow">
+                    <a href="#closeVehiclesForLocation" class="close-panel"><img src="/images/close-panel.png"></a>
+                </div>
+                <div id="VehiclesForLocation" class="hidden">
+                </div> <!-- .vehicles_for_location -->
+            </div>
+        </div>
+        @*<p class="title"><strong>Location: @item.location</strong></p>*@
+
+        @*<p class="details">
+                    @item.address
+            </p>*@
+    </div>
+}
+
+
+@Html.TextBox("OrderSearchTransportationVehicleNumber", "", new { @class = "text-input", @placeholder = "Type Vehicle Number", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Type Vehicle Number'" })
+<br />
+@Html.TextBox("OrderSearchTransportationVehicleCapacity", "", new { @class = "text-input", @placeholder = "Type Vehicle Capacity (MT)", @type = "number", @step = "any", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Type Vehicle Capacity (MT)'" })
+
+
+
+<div class="start_arrival_times">
+    <div class="start_time">
+        <p class="form-label">Start</p>
+
+        <div class="fix-overflow">
+            <select class="date-select-input" id="ordersNewTransportationStartDay">
+                <option>DD</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select class="date-select-input" id="orderNewTransportationStartMonth">
+                <option>MM</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select class="date-select-input year" id="ordersNewTransportationStartYear">
+                <option>YYYY</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="time_selects">
+        <select id="ordersNewTransportationStartTime" class="select-input time">
+            <option value="1:00">1:00</option>
+            <option value="2:00">2:00</option>
+            <option value="3:00">3:00</option>
+            <option value="4:00">4:00</option>
+            <option value="5:00">5:00</option>
+            <option value="6:00">6:00</option>
+            <option value="7:00">7:00</option>
+            <option value="8:00">8:00</option>
+            <option value="9:00">9:00</option>
+            <option value="10:00">10:00</option>
+            <option value="11:00">11:00</option>
+            <option value="12:00">12:00</option>
+        </select>
+        <select id="ordersNewTransportationStatTimeAmPm" class="select-input time_am_pm">
+            <option value="am">AM</option>
+            <option value="pm">PM</option>
+        </select>
+    </div>
+
+    <div class="arrival_time">
+        <p class="form-label">Expected Arrival Time</p>
+
+        <div class="fix-overflow">
+            <select class="date-select-input" id="ordersNewTransportationArrivalDay">
+                <option>DD</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select class="date-select-input" id="ordersNewTransportationArrivalMonth">
+                <option>MM</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select class="date-select-input year" id="ordersNewTransportationArrivalYear">
+                <option>YYYY</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="time_selects">
+        <select id="ordersNewTransportationArrivalTime" class="select-input time">
+            <option value="1:00">1:00</option>
+            <option value="2:00">2:00</option>
+            <option value="3:00">3:00</option>
+            <option value="4:00">4:00</option>
+            <option value="5:00">5:00</option>
+            <option value="6:00">6:00</option>
+            <option value="7:00">7:00</option>
+            <option value="8:00">8:00</option>
+            <option value="9:00">9:00</option>
+            <option value="10:00">10:00</option>
+            <option value="11:00">11:00</option>
+            <option value="12:00">12:00</option>
+        </select>
+        <select id="ordersNewTransportationArrivalTimeAmPm" class="select-input time_am_pm">
+            <option value="am">AM</option>
+            <option value="pm">PM</option>
+        </select>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#tmpOrderDetailsArrNewTransportation').on('click', 'a[href="#seeVehiclesForLocation"]', function () {
+        debugger;
+        var locationId =
+            {
+                locationId: $('#tmplocationid').val()
+            }
+
+        $.ajax({
+            //async: true,
+            type: "Get",
+            url: "/Truck_dispatch/GetVehicleOnQueueForLocation/",
+            data: locationId,
+            dataType: "html",
+            context: document.body,
+            //contentType: 'application/json; charset=utf-8'
+        })
+
+                  .success(function (result) {
+
+                      $('.vehicles_for_location').show();
+                      $('#VehiclesForLocation').show();
+                      $('#VehiclesForLocation').html(result)
+
+                  })
+                 .error(function (xhr, ajaxOptions, thrownError) {
+                 })
+
+        $('html,body').animate({
+            scrollTop: $('#orderDetails').position().top + 1000
+        }, 400);
+
+        //return false;
+    });
+
+    $('#tmpOrderDetailsArrNewTransportation').on('click', 'a[href="#closeVehiclesForLocation"]', function () {
+        $(this).closest('.vehicles_for_location').hide();
+
+        $('html,body').animate({
+            scrollTop: $('#orderDetails').position().top + 600
+        }, 400);
+        //return false;
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Agent/GetCurrentyear/",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var dafulttext = "YYYY";
+
+                //New Transportion
+                $("#ordersNewTransportationStartYear").empty();
+                $("#ordersNewTransportationStartYear").append($('<option>' + dafulttext + '</option>'));
+                $("#ordersNewTransportationStartYear").append($('<option value=' + data[0] + '>' + data[0] + '</option>'));
+                $("#ordersNewTransportationStartYear").append($('<option value=' + data[1] + '>' + data[1] + '</option>'));
+
+                $("#ordersNewTransportationArrivalYear").empty();
+                $("#ordersNewTransportationArrivalYear").append($('<option>' + dafulttext + '</option>'));
+                $("#ordersNewTransportationArrivalYear").append($('<option value=' + data[0] + '>' + data[0] + '</option>'));
+                $("#ordersNewTransportationArrivalYear").append($('<option value=' + data[1] + '>' + data[1] + '</option>'));
+            }
+
+        });
+    });
+
+
+</script>

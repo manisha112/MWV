@@ -1,0 +1,104 @@
+﻿
+
+<div class="list-item-wrapper">
+    <div class="customer-list-item">
+        <div class="fix-overflow">
+            <a href="#closeCurrentCustomer" class="close-panel"><img src="/images/close-panel.png"></a>
+
+            <p class="title"><strong>@ViewBag.CustName</strong></p>
+        </div>
+        @{
+
+           
+            
+            string strAddress = "";
+            string cityState = "";
+            string country = "";
+            string number = "";
+            strAddress = @ViewBag.Address1 + "," + @ViewBag.Address2 + "," + @ViewBag.Address3 + ",";
+            if (strAddress.Contains(",,,"))
+                strAddress = strAddress.Remove(strAddress.Length - 2);
+
+            if (strAddress.Contains(",,"))
+                strAddress = strAddress.Remove(strAddress.Length - 1);
+          
+            if (strAddress.Substring(strAddress.Length - 1) == ",")
+                strAddress = strAddress.Remove(strAddress.Length - 1);
+
+            cityState = @ViewBag.city + "," + @ViewBag.state + ",";
+            if (cityState.Contains(",,"))
+                cityState = cityState.Remove(cityState.Length - 1);
+            if (cityState.Substring(cityState.Length - 1) == ",")
+                cityState = cityState.Remove(cityState.Length - 1);
+
+            country = @ViewBag.country + "," + @ViewBag.pincode + ",";
+
+            if (country.Contains(",,"))
+                country = country.Remove(country.Length - 1);
+            if (country.Substring(country.Length - 1) == ",")
+                country = country.Remove(country.Length - 1);
+
+            number = @ViewBag.phone + "," + @ViewBag.fax;
+            if (number.Contains(",,"))
+                number = number.Remove(number.Length - 1);
+            if (number.Substring(number.Length - 1) == ",")
+                number = number.Remove(number.Length - 1);
+
+                <p>@strAddress</p>
+                <p>@cityState</p>
+                <p>@country</p>
+                <p>@number</p>
+        }
+
+        <p class="title"><strong>@ViewBag.AgentName</strong></p>
+         
+
+
+        <p class="form-label credit_period">Credit Period</p>
+
+
+        <select class="select-input" id="CreditDays">
+            <option id="0">Select</option>
+            <option id="30">30 Days</option>
+            <option id="60">60 Days</option>
+            <option id="90">90 Days</option>
+        </select>
+
+
+        @*}
+            }*@
+
+        <p class="form-label">Credit Amount</p>
+        @{
+    if (ViewBag.CreditLimit == null)
+    {
+        <input type="number" step="any" class="number-input credit_amount" value="" id="txtCreditAmt" placeholder="Enter Credit Amount" onfocus="this.placeholder = ''" onblur="    this.placeholder = 'Enter Credit Amount'">
+    }
+    else
+    {
+        <input type="number" step="any" class="number-input credit_amount" value="@ViewBag.CreditLimit" id="txtCreditAmt">
+    }
+}
+
+        <span id="financeErrors" class="error-msg"></span>
+        <a href="#closeCurrentCustomer" class="btn cancel_btn">Cancel</a>
+        <a href="#saveCustomerCredit" class="btn">Save</a>
+        
+    </div> <!-- .customer_list_item -->
+</div> <!-- .list_item_wrapper -->
+
+
+<script type="text/javascript">
+    
+    var myJsVariable = '@ViewBag.CreditDay'
+
+    if (myJsVariable != '' && myJsVariable != 0) {
+        var FinalVariable = myJsVariable + " " + "Days";
+        $("#CreditDays").val(FinalVariable);
+    }
+    else {
+        $("#CreditDays").val("Select");
+    }
+
+
+</script>

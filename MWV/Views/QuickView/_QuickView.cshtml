@@ -1,0 +1,145 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+<script type="text/javascript">
+
+    $('#PagerRecentOrders').on('click', 'a', function () {
+        //  alert("QuickView");
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    //$('#quickViewRecentOrders').html(result);
+                                    $('#customersPanel').hide();
+                                    $('#transportationPanel').hide();
+                                    $('.order_details').hide();
+                                    $('#ordersResultsPanel').show();
+                                    $('#ordersResultsPanel').html(result);
+                                    $('#ordersPanel').show();
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top + 260
+        }, 400);
+
+      
+    });
+    $('#PagerRecentTransportation').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    //$('#quickViewRecentOrders').html(result);
+                                    $('#customersPanel').hide();
+                                    $('#transportationPanel').hide();
+                                    $('.order_details').hide();
+                                    $('#ordersResultsPanel').show();
+                                    $('#ordersResultsPanel').html(result);
+                                    $('#ordersPanel').show();
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top + 260
+        }, 400);
+
+      
+    });
+
+</script>
+
+        <div class="fix-overflow">
+            <h3>Recent Orders</h3>
+@if ((Model.OrderDetails).Count != 0)
+{
+            <a href="#seeAllRecentOrders" class="see_all">See All</a>
+}
+        </div>
+@if ((Model.OrderDetails).Count == 0)
+{
+    <br />
+    <h4>
+        no recent records found
+    </h4>
+}
+        <ul>
+           
+            @foreach (var item in Model.OrderDetails)
+            {
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title">
+                            <strong>PO: @item.order_id</strong>
+                            <a href="#downloadOrder" class="download_order" data-id="@item.order_id"><img src="/images/download.png"></a>
+                        </p>
+                    </div>
+
+                    <p><a href="#seeOrderDetails" class="see-details" data-order-id="@item.order_id">See Details</a></p>
+                </li>
+            }
+            
+            
+        </ul>
+
+        <div class="fix-overflow">
+            <h3>Recent Transportation Updates</h3>
+           @if ((Model.Truck_dispatches).Count != 0)
+{
+            <a href="#seeAllRecentTransportation" class="see_all">See All</a>
+           }
+        </div>
+@if ((Model.Truck_dispatches).Count == 0)
+{
+    <br />
+    <h4>
+        no recent records found
+    </h4>
+}
+        <ul>
+            
+            @foreach (var item in Model.Truck_dispatches)
+            {
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title"><strong>Vehicle # @item.truck_no</strong></p>
+                    </div>
+                    @{string status = "";}
+                    @{string statusDep = "";}
+                    @if (@item.actual_arrival_at_gate == null)
+                    {
+                        status = "Arrived: " + "Pending";
+                    }
+                    else
+                    {
+                        status = "Arrived: " + @item.actual_arrival_at_gate.ToString("dd MMM yyy hh:mm tt");
+                    }
+                    @if (@item.left_factory_on == null)
+                    {
+                        statusDep = "Departed: " + "Pending";
+                    }
+                    else
+                    {
+                        statusDep = "Departed: " + @item.left_factory_on.ToString("dd MMM yyy hh:mm tt");
+                    }
+
+                    <p class="details"> @status | @statusDep</p>
+
+                    <p><a href="#seeTransportationDetails" class="see-details" data-id="@item.truck_dispatch_id">See Details</a></p>
+                </li>
+           
+}
+        </ul>
+
+
+
+
+

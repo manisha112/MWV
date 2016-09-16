@@ -1,0 +1,651 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+<script type="text/javascript">
+
+    $('#PagerRecentOrders').on('click', 'a', function () {
+        //  alert("QuickView");
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    //$('#quickViewRecentOrders').html(result);
+                                    $('#customersPanel').hide();
+                                    $('#transportationPanel').hide();
+                                    $('.order_details').hide();
+                                    $('#ordersResultsPanel').show();
+                                    $('#ordersResultsPanel').html(result);
+                                    $('#ordersPanel').show();
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top + 260
+        }, 400);
+
+        return false;
+    });
+    $('#PagerRecentTransportation').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    //$('#quickViewRecentOrders').html(result);
+                                    $('#customersPanel').hide();
+                                    $('#transportationPanel').hide();
+                                    $('.order_details').hide();
+                                    $('#ordersResultsPanel').show();
+                                    $('#ordersResultsPanel').html(result);
+                                    $('#ordersPanel').show();
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top + 260
+        }, 400);
+
+        return false;
+    });
+    $('#quickView').on('click', 'a[href="#seeTransportationDetails"]', function () {
+     var id = $(this).attr('data-id');
+       // alert(id);
+        $.ajax({
+            url: "/quickView/seeTransportationDetails/" + id,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#customersPanel').hide();
+                                    $('#ordersPanel').hide();
+                                    $('#transportationResultsPanel').hide();
+                                    $('#transportationDetails').show();
+                                    $('#transportationDetails').html(result);
+                                    $('#transportationPanel').show();
+                                    //$('#transportationPanel').html(result);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+        //$('#customersPanel').hide();
+        //$('#ordersPanel').hide();
+        //$('#transportationResultsPanel').hide();
+        //$('#transportationDetails').show();
+        //$('#transportationPanel').show();
+
+        $('html,body').animate({
+            scrollTop: $('#transportationPanel').position().top + 400
+        }, 400);
+
+        return false;
+    });
+    $('#quickView').on('click', 'a[href="#seeOrderDetails"]', function () {
+        var id = $(this).attr('data-order-id');
+        //alert(id);
+        $.ajax({
+            url: "/quickView/seeOrderDetails/" + id,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#customersPanel').hide();
+                                    $('#transportationPanel').hide();
+                                    $('.close_orders_panel').hide();
+                                    $('#selectOrder').hide();
+                                    $('#ordersResultsPanel').hide();
+                                    //$('#orderDetails-' + id).show();
+                                    $('#orderDetails').show();
+                                    $('#orderDetails').html(result);
+                                    $('#ordersPanel').show();
+                                    $('#ordersPanel').html(result);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+
+        //$('#customersPanel').hide();
+        //$('#transportationPanel').hide();
+        //$('.close_orders_panel').hide();
+        //$('#selectOrder').hide();
+        //$('#ordersResultsPanel').hide();
+        //$('#orderDetails-' + id).show();
+        //$('#ordersPanel').show();
+
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top
+        }, 400);
+
+        return false;
+    });
+</script>
+
+@{
+    ViewBag.Title = "QuickView";
+}
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+@{
+
+    //var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+    var Action = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+
+    if (Action == "QuickViewDetails")
+    {
+
+        <div class="fix-overflow">
+            <h3>Recent Orders</h3>
+            <a href="#seeAllRecentOrders" class="see_all">See All</a>
+        </div>
+        <ul>
+            @foreach (var item in Model.OrderDetails)
+            {
+
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title">
+                            <strong>PO : @item.order_id</strong>
+                            <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                        </p>
+                    </div>
+
+                    <p><a href="#seeOrderDetails" class="see-details" data-order-id="@item.order_id ">See Details</a></p>
+                </li>
+            }
+        </ul>
+
+        <div class="fix-overflow">
+            <h3>Recent Transportation Updates</h3>
+
+            <a href="#seeAllRecentTransportation" class="see_all">See All</a>
+        </div>
+        <ul>
+            @foreach (var item in Model.Truck_dispatches)
+            {
+                <li>
+                    <div class="fix-overflow">
+                        <p class="title"><strong>Vehicle # @item.truck_no</strong></p>
+                    </div>
+                    @{string status = "";}
+                    @{string statusDep = "";}
+                    @if (@item.actual_arrival_at_gate == null)
+                    {
+                        status = "Pending";
+                    }
+                    else
+                    {
+                        status = "Arrived : " + @item.actual_arrival_at_gate;
+                    }
+                    @if (@item.left_factory_on == null)
+                    {
+                        statusDep = "Pending";
+                    }
+                    else
+                    {
+                        statusDep = "Departed :" + @item.left_factory_on;
+                    }
+
+                    <p class="details">Arrival: @status|  Departure: @statusDep</p>
+
+                    <p><a href="#seeTransportationDetails" class="see-details" data-id="@item.truck_dispatch_id">See Details</a></p>
+                </li>
+            }
+        </ul>
+    }
+    else if (Action == "seeAllRecentOrders")
+    {
+
+        <div class="fix-overflow close_orders_panel">
+            <a href="#closeOrdersPanel" class="close-panel"><img src="../images/close-panel.png"></a>
+        </div>
+
+        <table class="table" cellspacing="5" cellpadding="5" style="padding:10px">
+            <tr>
+                <td>
+                    <div id="PagerRecentTransportation">
+                        @Html.PagedListPager((IPagedList)ViewBag.OrderDetails, page => Url.Action("seeAllRecentOrders", new { page }))
+                    </div>
+                </td>
+            </tr>
+            @foreach (var item in ViewBag.OrderDetails)
+            {
+                // WebGrid grid = new WebGrid(Model.OrderDetails, rowsPerPage: 2);
+
+                <tr>
+                    <td>
+
+                        <div class="fix-overflow" style="width:725px">
+                            <p class="title"><strong>PO : @item.order_id</strong></p>
+                            <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><a href="#seeOrderDetails" class="see-details" data-order-id="mwv-1234-123456-1234">See Details</a></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="details"> Order Date : @item.order_date</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @*<p class="details"> Status : @item.status</p>*@
+                        @{
+                if (item.status == "Open")
+                {
+                    <a href="#filterOrderStatus" class="order-status os-open" data-status="open">@item.status</a>
+                }
+                else if (item.status == "Created")
+                {
+                    <a href="#filterOrderStatus" class="order-status os-complete" data-status="complete">@item.status</a>
+                }
+                else if (item.status == "Dispatch Ready")
+                {
+                    <a href="#filterOrderStatus" class="order-status os-dispatch-ready" data-status="dispatch-ready">@item.status</a>
+                }
+                else
+                {
+                    <a href="#filterOrderStatus" class="order-status os-dispatch-ready" data-status="dispatch-ready">@item.status</a>
+                }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr></tr>
+            }
+
+        </table>
+
+        @*<div>
+                @Html.PagedListPager(Model.OrderDetails, page => Url.Action("seeAllRecentOrders", new { page }), PagedListRenderOptions.PageNumbersOnly)
+            </div>*@
+    }
+    else if (Action == "seeAllRecentTransportation")
+    {
+        <div class="fix-overflow">
+            <a href="#closeTransportationDetails" class="close-panel"><img src="images/close-panel.png"></a>
+        </div>
+        @*<div class="fix-overflow close_orders_panel">
+                <a href="#closeOrdersPanel" class="close-panel"><img src="../images/close-panel.png"></a>
+            </div>*@
+
+        <table class="table" cellspacing="5" cellpadding="5" style="padding:10px; width:100%">
+
+            <tr>
+                <td>
+                    <div id="PagerRecentOrders">
+                        @Html.PagedListPager((IPagedList)ViewBag.Truck_dispatches, page => Url.Action("seeAllRecentTransportation", new { page }))
+                    </div>
+                </td>
+            </tr>
+
+            @foreach (var item in ViewBag.Truck_dispatches)
+            {
+                <tr>
+                    <td>
+
+                        <div class="vehicle_number">
+                            <p class="title" style=" margin-right: 380px;">
+                                <strong>Truck No : @item.truck_no</strong>
+                                <div class="transportation_details_icons">
+                                    <a href="#editVehicle" class="edit_vehicle"><img src="images/edit.png"></a>
+                                    <a href="#removeVehicle" class="remove_vehicle"><img src="images/delete.png"></a>
+                                </div>
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @{string status = "";}
+                        @{string statusDep = "";}
+                        @if (@item.actual_arrival_at_gate == null)
+                        {
+                            status = "Pending";
+                        }
+                        else
+                        {
+                            status = "Arrived : " + @item.actual_arrival_at_gate;
+                        }
+                        @if (@item.left_factory_on == null)
+                        {
+                            statusDep = "Pending";
+                        }
+                        else
+                        {
+                            statusDep = "Departed :" + @item.left_factory_on;
+                        }
+
+                        <p class="details">  Scheduled on : @item.created_on</p>
+                        <p class="details">Arrival: @status</p>
+                        <p class="details"> Departure: @statusDep</p>
+
+                        @*<p><a href="#seeTransportationDetails" class="see-details" data-id="mh-123-1234">See Details</a></p>*@
+                        @*<p class="title">
+                                @item.status
+                            </p>*@
+                        @*<a href="#filterOrderStatus" class="order-status os-open" data-status="open">@item.status</a>*@
+                    </td>
+                </tr>
+                @*<tr>
+                        <td>
+                            <p class="details">  Estimated Arrival : @item.estimated_arrival</p>
+                        </td>
+                    </tr>*@
+                <tr>
+                    <td>
+                        <a href="#seeTransportationDetails" class="see-details" data-id="@item.truck_no">See Details</a>
+                    </td>
+                </tr>
+            }
+            @*</div>*@
+        </table>
+    }
+    else if (Action == "seeTransportationDetails")
+    {
+
+
+        <div class="fix-overflow">
+            <a href="#closeTransportationDetails" class="close-panel"><img src="images/close-panel.png"></a>
+        </div>
+        <div class="transportation_details_full">
+            @foreach (var item in Model.Truck_dispatches)
+            {
+                <p>Transportation Details For:</p>
+                <p class="title"><strong>Vehicle # @item.truck_no</strong></p>
+
+                <p class="title"><strong>Location: Morai Division</strong></p>
+
+                <p class="details">
+                    Survey No. : <br>
+                    Village - <br>
+                    @*Dist. Valsad 396191*@
+                </p>
+
+
+                <p class="details">
+                    Scheduled on : @item.created_on<br />
+                    Vehicle Capacity : @item.estimated_capacity<br />
+                    Scheduled Start: @item.created_on<br>
+                    Expected Arrival: @item.estimated_arrival<br>
+                    @{string status = "";}
+                    @{string statusDep = "";}
+                    @if (@item.actual_arrival_at_gate == null)
+                    {
+                        status = "Arrived :" + "Pending";
+                    }
+                    else
+                    {
+                        status = "Arrived : " + @item.actual_arrival_at_gate;
+                    }
+                    @if (@item.left_factory_on == null)
+                    {
+                        statusDep = "Departed :" + "Pending";
+                    }
+                    else
+                    {
+                        statusDep = "Departed :" + @item.left_factory_on;
+                    }
+                    @status<br />
+                    @statusDep<br />
+                </p>
+            }
+            <h2>Cargo List</h2>
+            <div class="cargo_list">
+                <p>@ViewBag.NoRecordMsg</p>
+                <ul>
+                    @foreach (var item in Model.Truck_dispatch_details)
+                    {
+
+                        <li>
+                            <div class="fix-overflow">
+                                <p class="po_number"><strong>PO: @item.order_product_id</strong></p>
+                                <a href="#removeCargo" class="remove"><img src="images/delete.png"></a>
+                            </div>
+
+                            @*<p class="title"><strong>Customer Name : Model.Truck_dispatches.created_by</strong></p>*@
+                            <p class="details">TK-144.0-185-40RGMP</p>
+                            <p class="details">Qty. For Loading: @item.qty</p>
+                            @*<p class="details">Qty. For Loading: @item.qty_loaded</p>*@
+                        </li>
+                    }
+                </ul>
+                <div class="fix-overflow">
+                    <a href="#addCargoToCargoList" class="add_cargo"><img src="images/add.png"> <span>Add Cargo</span></a>
+                </div>
+
+                <div class="add_cargo_panel hidden">
+                    <div class="fix-overflow">
+                        <a href="#closeAddCargoPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                        @*<a href="#closeAddCargoPanel" class="close-panel"><img src="images/close-panel.png"></a>*@
+                    </div>
+
+                    <h2>Add Cargo Item</h2>
+
+                    <div class="add_cargo_panel_details">
+                        <select class="select-input">
+                            <option>Select PO #</option>
+                        </select>
+
+                        <select class="select-input">
+                            <option>Select Product</option>
+                        </select>
+
+                        <input type="text" class="text-input" value="Enter Quantity (MT)" id="transportationDetailsAddCargoPanelEnterQuantity">
+
+                        <a href="#addNewCargoItem" class="btn">Add Cargo</a>
+                    </div>
+                </div>
+                @*</div>*@ <!-- .cargo_list -->
+            </div> <!-- .cargo_list -->
+        </div>
+    }
+    else
+    {
+
+        <div class="fix-overflow close_orders_panel">
+            <a href="#closeOrdersPanel" class="close-panel"><img src="../images/close-panel.png"></a>
+        </div>
+        <div class="order_details_full">
+            @foreach (var item in Model.OrderDetails)
+            {
+
+                <p>Order Details For:</p>
+
+                <div class="fix-overflow">
+                    <p class="po_number"><strong>PO: @item.order_id</strong></p>
+
+                    <div class="order_details_icons">
+                        <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                        <a href="#duplicateOrder" class="duplicate_order"><img src="images/duplicate.png"></a>
+                    </div>
+                </div>
+
+                <div class="order-status up_top os-schedule-ready">@item.status</div>
+
+                <div class="customer_name">
+                    <p class="name"><strong>Customer Name : @item.created_by</strong></p>
+
+                    <p class="details">
+                        Placed On: @item.created_on <br>
+                        Requested Delivery : @item.requested_delivery_date
+                    </p>
+                </div>
+            }
+            <div class="customer_name">
+                @foreach (var item in Model.papermill)
+                {
+                    <p class="name"><strong>Location: @item.location</strong></p>
+
+                    <p class="details">
+                        Survey No. 56/1<br>
+                        Village - @item.location<br>
+                        Dist. Valsad 396191
+                    </p>
+
+                }
+            </div>
+        </div>
+        <a href="#arrangeTransportation" class="btn arrange_transportation_button">Arrange Transportation</a>
+
+        <ul class="order_products">
+
+
+            @*@{string status = "";}
+            @{string statusDep = "";}*@
+
+
+            @foreach (var item in Model.Order_Products)
+            {
+
+                <li>
+                    <p class="product_code"><strong>@item.product_code</strong></p>
+
+                    <p class="details">
+                        @*144.0 x 185 BF 40 RUBY KRAFT TOP<br>*@
+
+                        Qty. Ordered: @item.qty]<br>
+                        Rate: @item.unit_price<br>
+                        Est. Ready Time: June 9th, 2015 9:00 AM<br>
+                        INR 29,335<br>
+                        Qty. Dispatched To-Date: xxxx <br>
+                        Qty. At Dispatch Facility: xxxx  <br>
+                        @*Qty. Dispatched To-Date: 1.200 MT<br>
+                            Qty. At Dispatch Facility: 1.200 MT<br>*@
+                        Qty. Scheduled For Loading: @item.qty_planned_byAgent
+                    </p>
+                    @{
+                if (item.status == "Open")
+                {
+                    <span class="order-status os-open" data-status="open">@item.status</span>
+                }
+                else if (item.status == "Created")
+                {
+                    <span class="order-status os-product-ready">@item.status</span>
+                        @*<a href="#filterOrderStatus" class="order-stat  us os-complete" data-status="complete">@item.status</a>*@
+                }
+                else if (item.status == "Dispatch Ready")
+                {
+                    <span class="order-status os-dispatch-ready">@item.status</span>
+                        @*<a href="#filterOrderStatus" class="order-status os-dispatch-ready" data-status="dispatch-ready">@item.status</a>*@
+                }
+                else
+                {
+                    <div class="order-status up_top os-schedule-ready">@item.status</div>
+                        @*<a href="#filterOrderStatus" class="order-status os-dispatch-ready" data-status="dispatch-ready">@item.status</a>*@
+                }
+                    }
+                   
+                </li>
+            }
+        </ul>
+    <div class="order_totals">
+      
+            <p><strong> Grand Total : @ViewBag.totaLAmount</strong></p>
+            @*<p><strong>Grand Total: INR 32,335</strong></p>*@
+
+    </div>
+        @*<tr>
+            <td>*@
+        @*<div class="transportation_details_full">
+                    <div class="order_details_full">
+                        <p>Order Details For:</p>
+
+                        <div class="fix-overflow">
+                            <p class="po_number"><strong>PO: MWV-123-123456-1234</strong></p>
+
+                            <div class="order_details_icons">
+                                <a href="#downloadOrder" class="download_order"><img src="images/download.png"></a>
+                                <a href="#duplicateOrder" class="duplicate_order"><img src="images/duplicate.png"></a>
+                            </div>
+                        </div>
+
+                        <div class="order-status up_top os-schedule-ready">Schedule Ready</div>
+
+                        <div class="customer_name">
+                            <p class="name"><strong>Customer Name</strong></p>
+
+                            <p class="details">
+                                Placed On: 03-08-2015<br>
+                                Requested Delivery Date: 03-15-2015
+                            </p>
+                        </div>
+
+                        <div class="customer_name">
+                            <p class="name"><strong>Location: Morai Division</strong></p>
+
+                            <p class="details">
+                                Survey No. 56/1<br>
+                                Village - Morai via Vappi<br>
+                                Dist. Valsad 396191
+                            </p>
+                        </div>
+                    </div>
+            </div>*@
+        @*</td>
+                    </tr>
+                }
+            </table>*@
+    }
+}
+
+
+
+@*<h4><strong>CUSTOMER VIEW </strong> </h4>
+    <table class="table" cellspacing="5" cellpadding="5" style="padding:10px">
+        <tr>
+            <th>
+                Customer Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Phone
+            </th>
+            <th>
+                Address1
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+        @foreach (var item in Model.CustomerDetails)
+        {
+            <tr>
+                <td>
+                    @item.name
+                </td>
+                <td>
+                    @item.email
+                </td>
+                <td>
+                    @item.phone
+                </td>
+                <td>
+                    @item.address1
+                </td>
+                <td>
+                    @item.city
+                </td>
+                <td>
+                    @item.status
+                </td>
+            </tr>
+        }
+    </table>*@

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<MWV.Repository.Implementation.OrderRepository.tempOrderProducts>
+
+@foreach (var item in Model)
+{
+<div id="currentProductsList" class="current_products_list">
+    <ul>
+        <li class="current_product">
+            <div class="fix-overflow">
+                <p class="title"><strong>@item.product_code</strong></p>
+                <div class="product_icons">
+                    <a href="#editCurrentProduct" class="edit_current_product"><img src="images/edit.png"></a>
+                    <a href="#duplicateCurrentProduct" class="duplicate_current_product"><img src="images/duplicate.png"></a>
+                    <a href="#removeCurrentProduct" class="remove_current_product"><img src="images/delete.png"></a>
+                </div>
+                   
+            </div>
+    <p>@item.width cms x @item.product_code</p>
+    <p>INR @item.unit_price</p>
+    
+            
+        </li>
+    </ul>
+</div> <!-- #currentProductsList -->
+}
+<div class="fix-overflow">
+    <a href="#addProduct" class="add_product">Add Product</a>
+</div>
+
+
+@*@*<p id="currentProductsTotal"><strong>Total: INR 29,335</strong></p>*@
+@*<p id="currentProductsTotal"><strong>Total: INR @item.unit_price</strong></p>*@
+@*<p id="currentProductsGrandTotal"><strong>Grand Total: INR 32,335</strong></p>*@
+
+<p id="currentProductsGrandTotal"><strong>Grand Total: @ViewBag.grandtotal</strong></p>
+    

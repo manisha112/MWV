@@ -1,0 +1,43 @@
+﻿
+
+@*<div class="fix-overflow">
+    <a href="#closeReportResultsPanel" class="close-panel"><img src="../images/close-panel.png"></a>
+</div>
+
+<ul>
+    <li>
+        <div class="fix-overflow">
+            <p class="title"><strong> @ViewBag.name </strong></p>
+            <a href="/home/Download?filename=@ViewBag.finalPath/@ViewBag.filepath"><img src="/images/download.png"></a>
+        </div>
+    </li>
+</ul>*@
+
+@{
+       <div class="fix-overflow">
+                    <a href="#closeReportResultsPanel" class="close-panel"><img src="images/close-panel.png"></a>
+                </div>
+    if (ViewBag.noRecords ==null)
+    { 
+     <ul>
+        <li>
+            <div class="fix-overflow">
+                <p class="dl_title"><strong>@ViewBag.name</strong>[@ViewBag.CreatedOn]</p>
+
+                <a href="/home/Download?filename=@ViewBag.finalPath/@ViewBag.filepath" class="download_report" data-id=""><img src="images/download.png"></a>
+            </div>
+        </li>
+    </ul>
+        
+    }
+    else
+    {
+        <ul>
+            <li class="error-msg">@ViewBag.noRecords</li>
+        </ul>
+         
+        
+    }
+    
+}
+   

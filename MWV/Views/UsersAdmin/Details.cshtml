@@ -1,0 +1,49 @@
+﻿@model IdentitySample.Models.ApplicationUser
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "Details";
+}
+
+<h2><b> Details Of User / Account->@Html.ActionLink("Goto Home", "Index")</b></h2>
+<br />
+&nbsp;@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+&nbsp;@Html.ActionLink("Back to List", "Index")
+<br />
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+           <p class="form-label">&nbsp; UserName <b>:</b></p>
+        </dt>
+        <dd class="form-label">
+       <b>*</b>@Html.DisplayFor(model => model.UserName)
+        </dd>
+    </dl>
+</div>
+
+<h4 class="form-label">&nbsp; List of roles for this user <b>:</b></h4>
+@if (ViewBag.RoleNames.Count == 0)
+{
+    <hr />
+    <p class="form-label">No roles found for this user.</p>
+}
+
+<table>
+
+    @foreach (var item in ViewBag.RoleNames)
+    {
+        <tr>
+            <td class="form-label" style="padding-left: 34px;">
+               <b>*</b>@item
+            </td>
+        </tr>
+    }
+</table>
+<br />
+<p>
+&nbsp;@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+<br />
+
+

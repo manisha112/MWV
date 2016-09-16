@@ -1,0 +1,107 @@
+﻿
+<div class="fix-overflow">
+    <a href="#closeMismatchesPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+
+<ul>
+
+    @foreach (var item in ViewBag.QuickiewSeeDetails)
+    {
+        if (@item.request_date <= DateTime.Now.AddDays(-1))
+        {
+            <li id="@item.dm_id">
+                <p class="title"><strong>Deckle Mismatch @item.dm_id</strong></p>
+
+                <p class="details">@item.bf_code BF @item.gsm_code GSM @item.shade_code </p>
+                <p class="details">Matched: @item.matched_sizes cm</p>
+                <p class="details">Required Weight : @item.required_weight MT</p>
+                <p class="details">Required size for Deckle match: @item.required_size cm</p>
+
+                <p class="take_action"><span class="overdue">Action Overdue</span> <a href="#takeMismatchAction">Take Action</a></p>
+
+                <div class="take_action_panel choose_action hidden">
+                    <div class="fix-overflow close_btn">
+                        <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+
+                    <h2>Choose Action</h2>
+
+                    <textarea class="textarea-input remark-@item.dm_id" placeholder="Type Remark" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Type Remark'"></textarea>
+                    <span id="mismatchErrors-@item.dm_id" class="error-msg"></span>
+                    <span id="mismatchErrorsLowerbf-@item.dm_id" class="error-msg"></span>
+                    <a href="#sendToLowerBf" class="btn" data-id="@item.dm_id">Send To Lower BF</a>
+                    <a href="#sendToProduction" class="btn" data-id="@item.dm_id">Send To Production</a>
+                </div>
+                <div class="take_action_panel to_production hidden">
+                    <div class="fix-overflow close_btn">
+                        <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+
+                    <p class="title"><strong>Sent To Production</strong></p>
+
+                    <p class="details">This product has been successfully sent to production.</p>
+
+                    <a href="#closeTakeAction" class="btn">Close</a>
+                </div>
+                <div class="take_action_panel to_bf hidden">
+                    <div class="fix-overflow close_btn">
+                        <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+
+                    <p class="title"><strong>Sent To Lower BF</strong></p>
+
+                    <p class="details">This product has been successfully sent to lower bf.</p>
+
+                    <a href="#closeTakeAction" class="btn">Close</a>
+                </div>
+            </li>
+        }
+        else
+        {
+            <li id="@item.dm_id">
+                <p class="title"><strong>Deckle Mismatch @item.dm_id</strong></p>
+
+                <p class="details">@item.bf_code BF @item.gsm_code GSM @item.shade_code </p>
+                <p class="details">Matched: @item.matched_sizes cm</p>
+                <p class="details">Required Weight : @item.required_weight MT</p>
+                <p class="details">Required for Deckle match: @item.required_size cm</p>
+
+                <p class="take_action"><a href="#takeMismatchAction">Take Action</a></p>
+
+                <div class="take_action_panel choose_action hidden">
+                    <div class="fix-overflow close_btn">
+                        <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+                    <h2>Choose Action</h2>
+                    <textarea class="textarea-input remark-@item.dm_id" placeholder="Type Remark" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Type Remark'"></textarea>
+                    <span id="mismatchErrors-@item.dm_id" class="error-msg"></span>
+                    <span id="mismatchErrorsLowerbf-@item.dm_id" class="error-msg"></span>
+                    <a href="#sendToLowerBf" class="btn" data-id="@item.dm_id">Send To Lower BF</a>
+                    <a href="#sendToProduction" class="btn" data-id="@item.dm_id">Send To Production</a>
+                </div>
+                <div class="take_action_panel to_production hidden">
+                    <div class="fix-overflow close_btn">
+                        <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+
+                    <p class="title"><strong>Sent To Production</strong></p>
+
+                    <p class="details">This product has been successfully sent to production.</p>
+
+                    <a href="#closeTakeAction/close" class="btn">Close</a>
+                </div>
+                <div class="take_action_panel to_bf hidden">
+                    <div class="fix-overflow close_btn">
+                        <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+                    </div>
+
+                    <p class="title"><strong>Sent To Lower BF</strong></p>
+
+                    <p class="details">This product has been successfully sent to lower bf.</p>
+
+                    <a href="#closeTakeAction/close" class="btn">Close</a>
+                </div>
+            </li>
+        }
+    }
+</ul>

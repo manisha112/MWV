@@ -1,0 +1,16 @@
+﻿@* render using partial view after posting the form *@
+@model MWV.Models.Customer
+<h2>Confirmation</h2>
+
+<div class="thank_you">
+    <p><strong> @ViewBag.message1</strong></p>
+    <p>@ViewBag.message2 </p>
+    @*<p><strong>Thank you for your submission</strong></p>
+
+    <p>Your submission will be reviewed shortly, and you will be notified if it is approved.</p>*@
+</div>
+
+<div class="buttons">
+    <a href="#closeCreateCustomerConfirmation" class="btn">Close</a>
+    <a href="#createAnotherCustomer" class="btn">Create Another Customer</a>
+</div>

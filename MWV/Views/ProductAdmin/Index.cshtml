@@ -1,0 +1,68 @@
+﻿@model IEnumerable<MWV.Models.Product>
+@{
+    
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    
+    ViewBag.Title = "Index";
+    string msg = @ViewBag.Message;
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+        border-collapse:collapse;
+    }
+</style>
+
+<h2 style="margin-top:80px">Product HomePage->@Html.ActionLink("Create New Product", "Create")</h2>
+
+<center class="form-label"><b>List Of Products</b></center>
+<span id="ErrorMsgs"><p class='error-msg'>@msg</p></span>
+
+<table align="center">
+    <tr>
+        <th>
+            <h1><b>product_code </b></h1>
+        </th>
+        <th>
+            <h1><b>Bf_code</b></h1>
+        </th>
+        <th>
+            <h1><b>Gsm_code</b></h1>
+        </th>
+        <th>
+            <h1><b>Description</b></h1>
+        </th>
+        <th>
+            <h1><b>Action</b></h1>
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.product_code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.bf_code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.gsm_code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Details", new { id = item.product_code }) |
+                @Html.ActionLink("Delete", "DeleteDetails", new { id = item.product_code })
+            </td>
+
+
+        </tr>
+    }
+
+</table>
+<br />
+

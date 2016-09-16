@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+}
+<table>
+    <tr>
+        <td style="float:left"><b>Production Plan(@ViewBag.papermillName)</b></td>
+        <td style="float:right">Request Delivery Date:@ViewBag.estStartTime</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        @{
+            foreach (var items in ViewBag.JumbosDetails)
+            {
+                <td style="float:left">Plan No :@items.jumboNo </td> //as Jumbo No
+                <td>@items.BF ,@items.GSM,@items.shade </td>
+                <td style="float:right">@items.plannedQty</td>
+            </tr>
+        </table>
+            <table>
+                <tr>
+                    @{
+                var jumboid = items.pjid;
+                var Users = (List<MWV.ViewModels.TempJumboDetails>)ViewBag.LotsDetails;
+                var lotquery = (from lot in User where lot.pjid == jumboid select lot).ToList();
+                foreach (var childitems in lotquery)
+                {
+                    <td></td>
+
+                }
+
+                    }
+
+                </tr>
+            </table>
+
+
+
+
+            }
+
+
+        }
+
+

@@ -1,0 +1,46 @@
+﻿@model MWV.Models.Customer
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2><b> Delete Customer ->@Html.ActionLink("Goto Home", "Index")</b></h2>
+<br /><br />
+  &nbsp;<span id="ErrorMsgs"></span>
+<br />
+&nbsp;<h3 class="form-label">&nbsp; Are you sure you want to delete this Customer?</h3>
+<div>
+    <input type="hidden" value="@Model.customer_id" id="CustomerIDToDel" />
+    </br>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Name</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.name, new { @class = "text-input", id = "name", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;City</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.city, new { @class = "text-input", id = "city", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Agent</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Agent.name, new { @class = "text-input", id = "AgentName", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    </br>
+   
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" id="btnDeleteCust" />
+        </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "CustomerAdmin")'" />
+        </div>
+    </div><br /><br />
+   
+</div>
+</br>

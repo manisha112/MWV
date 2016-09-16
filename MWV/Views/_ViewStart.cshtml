@@ -1,0 +1,27 @@
+﻿@{
+    var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+    var Action = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+
+    string Newlayout = "";
+    if (controller == "Account" || (controller == "Truck_dispatch" && (Action == "TruckInward" || Action == "TruckOutward")))
+    {
+        Newlayout = null;
+    }
+    else if ((controller == "Home" && Action == "Index") )
+       //|| controller == "RolesAdmin" || controller == "UsersAdmin" || controller == "ShadeAdmin" ||
+      //   controller == "AgentAdmin" || controller == "BfAdmin" || controller == "CoreAdmin" || controller == "ProductPriceAdmin" || controller == "UploadFiles"
+      // || controller == "GsmAdmin" || controller == "ProductAdmin" || controller == "CustomerAdmin" || controller == "ProductTimeLIneAdmin")
+    {
+        Newlayout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Newlayout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+
+    Layout = Newlayout;
+}
+@*@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@

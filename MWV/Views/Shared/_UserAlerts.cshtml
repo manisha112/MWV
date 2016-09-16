@@ -1,0 +1,270 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@*<div id="yourAlerts" class="your_messages">*@
+    @*&nbsp;<a href="#backtoDash">Back To Dashboard </a>*@
+    <div class="fix-overflow">
+        <a href="#close-panel" class="close-panel"><img src="images/close-panel.png"></a>
+    </div>
+    <h2>Your Alerts</h2>
+
+    <div class="fix-overflow delete_messages">
+        <input type="checkbox" id="deleteSelectedMessages" class="delete_selected_messages">
+        <p class="delete_messages_text"><a href="#deleteAlrts">Delete Selected Alerts</a></p>
+    </div>
+
+    <div class="hidden delete_messages_alert" id="deleteMessagesAlert">
+        <div class="fix-overflow">
+            <a href="#closeDeleteAlert" class="close-panel"><img src="/images/close-panel.png"></a>
+        </div>
+
+        <p>Are you sure you want to delete the selected alerts?</p>
+        <span id="ErrAlrt" class="error-msg"></span>
+        <a href="#deleteMessages" class="btn delete_btn">Delete</a>
+        <a href="#closeDeleteAlert" class="btn">Close</a>
+    </div>
+    <input type="hidden" value="@ViewBag.Rollname" id="hfBackBtn">
+    <div class="hr"></div>
+    <span id="errormsg" class="error-msg hidden">@ViewBag.Errormsg</span>
+
+    @*@Html.PagedListPager((IPagedList)ViewBag.alertLst, page => Url.Action("ShowAleartMsg", new { page, @class = "pagination" }))*@
+    <div id="AlertsindividualMessages" class="individual_messages">
+        <ul>
+            @{
+                foreach (var items in ViewBag.alertLst)
+                {
+                    <li>
+                        <p class="date_line">@items.created_on.ToString("dd MMM yyyy hh:mm tt")</p>
+
+                        <div class="fix-overflow">
+                            <input type="checkbox" name="Alrtchk" class="select_message" id="@items.alert_id">
+                            @{
+
+
+                    int alrtid = items.viewed;
+
+                    if (alrtid == 1)
+                    {
+                        <a class="message_subject unread" data-id="@items.alert_id" href="#openAlerts">@items.alert_subject</a>
+
+                    }
+                    else
+                    {
+                        <a class="message_subject" data-id="@items.alert_id" href="#openAlerts">@items.alert_subject</a>
+
+                    }
+
+
+                            }
+
+
+                        </div>
+
+                        <div class="hidden message_content">
+                            <div class="fix-overflow">
+                                <a href="#closeCurrentMessage" class="close-panel"><img src="/images/close-panel.png"></a>
+                            </div>
+
+                            <p class="message_title">@items.alert_subject</p>
+
+                            <p class="message_text">@items.alert_text</p>
+
+                            <a href="#deleteCurrentMessage" data-id="@items.alert_id" class="btn delete_btn">Delete</a>
+                            <a href="#closeCurrentMessage" class="btn">Close</a>
+                        </div>
+                    </li>
+                }
+            }
+
+
+
+        </ul>
+    </div>
+@*</div>*@
+<script>
+
+    var StringText = $("#errormsg").text();
+    if (StringText != "") {
+        $("#errormsg").removeClass(".hidden");
+        $("#errormsg").show();
+        $('#yourAlerts').find(".delete_messages").hide();
+        $('#yourAlerts').find(".hr").hide();
+
+    }
+    $('#CustomerByAlpha').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#yourMessages').show();
+                                    $('#yourMessages').html(result);
+                                    //$('html,body').animate({
+                                    //    scrollTop: $('#mismatchesPanel').position().top
+                                    //}, 400);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+
+    $('#yourMessages').on('click', 'a[href="#deleteAlrts"]', function () {
+        $("#ErrAlrt").html('');
+        $('#deleteMessagesAlert').show();
+
+    });
+
+    $('#yourMessages').on('change', '#deleteSelectedMessages', function () {
+
+        if ($(this).is(':checked')) {
+            $("input:checkbox").prop('checked', $(this).prop("checked"));
+
+
+            //$('#deleteMessagesAlert').show();
+        }
+        else {
+            $('#deleteMessagesAlert').hide();
+            $("input:checkbox").prop('checked', false);
+        }
+    });
+
+    $('#tempbodySection').on('click', 'a[href="#deleteMessages"]', function () {
+        //$('#individualMessages')
+        //    .find('input:checked')
+        //    .each(function (node) {
+        //        $(this).closest('li').remove();
+        //    });
+        $("#ErrAlrt").html('');
+        if ($('.select_message:checked').length > 0) {
+            $("input:checkbox[name=Alrtchk]:checked").each(function () {
+                var selectedCustomer = $(this).attr("id");
+                var allValues = {
+                    selectedCustomerid: $(this).attr("id"),
+
+                }
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "/UserAlerts/DeleteItems/",
+                    data: allValues,
+                    contentType: "application/json; charset=utf-8",
+
+                    success: function (data) {
+
+
+                    }
+                });
+
+                $(this).closest('li').remove();
+                $('#reviewOrder').hide();
+                $('#orderConfirmation').show();
+                $('.delete_messages_alert').hide();
+                $('#deleteSelectedMessages').attr('checked', false);
+                SetalertsMessages();
+
+
+            });
+            var count = $("#individualMessages ul").children().length;
+            if (count == 0) {
+                $('#reviewOrder').hide();
+                $('.delete_messages_alert').hide();
+                $(".delete_messages").html('');
+                $(".hr").hide();
+                $("#errormsg").show();
+                $("#errormsg").html('');
+                $("#errormsg").html('No data available!');
+
+
+            }
+        }
+        else {
+            $("#ErrAlrt").html('');
+            $("#ErrAlrt").html('Please Select atleast one alert!');
+            $('#deleteMessagesAlert').show();
+
+        }
+
+    });
+    $('#tempbodySection').on('click', 'a[href="#closeDeleteAlert"]', function () {
+        $('#deleteMessagesAlert').hide();
+    });
+
+    $('#tempbodySection').on('click', 'a[href="#deleteCurrentMessage"]', function () {
+        var DeleteID = $(this).attr("data-id");
+        var allValues = {
+            selectedCustomerid: $(this).attr("data-id"),
+
+        }
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/UserAlerts/DeleteItems/",
+            data: allValues,
+            contentType: "application/json; charset=utf-8",
+
+            success: function (data) {
+            }
+        });
+        $(this).closest('li').remove();
+        var count = $("#individualMessages ul").children().length;
+        if (count == 0) {
+
+            $(".delete_messages").html('');
+            $(".hr").hide();
+            $("#errormsg").show();
+            $("#errormsg").html('');
+            $("#errormsg").html('No data available!');
+
+
+        }
+
+
+
+    });
+    $('#tempbodySection').on('click', 'a[href="#closeCurrentMessage"]', function () {
+        $(this).closest('.message_content').hide();
+
+        $('html,body').animate({
+            scrollTop: $(window).scrollTop() - 75
+        });
+    });
+
+    //Update alerts Image on delete
+    function SetalertsMessages() {
+        $.ajaxSetup({ cache: false });
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/UserAlerts/SetAlertIntervalsAlerts/",
+            contentType: "application/json; charset=utf-8",
+
+            success: function (data) {
+                if (data != 0) {
+                    $("#dashboard").find("#imgAlert").attr("src", data);
+
+
+                }
+
+            }
+        });
+        $.ajaxSetup({ cache: false });
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/UserAlerts/SetAlertIntervalsMessages/",
+            contentType: "application/json; charset=utf-8",
+
+            success: function (data) {
+                if (data != 0) {
+                    $("#dashboard").find("#imgMsg").attr("src", data);
+
+                }
+
+            }
+        });
+
+    }
+
+</script>

@@ -1,0 +1,91 @@
+﻿@model MWV.Models.Agent
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@*<center><h1 style="margin-top:80px">Create Agent</h1> </center>*@
+
+
+<div class="form-group">
+    <p class="form-label">&nbsp; Company Name</p>
+    <p class="details">@Html.TextBoxFor(m => m.name, new { @class = "text-input", @placeholder = "Enter Agent Name", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent Name'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; First Name</p>
+    <p class="details">@Html.TextBoxFor(m => m.firstname, new { @class = "text-input", @placeholder = "Enter Agent First Name", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent First Name'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Last Name</p>
+    <p class="details">@Html.TextBoxFor(m => m.lastname, new { @class = "text-input", @placeholder = "Enter Agent Last Name", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent Last Name'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Email</p>
+    <p class="details">@Html.TextBoxFor(m => m.email, new { @class = "text-input", @placeholder = "Enter Agent Email", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent Name'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Password</p>
+    <p class="details"><input type="password" id="txtPassword"  class="text-input" placeholder="Enter Password For Agent" onfocus="this.placeholder = ''" onblur="    this.placeholder = 'Enter Password For Agent'"></p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Confirm Password</p>
+    <p class="details"><input type="password" id="txtConfirmPassword" class="text-input" placeholder="Enter confirm Password For Agent" onfocus="this.placeholder = ''" onblur="    this.placeholder = 'Enter confirm Password For Agent'"></p>
+</div>
+
+<div class="form-group">
+        <p class="form-label">&nbsp; Mobile</p>
+        <p class="details">@Html.TextBoxFor(m => m.mobile, new { @class = "text-input", @placeholder = "Enter Agent Mobile No", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent Mobile No'" })</p>
+    </div>
+<div class="form-group">
+    <p class="form-label">&nbsp; landline</p>
+    <p class="details">@Html.TextBoxFor(m => m.landline, new { @class = "text-input", @placeholder = "Enter Agent Landline No", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent Landline No'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Address</p>
+    <p class="details">@Html.TextBoxFor(m => m.address, new { @class = "text-input", @placeholder = "Enter Agent Address", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent Address'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Address 2</p>
+    <p class="details">@Html.TextBoxFor(m => m.address2, new { @class = "text-input", @placeholder = "Enter Agent Address 1", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent Address 1'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Address 3</p>
+    <p class="details">@Html.TextBoxFor(m => m.address3, new { @class = "text-input", @placeholder = "Enter Agent Address 2", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent Address 2'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; City</p>
+    <p class="details">@Html.TextBoxFor(m => m.city, new { @class = "text-input", @placeholder = "Enter Agent City", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent City'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; State</p>
+    <p class="details">@Html.TextBoxFor(m => m.state, new { @class = "text-input", @placeholder = "Enter Agent State", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent State'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Pincode</p>
+    <p class="details">@Html.TextBoxFor(m => m.pincode, new { @class = "text-input", @placeholder = "Enter Agent Pincode", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Agent Pincode'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Credit Days</p>
+    <p class="details">@Html.TextBoxFor(m => m.credit_days, new { @class = "text-input", @placeholder = "Enter Credit Days", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Credit Days'" })</p>
+</div>
+<div class="form-group">
+    <p class="form-label">&nbsp; Credit Limit</p>
+    <p class="details">@Html.TextBoxFor(m => m.credit_limit, new { @class = "text-input", @placeholder = "Enter Credit Limit", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Credit Limit'" })</p>
+</div>
+
+
+<br />
+      <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @*<input type="button" id="btnCreate" value="Create" class="btn btn-default" />*@
+                 <p class="error-msg" id="loginErrormsg"></p>
+                <a href="#SaveAgnet" class="btn btn-default">Create</a>
+            </div>
+        </div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<br />
+
+ 
+ 

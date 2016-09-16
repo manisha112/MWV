@@ -1,0 +1,109 @@
+﻿@model IEnumerable<MWV.Models.Order>
+
+    @*<script type="text/javascript">
+
+                $('#selectOrderPanel').on('click', 'a[href="#searchOrders"]', function () {
+                    debugger;
+                    $("#selectOrderTypeDropdown").change(function () {
+                        var selectedItem = $(this).val();
+                        //var ddlStates = $("#gsm_list");
+                       // var statesProgress = $("#states-loading-progress");
+                       // statesProgress.show();
+                        alert(selectedItem);
+                        $.ajax(
+                            {
+                                cache: false,
+                                type: "GET",
+                                url: "/Order/OrdersSearchResults/" + selectedItem,
+                                contentType: "application/json; charset=utf-8",
+                                dataType: 'json'
+                            })
+                                                .success(function (result) {
+                                                    $('#ordersResultsPanel').slideDown();
+                                                    $('#ordersResultsPanel').html(result);
+                                                })
+                                               .error(function (xhr, ajaxOptions, thrownError) {
+                                               })
+                    });
+                });
+
+        </script>*@
+
+    <div class="fix-overflow">
+        <a href="#closeOrdersResultsPanel" class="close-panel"><img src="images/close-panel.png"></a>
+
+        <div class="sort_by">
+            Sort By <a href="#">+</a> &nbsp; <a href="#">-</a>
+        </div>
+    </div>
+
+    <ul>
+        <li>
+            <div class="fix-overflow">
+                <a href="#downloadOrder" class="download_order" data-id="mwv-1234-123456-1234"><img src="images/edit.png"></a>
+                @*<strong>PO: MWV-1234-123456-1234</strong>*@
+
+                <table>
+                        <div id="OrderId" style="padding:10px">
+                            <strong> @ViewBag.noRecordMsg</strong>
+                        </div>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div id="OrderId" style="padding:10px">
+                                        <strong>OrderId : @item.order_id</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fix-overflow" id="OrderSearchDetails">
+                                        <a href="#seeOrderDetails" class="see_order_details" data-order-id="mwv-1234-123456-1234">[See Details]</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <td> OrderDate [Placed On] : @item.order_date</td>
+                                @*<td></td>*@
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#filterOrderStatus" class="order_status" data-status="open">@item.status</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+            @*<a href="#filterOrderStatus" class="order_status" data-status="open">Open</a>*@
+        </li>
+        @*<li>
+                <div class="fix-overflow">
+                    <a href="#downloadOrder" class="download_order" data-id="mwv-1234-123456-2345"><img src="images/edit.png"></a>
+
+                    <strong>PO: MWV-1234-123456-2345</strong>
+                </div>
+                <div class="fix-overflow">
+                    <a href="#seeOrderDetails" class="see_order_details" data-order-id="mwv-1234-123456-2345">[See Details]</a>
+
+                    <p>Placed On: 13-06-2016</p>
+                </div>
+
+                <a href="#filterOrderStatus" class="order_status" data-status="complete">Complete</a>
+            </li>
+            <li>
+                <div class="fix-overflow">
+                    <a href="#downloadOrder" class="download_order" data-order-id="mvw-1234-123456-3456"><img src="images/edit.png"></a>
+
+                    <strong>PO: MWV-1234-123456-3456</strong>
+                </div>
+                <div class="fix-overflow">
+                    <a href="#seeOrderDetails" class="see_order_details" data-order-id="mwv-1234-123456-3456">[See Details]</a>
+
+                    <p>Placed On: 12-12-2016</p>
+                </div>
+
+                <a href="#filterOrderStatus" class="order_status" data-status="dispatch-ready">Dispatch Ready</a>
+            </li>*@
+    </ul>

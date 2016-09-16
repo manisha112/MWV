@@ -1,0 +1,101 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+        border-collapse: collapse;
+    }
+
+    #DivPaging li {
+        padding: 10px 0 20px 0;
+        line-height: 188%;
+    }
+</style>
+
+<h2 style="margin-top:80px">Manage Agent's</h2>
+
+<div id="MasterDiv">
+    <br />
+ <center><a href="#Create">&nbsp;Create Agent</a></center>
+<div id="DivPaging">
+    <p class="error-msg" id="ErrorMsg">@ViewBag.ErrorMsg</p>
+    @Html.PagedListPager((IPagedList)ViewBag.AgentLst, page => Url.Action("Index", new { page, @class = "pagination" }), new PagedListRenderOptions { DisplayEllipsesWhenNotShowingAllPageNumbers = false, DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never })
+</div>
+
+<table align="center" style="font-size: 12px;" id="tblPagingData">
+    <tr>
+        <th>
+            <h1><b>Name </b></h1>
+        </th>
+        <th>
+            <h1><b>Email</b></h1>
+        </th>
+         <th>
+            <h1><b>City</b></h1>
+        </th>
+         <th>
+            <h1><b>First Name</b></h1>
+        </th>
+         <th>
+            <h1><b>Action</b></h1>
+        </th>
+         
+    </tr>
+
+    @foreach (var item in ViewBag.AgentLst)
+    {
+        <tr>
+
+            <td>
+                @item.name
+            </td>
+            <td>
+                @item.email
+            </td>
+             <td>
+                @item.city
+            </td>
+            <td>
+                @item.firstname
+            </td>
+             
+            <td>
+                
+               
+                <a href="#Edit" id="@item.agent_id">Edit</a>|
+                <a href="#Delete" id="@item.agent_id">Delete</a>|
+                <a href="#Reset" id="@item.agent_id">Reset Password</a>
+
+            </td>
+
+
+        </tr>
+    }
+
+</table>
+    <br />
+    </div>
+ <script type="text/javascript">
+
+    $('#DivPaging').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#tblPagingData').show();
+                                    $('#tblPagingData').html(result);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+
+
+</script>
+<script src="~/Scripts/Admin/AgentAdmin.js"></script>

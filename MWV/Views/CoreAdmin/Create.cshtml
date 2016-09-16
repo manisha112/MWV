@@ -1,0 +1,118 @@
+﻿@model MWV.Models.Core
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<h2 style="margin-top: 80px;"><b> Create New Core -> @Html.ActionLink("Goto Home", "Index")</b></h2><br />
+ &nbsp;<span id="ErrorMsgs"></span><br />
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-error" })
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Core Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.core_code, new { @class = "text-input", id = "CoreCode", @placeholder = "Enter Core Code(upto 15 char)", @maxlength = "15", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Core Code(upto 15 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp; Core Description</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "CoreDescription", @placeholder = "Enter Core Description(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Core Description(upto 100 char)'" })
+        </div>
+    </div>
+    <br /><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" id="btnAddCore" value="Create" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-default"  title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "CoreAdmin")'" />
+        </div>
+    </div><br /><br />
+   
+
+
+<br /><br />
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
+
+<script type="text/javascript">
+    function CheckCoreValidation() {
+        var CoreCode = $('#CoreCode').val();
+        var CoreDescription = $('#CoreDescription').val();
+
+        if ($('#CoreCode').val() == "Enter Core Code(upto 15 char)" || $('#CoreCode').val().trim() == "" || $('#CoreCode').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter Core Code!</p>");
+            return false;
+        }
+        else if ($('#CoreCode').val().length > 15) {
+            $('#ErrorMsgs').html("<p class='error-msg'>Core Code should contain 15 characters.!</p>");
+            return false;
+        }
+        else if ($('#CoreDescription').val() == "Enter Core Description(upto 100 char)" || $('#CoreDescription').val().trim() == "" || $('#CoreDescription').val() == "") {
+            $('#ErrorMsgs').html("<p class='error-msg'>Please enter Core Description!</p>");
+            return false;
+        }
+        else if ($('#CoreDescription').val().length > 100) {
+            $('#ErrorMsgs').html("<p class='error-msg'>Core Description should contain 100 characters.!</p>");
+            return false;
+        }
+
+        else {
+            return true;
+        }
+    }
+    $('#btnAddCore').click(function () {
+        // 
+        var CoreCode = $('#CoreCode').val();
+        var CoreDescription = $('#CoreDescription').val();
+        var msg = "";
+        // var ActionType;
+
+        if (CheckCoreValidation() == true) {
+            var datatosend = {
+                CoreCode: CoreCode,
+                CoreDescription: CoreDescription
+            }
+
+            $.ajax({
+                url: "/CoreAdmin/AddCore/",
+                data: datatosend,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                dataType: 'html'
+            })
+                      .success(function (result) {
+                          // alert(result);
+                          if (result == "True") {
+                              msg = 'Core details added successfully.!';
+                              window.location.href = "/CoreAdmin/Index?msg=" + msg;
+                          }
+                          else {
+                              $("#ErrorMsgs").html("<p class='error-msg'>" + 'Core Code already exists.!' + "</p>");
+                          }
+
+                      })
+                     .error(function (xhr, ajaxOptions, thrownError) {
+                     })
+        }
+
+
+    });
+
+</script>

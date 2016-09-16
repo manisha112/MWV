@@ -1,0 +1,109 @@
+﻿@model MWV.Models.Order
+
+<div class="fix-overflow">
+    <a href="#closeOrderDetailsPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+
+<div class="order_details_full">
+    <p>Order Details For:</p>
+
+    <div class="fix-overflow">
+        <p class="title top_title"><strong>PO: @Model.order_id</strong></p>
+        <a href="#downloadOrder" class="download_order"><img src="/images/download.png"></a>
+        
+       
+    </div>
+   
+</div>
+
+@*@Html.DropDownList("NewOrdersBulkAction", (SelectList)ViewBag.lstPapermills, "Assign Order to PM", new { @class = "select-input" })*@
+@*<div class="block-small-margin">
+    <select id="ddlPapermillname" class="select-input">
+        <option selected>Select Bulk Action</option>
+
+    </select>
+</div>*@
+
+<div class="take_action_panel choose_action hidden">
+    <div class="fix-overflow close_btn">
+        <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+
+    <p class="title"><strong>Confirm Assignment</strong></p>
+
+    <p class="details"></p>
+    
+    
+
+    <div id="takactionpanel">
+        <a href="#confirmAssignment" class="btn in_order_details">Confirm</a>
+    </div>
+    @*<a href="#confirmAssignment" class="btn in_order_details">Confirm</a>*@
+</div>
+
+<script type="text/javascript">
+    //Changed by manisha as we are calling this event at partial view
+    $('#takactionpanel').on('click', 'a', function () {
+       
+        $("#spanForSeeErrors").html('');
+        var machid = $("#NewOrdersBulkAction option:selected").text();
+        if (machid == "Assign Order to PM") {
+            $("#spanForSeeErrors").html("Please Select Papermill !");
+
+        }
+        else { 
+        $('#newOrdersList').show();
+        $('#newOrdersPanel').show();
+        var allVals = [];
+        var ordId = @Model.order_id
+        allVals = $("#NewOrdersBulkAction").val() + "," + ordId; //Get selected customer action value
+        $.ajax({
+            url: "/ProductionPlanner/SingleOrderSubmitToMill/?allVals=" + allVals,
+            contentType: "application/html; charset=utf-8",
+            type: "Post",
+            dataType: 'html',
+            context: document.body,
+        })
+                        .success(function (result) {
+
+                        })
+                            .error(function (xhr, ajaxOptions, thrownError) {
+                            })
+        $(this).closest('.take_action_panel').hide();
+        if ($(this).hasClass('in_order_details')) {
+            $(this).closest('.new_order_details').hide();
+            $('#closeNewOrders').show();
+            $('#newOrdersBulkAction').show();
+            $('#newOrdersList').show();
+            //$('#newOrdersPanel').show();
+        }
+        $.ajax({
+            url: "/ProductionPlanner/GetNewOrderList/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                     .success(function (result) {
+                         $('#newOrdersList').show();
+                         $('#pendingApprovalsPanel, #mismatchesPanel, #productionPlansPanel').hide();
+                         $('#newOrdersPanel').show();
+                         $('#NewOrdeListDiv').show();
+                         $('#NewOrdeListDiv').html(result);
+                     })
+                         .error(function (xhr, ajaxOptions, thrownError) {
+                         })
+        $('#newOrdersPanel').show();
+        $('#newOrdersList').show();
+        }
+    });
+
+    $('.take_action_panel').on('click', 'a[href="#closeTakeAction"]', function () {
+        $(this).closest('.take_action_panel').hide();
+        $('#NewOrdersBulkAction').find('option:first').attr('selected', 'selected')
+      
+    });
+
+    
+
+</script>

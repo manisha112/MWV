@@ -1,0 +1,338 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+
+<div class="fix-overflow">
+    <a href="#closeTransportationResultsPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+</div>
+
+<ul>
+    @if ((ViewBag.Truck_dispatches).Count == 0)
+    {
+        <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+    }
+    else
+    { 
+    <li>
+         @{
+            if (ViewBag.Pagesize > 5)
+            {
+        <div id="PagerRecentOrders">
+            @Html.PagedListPager((IPagedList)ViewBag.Truck_dispatches, page => Url.Action("seeAllRecentTransportation", new { page }), new PagedListRenderOptions { DisplayEllipsesWhenNotShowingAllPageNumbers = false, DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never })
+        </div>
+         }
+         }
+    </li>
+    foreach (var item in ViewBag.Truck_dispatches)
+    {
+      
+        <li id="truck_@item.truck_dispatch_id">
+            <div class="fix-overflow">
+                <p class="vehicle_number"><strong>Vehicle # @item.truck_no</strong></p>
+                @if (@item.actual_arrival_at_gate == null)
+                {
+                    <div class="vehicle_icons">
+                        <a href="#editVehicle" class="edit_vehicle" data-id="@item.truck_dispatch_id"><img src="/images/edit.png"></a>
+                        <a href="#removeVehicle" data-id="@item.truck_dispatch_id" class="remove_vehicle"><img src="/images/delete.png"></a>
+                    </div>
+                }
+
+            </div>
+            @*<p class="details">Scheduled on June 6 at 9:03 AM</p>*@
+            @*<p class="details">Arrival: Pending</p>
+                <p class="details">Departure: Pending</p>*@
+
+            @{string status = "";}
+            @{string statusDep = "";}
+            @if (@item.actual_arrival_at_gate == null)
+            {
+                status = "Arrived: " + "Pending";
+            }
+            else
+            {
+                status = "Arrived: " + @item.actual_arrival_at_gate.ToString("dd MMM yyy hh:mm tt");
+            }
+            @if (@item.left_factory_on == null)
+            {
+                statusDep = "Departed: " + "Pending";
+            }
+            else
+            {
+                statusDep = "Departed: " + @item.left_factory_on.ToString("dd MMM yyy hh:mm tt");
+            }
+
+            <p class="details">Scheduled on: @item.created_on.ToString("dd MMM yyy hh:mm tt")</p>
+            <p class="details"> @status</p>
+            <p class="details"> @statusDep</p>
+
+            @*<p><a href="#seeTransportationDetails" class="see-details" data-id="mh-123-1234">See Details</a></p>*@
+            @*<p class="title">
+                    @item.status
+                </p>*@
+            @*<a href="#filterOrderStatus" class="order-status os-open" data-status="open">@item.status</a>*@
+
+            @*<a href="#seeTransportationDetails" class="see-details" data-id="@item.truck_dispatch_id">See Details</a></p>*@
+
+            <a href="#seeDetails" class="see-details" data-id="@item.truck_dispatch_id">See Details</a>
+            <div class="product_attention hidden" style="display: none;">
+                <div class="fix-overflow">
+                    <a href="#closeProductAttention" class="close-panel"><img src="/images/close-panel.png"></a>
+                </div>
+
+                <p class="alert_title"><strong>Attention!</strong></p>
+
+                <p class="alert_details">Are you sure you want to remove this transportation?</p>
+
+                <a href="#closeProductAttention" class="btn">Cancel</a>
+                <a href="#confirmRemoveVehicle" data-id="@item.truck_dispatch_id" class="btn">Remove</a>
+            </div>
+        </li>
+    }
+    }
+
+</ul>
+
+
+<script type="text/javascript">
+    $('#transportationResultsPanel').on('click', 'a[href="#editVehicle"]', function () {
+        // alert("hello editVehicle");
+        // make an ajax call to get the record of the vehicle selected
+       
+        var truck_dispatch_id = $(this).attr("data-id");
+        $.ajax(
+              {
+                  cache: false,
+                  type: "GET",
+                  url: "/Truck_dispatch/GetVehicleForEdit/" + truck_dispatch_id,
+                  context: document.body,
+                  contentType: "application/json; charset=utf-8",
+                  success: function (data) {
+                      //alert("success");
+                      $('#arrangeNewTransportation').find('#tmpArrangeNewTransportation').html(data);
+                      //alert("success " + data);
+                  },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                      //alert("ajaxOptions " + ajaxOptions);
+                      //alert('Failed to retrieve Orders for this location.');
+                  }
+              });
+
+
+
+        // alert("selectedPapermillid " + selectedPapermillid);
+        // GetDispatchInSession
+
+        var datatosend = {
+
+            truck_dispatch_id: truck_dispatch_id
+
+        };
+        // alert("location id: " + $('#newTransportationLocation').val());
+
+        $.ajax({
+            type: "POST",
+            url: "/Truck_dispatch/GetDispatchAndCargoInSession/",
+            context: document.body,
+            data: datatosend,
+            dataType: "html",
+            context: document.body,
+        })
+                         .success(function (result) {
+                             //alert("Successfully Created in session, data is  " + result);
+                             $('#ArrangeNewTransportation').show();
+                             $('.cargo_list').show();
+                             $('#showCargoList').show();
+                             $('#showCargoList').html(result);
+                             // $('#ArrangeNewTransportation .cargo_list').find('#showCargoList').html(result);
+                         })
+                        .error(function (xhr, ajaxOptions, thrownError) {
+                        })
+
+        //add the temp dispatch to session ends
+        //alert("pm location id" +$(this).attr('data-id'));
+
+        //alert("here populate the Purchase orders");
+        // make the ajax call to populate the PO drop down starts
+
+        // var pmlocationid = $('#pmlocationid').val();
+        // var selectedItem = pmlocationid;
+        var ddlOrders = $('#arrangeNewTransportation').find("#Orderddl");
+
+        $.ajax(
+               {
+                   cache: false,
+                   type: "GET",
+                   // url: "/Home/GetAllOrdersbyAgentandLocation/" + truck_dispatch_id,
+                   url: "/Order/GetAllOrdersForLocation/" + truck_dispatch_id,
+                   contentType: "application/json; charset=utf-8",
+                   success: function (data) {
+
+                       ddlOrders.html('');
+                       ddlOrders.append($('<option>Select Purchase Order</option>'));
+                       $.each(data, function (id, option) {
+
+                           ddlOrders.append($('<option>Select Purchase Order</option>').val(option.id).html(option.id +", "+ option.name));
+
+                       });
+                       //alert("success " + data);
+                   },
+                   error: function (xhr, ajaxOptions, thrownError) {
+                       //alert("ajaxOptions " + ajaxOptions);
+                       //alert('Failed to retrieve Orders for this location.');
+                   }
+               });
+        // this was on this form itself, i ahve to fill the
+        //var tdOrderddl = $('.transportation_details').find('#tdOrderddl');
+
+        //$.ajax(
+        //       {
+        //           cache: false,
+        //           type: "GET",
+        //           url: "/Home/GetAllOrdersbyAgentandLocation/" + pmlocationid,
+        //           context: document.body,
+        //           contentType: "application/json; charset=utf-8",
+        //           success: function (data) {
+        //               //alert("success");
+        //               tdOrderddl.html('');
+        //               tdOrderddl.append($('<option>Select Purchase Order</option>'));
+        //               $.each(data, function (id, option) {
+
+        //                   tdOrderddl.append($('<option></option>').val(option.id).html(option.name));
+
+        //               });
+        //               //alert("success " + data);
+        //           },
+        //           error: function (xhr, ajaxOptions, thrownError) {
+        //               //alert("ajaxOptions " + ajaxOptions);
+        //               //alert('Failed to retrieve Orders for this location.');
+        //           }
+        //       });
+        // $('.transportation_button').hide();
+        $('#transportationDetails').hide();
+        $('#transportationResultsPanel').hide();
+        $('#arrangeNewTransportation').show();
+
+        //$('html,body').animate({
+        //    scrollTop: $(window).scrollTop() - 120
+        //});
+
+    });
+    $('#transportationResultsPanel').on('click', 'a[href="#removeVehicle"]', function () {
+        // alert($(this).attr('data-id'));
+        var li_tdid = "#truck_" + $(this).attr('data-id');
+        // alert(li_tdid);
+        $(li_tdid).find('.product_attention').show();
+        //$('.transportation_button').show();
+        //$('.product_attention').show();
+    });
+    $('#transportationResultsPanel').on('click', 'a[href="#confirmRemoveVehicle"]', function () {
+        $.ajaxSetup({ cache: false });
+     //   
+        var li_tdid = "#truck_" + $(this).attr('data-id');
+        //alert(li_tdid);
+        $(li_tdid).find('.product_attention').show();
+        //$('.product_attention').show();
+
+
+        var truck_dispatch_id = $(this).attr("data-id");
+
+
+        $.ajax(
+                   {
+                       cache: false,
+                       type: "POST",
+                       url: "/Truck_dispatch/RemoveVehicle/" + truck_dispatch_id,
+                       contentType: "application/html; charset=utf-8",
+                       success: function (data) {
+                           if (data == true) {
+
+                           }
+                           else {
+
+                           }
+                       },
+                       error: function (xhr, ajaxOptions, thrownError) {
+                           //alert("ajaxOptions " + ajaxOptions);
+                           // alert('Failed to retrieve states.');
+                       }
+                   });
+        // hide the vehicle search listing that was just removed
+
+        //to reload the search list again
+        ///load the recent view again to see the update
+        $.ajax({
+            url: "/QuickView/QuickViewDetails/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                           .success(function (result) {
+                               $('#quickViewRecentOrders').html(result);
+                           })
+                          .error(function (xhr, ajaxOptions, thrownError) {
+                          })
+
+        ///load the recent view again to see the update
+        // reload the see all panel so that the removed vehicle is not shown again
+        //alert("seeAllRecentTransportation");
+        $.ajax({
+            url: "/QuickView/seeAllRecentTransportation/",
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    // $('#quickViewRecentOrders').html(result);
+                                    //alert(result);
+                                    $('#customersPanel').hide();
+                                    $('#ordersPanel').hide();
+                                    $('.order_details').hide();
+                                    // $('#ordersResultsPanel').html(result);
+                                    $('#transportationResultsPanel').show();
+                                    $('#transportationResultsPanel').html(result);
+                                    $('#transportationPanel').show();
+
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+
+        $(li_tdid).find('.product_attention').hide();
+
+        $('#transportationDetails').hide();
+    });
+    $('#transportationResultsPanel').on('click', 'a[href="#closeProductAttention"]', function () {
+
+        var id = $(this).attr("data-id");
+        // $('.product_attention-' + id).hide();
+        $(this).closest('.product_attention').hide();
+
+        $('html,body').animate({
+            scrollTop: $(window).scrollTop() - 120
+        });
+        return false;
+    });
+    $('#PagerRecentOrders').on('click', 'a', function () {
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    // $('#quickViewRecentOrders').html(result);
+                                    //alert(result);
+                                    $('#customersPanel').hide();
+                                    $('#ordersPanel').hide();
+                                    $('.order_details').hide();
+                                    // $('#ordersResultsPanel').html(result);
+                                    $('#transportationResultsPanel').show();
+                                    $('#transportationResultsPanel').html(result);
+                                    $('#transportationPanel').show();
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+    });
+</script>

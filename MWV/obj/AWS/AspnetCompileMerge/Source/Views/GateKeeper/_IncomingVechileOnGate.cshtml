@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MWV.Models.GateKeeper>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+ <div style="padding:10px">
+   @ViewBag.NoVechileInMsg
+ </div>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+          Vichle NO :
+        </td>
+    </tr>
+    <tr>
+        <td>
+          Expected Arrival :
+        </td>
+    </tr>
+    <tr>
+        <td>
+          Arrived : @Html.CheckBoxFor("Approved", new { name = "Approved" })          
+        </td>
+    </tr>
+     <tr>
+        <td>
+          Departed : @Html.CheckBoxFor("Departed", new { name = "Departed" })          
+        </td>
+    </tr>
+}
+
+</table>

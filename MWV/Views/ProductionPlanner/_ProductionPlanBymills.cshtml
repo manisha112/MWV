@@ -1,0 +1,177 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    var Action = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+
+    <div class="fix-overflow">
+        <a href="#closeSearchResults" class="close-panel"><img src="images/close-panel.png"></a>
+    </div>
+
+    if (ViewBag.NoRecordMsg != null)
+    {
+        @ViewBag.NoRecordMsg
+    }
+    else
+    {
+
+        <ul>
+            @if (Action == "seeAllRecentProductionPlans")
+            {
+                <li>
+                    <div id="AllProductionPlan">
+                        @Html.PagedListPager((IPagedList)ViewBag.GetSearchProductionPlan, page => Url.Action("seeAllRecentProductionPlans", new { page, @class = "pagination" }))
+                    </div>
+                </li>
+            }
+            else if (Action == "GetAllProPlanFromtoDate")
+            {
+                <li>
+                    <div id="AllProductionPlanFromtoDate">
+                        @Html.PagedListPager((IPagedList)ViewBag.GetSearchProductionPlan, page => Url.Action("GetAllProPlanFromtoDate", new { page, @class = "pagination" }))
+                    </div>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <div id="ProductionPlanbyEntity">
+                        @Html.PagedListPager((IPagedList)ViewBag.GetSearchProductionPlan, page => Url.Action("GetSearchProductionPlan", new { page, @class = "pagination" }))
+                    </div>
+                </li>
+            }
+            @foreach (var item in ViewBag.GetSearchProductionPlan)
+            {
+
+                <li>
+                    <div class="fix-overflow">
+                        <p class="plans_date"><strong>@item.estimated_start.ToString("dd MMM yyy hh:mm tt")</strong></p>
+                        <a href="#downloadPlans" class="download_plans"><img src="images/download.png"></a>
+                    </div>
+                    <p class="details">Plan No: @item.srNo</p>
+                    <p class="details">Assigned to @item.papermillName</p>
+
+                    <a href="#seeDetails" class="see-details" data-id="@item.srNo">See Details</a>
+                </li>
+
+            }
+        </ul>
+    }
+}
+<script type="text/javascript">
+    $('#productionPlansSearchResults').on('click', 'a[href="#seeDetails"]', function () {
+        var id = $(this).attr('data-order-id');
+
+        $.ajax({
+            url: "/ProductionPlanner/ProductionPlanDetails/" + id,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#productionPlansSearchResults').hide();
+                                    $('#plans-details-june182015-pm02').html(result);
+                                    // $('#plans-details-' + $(this).attr('data-id')).html(result);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+
+
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top
+        }, 400);
+
+        return false;
+    });
+
+    $('#AllProductionPlan').on('click', 'a', function () {
+        // alert("Hello");
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#newOrdersPanel').hide();
+                                    $('#mismatchesPanel').hide();
+                                    $('#pendingApprovalsPanel').hide();
+                                    $('#productionPlansSearchResults').show();
+                                    $('#productionPlansSearchResults').html(result);
+                                    $('#productionPlansPanel').show();
+
+                                    $('html,body').animate({
+                                        scrollTop: $('#productionPlansPanel').position().top + 575
+                                    }, 400);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top + 260
+        }, 400);
+
+        return false;
+    });
+
+    $('#AllProductionPlanFromtoDate').on('click', 'a', function () {
+        // alert("Hello");
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#newOrdersPanel').hide();
+                                    $('#mismatchesPanel').hide();
+                                    $('#pendingApprovalsPanel').hide();
+                                    $('#productionPlansSearchResults').show();
+                                    $('#productionPlansSearchResults').html(result);
+                                    $('#productionPlansPanel').show();
+
+                                    $('html,body').animate({
+                                        scrollTop: $('#productionPlansPanel').position().top + 575
+                                    }, 400);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top + 260
+        }, 400);
+
+        return false;
+    });
+
+    $('#ProductionPlanbyEntity').on('click', 'a', function () {
+        // alert("Hello");
+        $.ajax({
+            url: this.href,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html',
+            context: document.body,
+        })
+                                .success(function (result) {
+                                    $('#newOrdersPanel').hide();
+                                    $('#mismatchesPanel').hide();
+                                    $('#pendingApprovalsPanel').hide();
+                                    $('#productionPlansSearchResults').show();
+                                    $('#productionPlansSearchResults').html(result);
+                                    $('#productionPlansPanel').show();
+
+                                    $('html,body').animate({
+                                        scrollTop: $('#productionPlansPanel').position().top + 575
+                                    }, 400);
+                                })
+                               .error(function (xhr, ajaxOptions, thrownError) {
+                               })
+        $('html,body').animate({
+            scrollTop: $('#ordersPanel').position().top + 260
+        }, 400);
+
+        return false;
+    });
+</script>

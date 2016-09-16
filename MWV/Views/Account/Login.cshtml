@@ -1,0 +1,71 @@
+﻿@model IdentitySample.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta http-equiv="refresh" content="1140;url=/Account/Login" />
+
+    <title>WESTROCK: Agent Login</title>
+
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,500|Montserrat|Source+Sans+Pro:400,700|Cabin:400,700">
+
+    <link rel="stylesheet" type="text/css" href="~/Styles/style.css">
+
+    <script src="@Url.Content("~/Scripts/jquery-1.11.3.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.11.4.min.js")"></script>
+
+</head>
+
+<div id="login">
+
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { name = "UserLogin", ReturnUrl = ViewBag.ReturnUrl ,  @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h1>User Login</h1>
+
+        @Html.ValidationSummary(true, "", new { @class = "error-msg" })
+
+        @Html.TextBoxFor(m => m.Email, new { @class = "text-input-login username", placeholder = "Username", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Username'",@id="txtUsername"})
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "error-msg" })
+
+        @Html.PasswordFor(m => m.Password, new { @class = "text-input-login pass", placeholder = "Password", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Password'",@id="txtPassword" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "error-msg" })
+ 
+           <a href="javascript:submitform()" class="btn">Log In</a>
+       
+    }
+</div>
+
+
+</html>
+<script type="text/javascript">
+    function submitform() {
+        document.UserLogin.submit();
+
+    }
+
+    $('#txtPassword').keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  // the enter key code
+        {
+            document.UserLogin.submit();
+            
+        }
+    });
+    $('#txtUsername').keypress(function (e) {
+        var key = e.which;
+        if (key == 13)  // the enter key code
+        {
+            document.UserLogin.submit();
+
+        }
+    });
+      
+</script>

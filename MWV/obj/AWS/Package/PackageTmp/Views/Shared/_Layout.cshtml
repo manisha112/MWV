@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+@*<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - My ASP.NET Application</title>
+
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+
+    </head>*@
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>MWV Dev: Agent Create Order</title>
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,500|Montserrat|Source+Sans+Pro:400,700|Cabin:400,700" rel="stylesheet" type="text/css">
+
+    @Styles.Render("~/Styles/css")
+    @*<link href="@Url.Content("~/Styles/style.css")" rel="stylesheet" type="text/css" />*@
+    <script src="@Url.Content("~/Scripts/jquery-1.11.3.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.11.4.min.js")"></script>
+
+</head>
+<body>
+    <div id="dashboard" class="agent_create_order">
+        @*<h1 class="page_title">
+                <a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a>
+                <span class="a">WEST</span><span class="b">ROCK</span>
+            </h1>*@
+        @if (!Request.IsAuthenticated)
+        {
+        <h1 class="page_title">
+            @*<a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a>*@
+            <span class="a">WEST</span><span class="b">ROCK</span>
+        </h1>
+        }
+
+        @*<a href="index.html">Log Out</a>*@
+        @using Microsoft.AspNet.Identity
+
+        @if (Request.IsAuthenticated)
+        {
+            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+            {
+        @Html.AntiForgeryToken()
+
+        <h1 class="page_title">
+            <a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a>
+            <span class="a">WEST</span><span class="b">ROCK</span>
+        </h1>
+        <div id="welcomePanel" class="welcome_panel">
+            <div class="welcome_messages">
+                <div class="alert_icons">
+                    <a href="#showAlerts" class="alert"><img src="images/alarm-off.png"></a>
+                    <a href="#showMessages" class="message"><img src="images/mail-off.png"></a>
+                </div>
+
+                <h3>
+                    Welcome @Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    @*<a href="javascript:document.getElementById('logoutForm').submit()">[Log Out]</a>*@
+                </h3>
+            </div>
+        </div>
+
+            if (User.IsInRole("MWVAdmin"))
+                {
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
+            <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+        </ul>
+                }
+        @*else if (User.IsInRole("GateKeeper"))
+            {
+                @Html.Hidden("RedirectTo", Url.Action("Truck_dispatch", "TruckInward"));
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("GateKeeper", "Index", "GateKeeper")</li>
+                </ul>
+            }*@
+        @*else if (User.IsInRole("Agent"))
+            {
+                @Html.Hidden("RedirectTo", Url.Action("Agent", "Index   "));
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Agent", "Index", "Agent")</li>
+                </ul>
+            }*@
+        @*<ul class="nav navbar-nav navbar-right">
+            @*<li style="color:white">Role: @Session["RoleName"]</li>*@
+        @*<li>
+                        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    </li>
+            if (User.IsInRole("MWVAdmin"))
+            {
+                <ul class="nav navbar-nav navbar-right">
+
+                    <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
+                    <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+                    <li style="color:white">Role: @Session["RoleName"]</li>
+                </ul>
+            }
+                @*
+                <li style="color:white">Role: @Session["RoleName"]</li>
+                <li>@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        *@
+            }
+        }
+        else
+        {
+        <ul class="nav navbar-nav navbar-right">
+            @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
+            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>
+        }
+
+        @RenderBody()
+    </div>
+    <script src="~/Scripts/gatekeeper.js"></script>
+    <script src="~/Scripts/agent.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

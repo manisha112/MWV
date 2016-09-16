@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MWV.Models.Customer>
+
+@foreach(var item in Model)
+{
+
+<div class="list-item-wrapper">
+    <div class="customer-list-item">
+        <div class="fix-overflow">
+            <a href="#closeCurrentCustomer" class="close-panel"><img src="/images/close-panel.png"></a>
+
+            <p class="title"><strong>@item.name</strong></p>
+        </div>
+
+        @*<p>@item.address1</p>
+        <p>@item.address2</p>*@
+
+    @{
+         string strAddress = "";
+            string cityState = "";
+            strAddress = @item.address1 + "<br />" + @item.address2 + "<br />" + @item.address3;
+
+            if (strAddress.Contains("<br /><br />"))
+                strAddress = strAddress.Remove(strAddress.Length - 6);
+
+            if (strAddress.Substring(strAddress.Length - 1) == ">")
+                strAddress = strAddress.Remove(strAddress.Length - 6);
+
+            cityState = @item.city + " / " + @item.state + " / " + @item.country + " / " + @item.pincode;
+            if (cityState.Contains(" /  /  / "))
+                cityState = cityState.Replace(" /  / ", "");
+            if (cityState.Contains(" /  / "))
+                cityState = cityState.Replace(" /  / ", " / ");
+            if (cityState.Substring(cityState.Length - 3) == " / ")
+                cityState = cityState.Substring(0, cityState.Length - 3);
+                <p>@Html.Raw(@strAddress)</p>
+                <p>@cityState</p>
+
+    }
+
+        <a href="#selectCustomerFromList" data-value="customer-a" data-name="Customer A" class="btn">Select</a>
+    </div> <!-- .customer_list_item -->
+</div> <!-- .list_item_wrapper -->
+}

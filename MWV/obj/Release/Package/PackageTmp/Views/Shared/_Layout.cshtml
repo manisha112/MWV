@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    @if (!Request.IsAuthenticated)
+    {
+        <meta http-equiv="refresh" content="5;url=/Account/Login" />
+    }
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,500|Montserrat|Source+Sans+Pro:400,700|Cabin:400,700">
+    <link rel="stylesheet" type="text/css" href="~/Styles/style.css">
+
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/jquery-1.11.3.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.11.4.min.js")"></script>
+
+</head>
+<body>
+    @{
+        var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+        if (controller == "GateKeeper")
+        {
+            ViewBag.DashBoardCls = "gatekeeper";
+        }
+        else if (controller == "Agent")
+        {
+            ViewBag.DashBoardCls = "agent_create_order";
+        }
+        else if (controller == "ProductionPlanner")
+        {
+            ViewBag.DashBoardCls = "production_planner";
+        }
+        else if (controller == "MachineHead")
+        {
+            ViewBag.DashBoardCls = "machine_head";
+        }
+        else if (controller == "Dispatch")
+        {
+            ViewBag.DashBoardCls = "dispatch";
+        }
+        else if (controller == "FinanceHead")
+        {
+            ViewBag.DashBoardCls = "finance";
+        }
+        else if (controller == "Customer")
+        {
+            ViewBag.DashBoardCls = "customer_orders";
+        }
+        else if (controller == "Stakeholder")
+        {
+            ViewBag.DashBoardCls = "stakeholder";
+        }
+    }
+    <div id="dashboard" class="@ViewBag.DashBoardCls">
+        @if (!Request.IsAuthenticated)
+        {
+            <h1 class="page_title">
+                <img src="/images/logo.png" alt="WestRock">
+            </h1>
+        }
+
+        @using Microsoft.AspNet.Identity
+        @using MWV.Models
+
+        @if (Request.IsAuthenticated)
+        {
+            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+            {
+                @Html.AntiForgeryToken()
+
+
+
+                <h1 class="page_title">
+
+                    @*<span>@Session["uname"]<a href="#" onclick="document.getElementById('logoutForm').submit()">Log Out</a></span>*@
+                    <span>@Session["uname"] <a href="#" onclick="document.getElementById('logoutForm').submit()">Log Out</a></span>
+                    <img src="/images/logo.png" alt="WestRock">
+                </h1>
+
+            }
+            <!-- ---------------------------------------------------------------------------------------------------------
+              WELCOME PANEL
+             ------------------------------------------------------------------------------------------------------- -->
+            <div id="welcomePanel" class="welcome_panel six_icons">
+                <a href="#showHome" class="home"><img src="/images/home.png"></a>
+                <a href="#showSchedule" class="hidden schedule"><img src="/images/schedule.png"></a>
+                <a href="#showTickets" class="tickets"><img src="/images/support-ticket.png"></a>
+                <a href="#showMessages" class="messages"><img id="imgMsg" src="/images/mail-off.png"></a>
+                <a href="#showAlerts" class="alerts"><img id="imgAlert" src="/images/alarm-off.png"></a>
+                <a href="#settings" class="settings"><img src="/images/settings.png"></a>
+            </div>
+
+            if (User.IsInRole("MWVAdmin"))
+            {
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Users", "Index", "UsersAdmin")</li>
+                    <li>@Html.ActionLink("Product", "Index", "ProductAdmin")</li>
+                    <li>@Html.ActionLink("ProductPrice", "Index", "ProductPriceAdmin")</li>
+                    <li>@Html.ActionLink("ProductTimeLine", "Index", "ProductTimeLineAdmin")</li>
+                    <li>@Html.ActionLink("PaperMill", "Index", "PaperMillAdmin")</li>
+                    <li>@Html.ActionLink("Bf", "Index", "BfAdmin")</li>
+                    <li>@Html.ActionLink("Gsm", "Index", "GsmAdmin")</li>
+                    <li>@Html.ActionLink("Shade", "Index", "ShadeAdmin")</li>
+                    <li>@Html.ActionLink("Core", "Index", "CoreAdmin")</li>
+                    <li>@Html.ActionLink("Customer", "Index", "CustomerAdmin")</li>
+                    <li>@Html.ActionLink("Upload Navision Csv Files", "Index", "UploadFiles")</li>
+                    <li>@Html.ActionLink("Upload Order Excel File", "UploadOrders", "UploadFiles")</li>
+                    <li>@Html.ActionLink("Change Password", "ChangePassword", "UsersAdmin")</li>
+                   
+
+                </ul>
+
+            }
+            @*Div for showing Alerts*@
+            <div id="tempbodySection" class="messages">
+
+                @RenderBody()
+            </div>
+
+        }
+        else
+        {
+
+            <h2>
+                Sorry, but your session has timed out. You'll be redirected to the Log On page in 5 seconds...
+            </h2>
+            <ul class="nav navbar-nav navbar-right">
+                <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+            </ul>
+            @RenderBody()
+        }
+
+    </div>  <!-- #dashboard -->
+
+    <div id="loading"><img src="~/images/loading.gif" alt="loading..." title="loading..."></div>
+    @{
+        if (controller == "GateKeeper")
+        {
+            <script src="~/Scripts/gatekeeper.js"></script>
+        }
+        else if (controller == "Agent")
+        {
+            <script src="~/Scripts/agent.js"></script>
+        }
+        else if (controller == "ProductionPlanner")
+        {
+            <script src="~/Scripts/production-planner.js"></script>
+        }
+        else if (controller == "MachineHead")
+        {
+            @*<script src="~/Scripts/jquery.switchbutton.js"></script>*@
+            <script src="~/Scripts/machine-head.js"></script>
+        }
+        else if (controller == "Dispatch")
+        {
+            <script src="~/Scripts/dispatch.js"></script>
+        }
+        else if (controller == "FinanceHead")
+        {
+            <script src="~/Scripts/finance.js"></script>
+        }
+        else if (controller == "BfAdmin")  /* keep on adding controllers here */
+        {
+            <script src="~/Scripts/Admin/BfAdmin.js"></script>
+        }
+        else if (controller == "GsmAdmin")
+        {
+            <script src="~/Scripts/Admin/GsmAdmin.js"></script>
+        }
+        else if (controller == "ShadeAdmin")
+        {
+            <script src="~/Scripts/Admin/ShadeAdmin.js"></script>
+        }
+        else if (controller == "CoreAdmin")
+        {
+            <script src="~/Scripts/Admin/CoreAdmin.js"></script>
+        }
+        else if (controller == "ProductAdmin")
+        {
+            <script src="~/Scripts/Admin/ProductAdmin.js"></script>
+        }
+        else if (controller == "ProductPriceAdmin")
+        {
+            <script src="~/Scripts/Admin/ProductPriceAdmin.js"></script>
+        }
+        else if (controller == "ProductTimeLineAdmin")
+        {
+            <script src="~/Scripts/Admin/ProductTimeLineAdmin.js"></script>
+        }
+        else if (controller == "PaperMillAdmin")
+        {
+            <script src="~/Scripts/Admin/PaperMillAdmin.js"></script>
+        }
+        else if (controller == "CustomerAdmin")
+        {
+            <script src="~/Scripts/Admin/CustomerAdmin.js"></script>
+        }
+        else if (controller == "Customer")
+        {
+            <script src="~/Scripts/customer-orders.js"></script>
+        }
+        else if (controller == "Stakeholder")
+        {
+            <script src="~/Scripts/stakeholder.js"></script>
+        }
+
+    }
+    <script src="~/Scripts/CommonJS.js"></script>
+    <script src="~/Scripts/alerts.js"></script>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

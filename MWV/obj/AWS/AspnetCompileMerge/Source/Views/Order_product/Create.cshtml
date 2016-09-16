@@ -1,0 +1,233 @@
+﻿@model MWV.Models.Order_Products
+
+@{
+    ViewBag.Title = "Create";
+}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+    $("#bf_list").change(function () {
+        var selectedItem = $(this).val();
+        var ddlStates = $("#gsm_list");
+        var statesProgress = $("#states-loading-progress");
+        statesProgress.show();
+        //alert(selectedItem);
+        $.ajax(
+            {
+                cache: false,
+                type: "GET",
+                url: "/Order_product/GetGsms/" + selectedItem,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    ddlStates.html('');
+                    $.each(data, function (id, option) {
+                        ddlStates.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    //alert("ajaxOptions " + ajaxOptions);
+                    alert('Failed to retrieve gsms.');
+                    statesProgress.hide();
+                }
+            });
+    });
+    });
+</script>
+
+    <h2>Create</h2>
+
+
+    @using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+            <h4>Order_Products</h4>
+            <hr />
+            @Html.ValidationSummary(true)
+
+            @*<div class="form-group">
+            @Html.LabelFor(model => model.order_id, "order_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("order_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.order_id)
+            </div>
+        </div>*@
+
+            @*<div class="form-group">
+            @Html.LabelFor(model => model.product_code, "product_code", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("product_code", String.Empty)
+                @Html.ValidationMessageFor(model => model.product_code)
+            </div>
+        </div>*@
+            <div class="form-group">
+                @Html.LabelFor(model => model.Product.product_code, "bf", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("bf_list", String.Empty)
+                    @Html.ValidationMessageFor(model => model.product_code)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.product_code, "gsm", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("gsm_list", String.Empty)
+                    @Html.ValidationMessageFor(model => model.product_code)
+                </div>
+            </div>
+        @*<span id="states-loading-progress" style="display: none;">Please wait..</span>
+            @Ajax.ActionLink(
+            "Get the product code",
+            "GetProductCode",
+            "Order_product",
+            new
+                    {
+                        gsm_code = Request["gsm_list"],
+                        bf_code = Request["bf_list"]
+                    },
+                    new AjaxOptions { UpdateTargetId = "ajaxtarget"}
+            )
+
+            <div id="ajaxtarget"></div>*@
+            <div class="form-group">
+                @Html.LabelFor(model => model.shade_code, "shade_code", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("shade_code", String.Empty)
+                    @Html.ValidationMessageFor(model => model.shade_code)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.width, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.width)
+                    @Html.ValidationMessageFor(model => model.width)
+                </div>
+            </div>
+
+            @*<div class="form-group">
+            @Html.LabelFor(model => model.unit_price, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.unit_price)
+                @Html.ValidationMessageFor(model => model.unit_price)
+            </div>
+        </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.qty, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.qty)
+                    @Html.ValidationMessageFor(model => model.qty)
+                </div>
+            </div>
+
+            @*<div class="form-group">
+            @Html.LabelFor(model => model.amount, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.amount)
+                @Html.ValidationMessageFor(model => model.amount)
+            </div>
+        </div>*@
+
+
+
+            @*@Ajax.ActionLink(
+    "Calculate Amount",
+ "GetAmount",
+"Order_product", new
+                    {
+                        product_code = "Bf00-Gsm100"
+                    },
+    new AjaxOptions { UpdateTargetId = "result" }
+)
+
+            <div id="result"></div>*@
+
+            @*<div class="form-group">
+        @Html.LabelFor(model => model.status, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.status)
+            @Html.ValidationMessageFor(model => model.status)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.width_planned, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.width_planned)
+            @Html.ValidationMessageFor(model => model.width_planned)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.qty_planned_byAgent, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.qty_planned_byAgent)
+            @Html.ValidationMessageFor(model => model.qty_planned_byAgent)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.diameter, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.diameter)
+            @Html.ValidationMessageFor(model => model.diameter)
+        </div>
+    </div>*@
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.core, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.core)
+            @Html.ValidationMessageFor(model => model.core)
+        </div>
+    </div>
+@*
+    <div class="form-group">
+        @Html.LabelFor(model => model.created_on, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.created_on)
+            @Html.ValidationMessageFor(model => model.created_on)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.created_by, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.created_by)
+            @Html.ValidationMessageFor(model => model.created_by)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.modified_on, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.modified_on)
+            @Html.ValidationMessageFor(model => model.modified_on)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.modified_by, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.modified_by)
+            @Html.ValidationMessageFor(model => model.modified_by)
+        </div>
+    </div>*@
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+}
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+    @section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    }

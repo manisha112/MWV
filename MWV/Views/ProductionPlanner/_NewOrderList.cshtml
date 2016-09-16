@@ -1,0 +1,236 @@
+﻿@model IEnumerable<dynamic>
+
+    <div class="fix-overflow" id="closeNewOrders">
+        <a href="#closeNewOrdersPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+
+    @if (ViewBag.NoRecordMsg != null)
+    {
+        <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+    }
+    else
+    {
+        @*@Html.DropDownList("newOrdersBulkAction", (SelectList)ViewBag.lstPapermills, "Select Bulk Action", new { @class = "select-input select_bulk_action" })*@
+        <div class="block-small-margin">
+            @Html.DropDownList("newShades", (SelectList)ViewBag.lstShadeCode, "Select Shade", new { @class = "select-input" })
+        </div>
+        <div class="block-small-margin">
+            <select id="ddlPapermillname" class="select-input">
+                <option selected>Select Bulk Action</option>
+
+            </select>
+        </div>
+
+
+        <div class="take_action_panel choose_action hidden">
+            <div class="fix-overflow close_btn">
+                <a href="#closeTakeAction" class="close-panel"><img src="/images/close-panel.png"></a>
+            </div>
+
+            <p class="title"><strong>Confirm Assignment</strong></p>
+            <p class="details" id="ShowMachineName"></p>
+            <a href="#confirmAssignment" class="btn">Confirm</a>
+        </div>
+        <div id="ErrorMsgConfirmAssignment" class="hidden">
+            <p class="error-msg">Please Select Product!</p>
+        </div>
+        //Show Errors on Pm Changed
+        <span id="noRecordonPM" class="error-msg"></span>
+        //For Showing Bf,Gsm in _newShadeApproveOrders
+        <div id="temp_ShowShadeWithBf"></div>
+
+
+    }
+
+    <input type="hidden" id="hfSchId" />
+    <script type="text/javascript">
+        $('#newOrdersPanel').on('change', 'select#ddlPapermillname', function () {
+            
+         
+            $("#noRecordonPM").html('');
+            $("#ErrorMsgConfirmAssignment").hide();
+            var selectMachName = $("option:selected", this).text();//Select Bulk Action
+            if (selectMachName == "Select Bulk Action") {
+                $(this).closest('.new_order_details').find('.take_action_panel').hide();
+                $('#newOrdersPanel').find('.take_action_panel').hide();
+                $(".take_action_panel").find('.details').html("Confirm assignment to this Machine?");
+            }
+            else {
+                $('#newOrdersPanel').find('.take_action_panel').show();
+                $(".take_action_panel").find('.details').html("Confirm assignment to this" + "  " + selectMachName + "?");
+            }
+
+
+
+        });
+        //Changed by manisha for reload partial views
+        $('.take_action_panel').on('click', 'a[href="#confirmAssignment"]', function () {
+            debugger;
+            var allValsSave = [];
+            var schID = $("#ddlPapermillname option:selected").val();
+            allValsSave.push(schID);
+            $('#newOrdersList .input-checkbox:checked').each(function () {
+                allValsSave.push($(this).val());
+            });
+
+
+            allValsSave = allValsSave;
+
+            var checkedId = 0;
+            for (var i = 0, l = allValsSave.length; i < l; i++) {
+                var str1 = allValsSave[i];
+                checkedId = allValsSave[1];//allvals[1] is always the selected dropdown value which is the papermillid
+                $('#' + str1).closest('li').remove();
+            }
+            if (checkedId == undefined) {
+                $('#ErrorMsgConfirmAssignment').show();
+            }
+            else {
+                $.ajax({
+                    url: "/ProductionPlanner/SubmitOrderToMill/?allVals=" + allValsSave,
+                    contentType: "application/html; charset=utf-8",
+                    type: "Post",
+                    dataType: 'html',
+                    context: document.body,
+                })
+                         .success(function (result) {
+                             $(this).closest('.take_action_panel').hide();
+                             $.ajaxSetup({ cache: false });
+                             //if ($('#newOrdersPanel').is(':hidden')) {
+                             $('#newOrdersPanel').show();
+                             $('#NewOrdeListDiv').show();
+                             $('#NewOrdeListDiv').html(result);
+                             $('html,body').animate({
+                                 scrollTop: $('#newOrdersPanel').position().top
+                             }, 400);
+                             //} else {
+                             //    $('#newOrdersPanel').hide();
+                             //}
+                             //$('#newOrdersBulkAction').val('').trigger('chosen:updated');
+                             //$('#newOrdersBulkAction').find('option:first').prop('selected', 'selected');
+                         })
+                             .error(function (xhr, ajaxOptions, thrownError) {
+                             })
+                $('#ddlPapermillname').find('option:first').prop('selected', 'selected')
+                $(this).closest('.take_action_panel').hide();
+                $('#ErrorMsgConfirmAssignment').hide();
+                if ($(this).hasClass('in_order_details')) {
+                    $(this).closest('.new_order_details').hide();
+                    $('#closeNewOrders').show();
+                    $('#newOrdersBulkAction').show();
+                    $('#newOrdersList').show();
+                    $('#newOrdersPanel').show();
+                }
+
+
+            }
+
+
+        });
+        $('.take_action_panel').on('click', 'a[href="#closeTakeAction"]', function () {
+            $('#ErrorMsgConfirmAssignment').hide();
+            $(this).closest('.take_action_panel').hide();
+            $('#ddlPapermillname').val('').trigger('chosen:updated');
+            $('#ddlPapermillname').find('option:first').prop('selected', 'selected');
+            //$('#newOrdersBulkAction').find('option:first').attr('selected', 'selected')
+
+        });
+
+        $('#NewOrdeListDiv').on('click', 'a[href="#downloadOrder"]', function () {
+            var orderid = $(this).attr("data-id");
+            window.location = "Agent/GetPdffile?orderid=" + orderid
+
+
+        });
+
+        $('#newOrdersPanel').on('change', 'select#newShades', function () {
+            $('#newOrdersPanel').find('.take_action_panel').hide();
+            $("#ErrorMsgConfirmAssignment").hide();
+            $("#temp_ShowShadeWithBf").html('');
+            $("#noRecordonPM").html('');
+            var allval = {
+                papermillname: $("option:selected", this).text()
+
+            }
+            var Shadetext = $("select#newShades option:selected").text()
+
+            var allvals = {
+                Shadetext: Shadetext
+
+            }
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "/ProductionPlanner/GetPapermillNameonShade/",
+                data: allval,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#ddlPapermillname").html('');
+                    $("#ddlPapermillname").append($('<option>Select Bulk Action</option>'));
+                    $.each(data, function (id, option) {
+
+                        $("#ddlPapermillname").append($('<option></option>').val(option.schedule_id).html(option.name));
+
+                    });
+
+
+                }
+
+
+            });
+            $.ajax({
+
+                type: "GET",
+                url: "/ProductionPlanner/GetbfgsmShade/",
+                data: allvals,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("#temp_ShowShadeWithBf").html('');
+                    $("#temp_ShowShadeWithBf").html(data);
+                    var count = $("#temp_ShowShadeWithBf ul").children().length;
+                    if (count == 0) {
+                        $(this).closest('.new_order_details').find('.take_action_panel').hide();
+                        $('#newOrdersPanel').find('.take_action_panel').hide();
+                        $("#noRecordonPM").html('');
+                        $("#noRecordonPM").html('No Data Found For Selected Shade!');
+
+                    }
+
+
+                }
+            });
+
+
+
+
+        });
+
+        $('#newOrdersPanel').on('change', 'select#ddlPapermillname', function () {
+            $("#ErrorMsgConfirmAssignment").hide();
+
+
+
+            // var shadeid = $("option:selected", this).val();
+            //var Shadetext = $("select#newShades option:selected").text()
+
+            //var allval = {
+            //    Shadetext: Shadetext
+
+            //}
+            //$.ajax({
+
+            //    type: "GET",
+            //    url: "/ProductionPlanner/GetbfgsmShade/",
+            //    data: allval,
+            //    contentType: "application/json; charset=utf-8",
+            //    success: function (data) {
+            //        $("#temp_ShowShadeWithBf").html('');
+            //        $("#temp_ShowShadeWithBf").html(data);
+            //    }
+            //});
+        });
+
+
+    </script>

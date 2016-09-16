@@ -1,0 +1,200 @@
+﻿
+<h2>Upload Order Excel Files</h2>
+
+<style>
+    table, td, th {
+        border: 1px solid black;
+        border-collapse: collapse;
+        font-size: 9px;
+    }
+</style>
+
+
+<p></p>
+<p></p>
+
+<div>
+    <p></p>
+    <center>
+        <br />
+        <b>Select File :</b>
+        <input type="file" name="file" id="fuUpload" />
+        <input type="submit" value="Upload Files" class="btn-default" name="fileSubmit" id="btnSubmit" /><br /><br /><br />
+        <p class="error-msg" id="errUplods"></p>
+        <p>@ViewBag.TotalRecords</p>
+        <p>@ViewBag.SucessCount</p>
+        <p>@ViewBag.UnsucessCount</p>
+        <p></p>
+        <p class="error-msg">
+            @ViewBag.errorMsg
+        </p>
+
+        <p></p>
+        <p>* File size should not exceed more than 4 Mb.</p>
+        <p></p>
+
+
+
+
+        @{
+            if (@ViewBag.Sucessorders != null)
+            {
+
+                <center><h3>Sucessful Ordes</h3></center>
+                <table id="tblSucess" align="center">
+                    <tr>
+                        <th>order_id</th>
+                        <th>order_date</th>
+                        <th>Agent_Name</th>
+                        <th>Customer_Name</th>
+                        <th>BF_Code</th>
+                        <th>gsm_code</th>
+                        <th>shade_code</th>
+                        <th>width</th>
+                        <th>qty</th>
+                        <th>Price</th>
+                        <th>diameter</th>
+                        <th>core</th>
+                        <th>requested_delivery_date</th>
+
+
+
+                    </tr>
+
+                    @foreach (var item in ViewBag.Sucessorders)
+                    {
+                        <tr>
+                            <td>@item.Order_id</td>
+                            <td>@item.Order_date.ToShortDateString()</td>
+                            <td>@item.AgentName</td>
+                            <td>@item.CustomerName</td>
+                            <td>@item.BF_code</td>
+                            <td>@item.Gsm_code</td>
+                            <td>@item.Shade_code</td>
+                            <td>@item.width</td>
+                            <td>@item.Qty</td>
+                            <td>@item.price</td>
+                            <td>@item.Diameter</td>
+                            <th>@item.Core</th>
+                            <td>@item.Requested_delivery_date.ToShortDateString()</td>
+
+                        </tr>
+
+
+                    }
+                </table>
+
+            }
+
+        }
+
+        @{
+            <p></p>
+            <p></p>
+            if (@ViewBag.UnsucessOrder != null)
+            {
+
+                <center><h3> Unsucessful Orders</h3></center>
+                <table id="tblSucess" align="center">
+                    <tr>
+                        <th>order_id</th>
+                        <th>order_date</th>
+                        <th>Agent_Name</th>
+                        <th>Customer_Name</th>
+                        <th>BF_Code</th>
+                        <th>gsm_code</th>
+                        <th>shade_code</th>
+                        <th>width</th>
+                        <th>qty</th>
+                        <th>Price</th>
+                        <th>diameter</th>
+                        <th>core</th>
+                        <th>requested_delivery_date</th>
+                        <th>Reason</th>
+                    </tr>
+
+                    @foreach (var item in ViewBag.UnsucessOrder)
+                    {
+                        <tr>
+                            <td>@item.Order_id</td>
+                            <td>@item.Order_date.ToShortDateString()</td>
+                            <td>@item.AgentName</td>
+                            <td>@item.CustomerName</td>
+                            <td>@item.BF_code</td>
+                            <td>@item.Gsm_code</td>
+                            <td>@item.Shade_code</td>
+                            <td>@item.width</td>
+                            <td>@item.Qty</td>
+                            <td>@item.price</td>
+                            <td>@item.Diameter</td>
+                            <th>@item.Core</th>
+                            <td>@item.Requested_delivery_date.ToShortDateString()</td>
+                            <td>@item.NotUpdatesReason</td>
+
+                        </tr>
+                    }
+
+                </table>
+            }
+
+        }
+
+    </center>
+</div>
+
+
+
+<script>
+
+
+    $('#btnSubmit').on('click', function (e) {
+        debugger;
+        var fullPath = document.getElementById('fuUpload').value;
+        var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+        var filename = fullPath.substring(startIndex);
+        if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+            filename = filename.substring(1);
+            var chk = filename.indexOf("xlsx") > -1;
+            if (chk == false) {
+                $("#errUplods").html('');
+                $("#errUplods").html('Please Select *xlsx File!');
+            }
+            else {
+
+                var files = $("#fuUpload").get(0).files;
+                if (files.length > 0) {
+                    if (window.FormData !== undefined) {
+                        var data = new FormData();
+                        for (var x = 0; x < files.length; x++) {
+                            data.append("file" + x, files[x]);
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            url: '/UploadFiles/UploadOrdersCSV',
+                            contentType: false,
+                            processData: false,
+                            data: data,
+                            success: function (result) {
+                                $("#tempbodySection").html('');
+                                $("#tempbodySection").html(result);
+                            },
+
+                        });
+                    }
+                }
+                else {
+                    $("#errUplods").html('');
+                    $("#errUplods").html('Please Select *xlsx File!');
+
+                }
+            }
+        }
+        else {
+            $("#errUplods").html('');
+            $("#errUplods").html('Please Select *xlsx File!');
+
+        }
+
+    });
+</script>

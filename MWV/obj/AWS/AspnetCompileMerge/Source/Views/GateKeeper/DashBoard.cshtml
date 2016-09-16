@@ -1,0 +1,157 @@
+﻿
+
+@*@{
+    ViewBag.Title = "GatekeeperDashBoard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+
+
+    <div id="dashboard" class="gatekeeper">
+     
+        <div id="incomingVehicles" class="incoming_vehicles">
+            <a href="#incomingVehicles" class="tab-link">Incoming Vehicles</a>
+
+            <div id="incomingVehiclesPanel" class="incoming_vehicles_panel hidden">
+                <div class="fix-overflow">
+                    <a href="#closeIncomingVehicles" class="close-panel"><img src="images/close-panel.png"></a>
+                </div>
+
+                <h2>Scheduled Vehicles</h2>
+
+                @*<ul>
+                    <li>
+                        <p class="title"><strong>MH12-123-12345</strong></p>
+                        <p class="details">Expected Arrival: June 9th, 2015 9:30 AM</p>
+
+                        <input type="checkbox" data-id="vehicleAttention-mh12-123-12345"> &nbsp; Arrived
+
+                        <div id="vehicleAttention-mh12-123-12345" class="vehicle_attention scheduled hidden">
+                            <div class="fix-overflow">
+                                <a href="#closeVehicleAttention" class="close-panel"><img src="images/close-panel.png"></a>
+                            </div>
+                            <p class="title"><strong>Attention!</strong></p>
+
+                            <p class="details">Are you sure you want to mark vehicle MH12-123-12345 as arrived?</p>
+
+                            <a href="#closeVehicleAttention" class="btn">Cancel</a>
+                            <a href="#markVehicleArrived" data-id="mh12-123-12345" class="btn">Mark Arrived</a>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="title"><strong>MH12-123-12347</strong></p>
+                        <p class="details">Expected Arrival: June 10th, 2015 10:30 AM</p>
+
+                        <input type="checkbox" data-id="vehicleAttention-mh12-123-12347"> &nbsp; Arrived
+
+                        <div id="vehicleAttention-mh12-123-12347" class="vehicle_attention scheduled hidden">
+                            <div class="fix-overflow">
+                                <a href="#closeVehicleAttention" class="close-panel"><img src="images/close-panel.png"></a>
+                            </div>
+                            <p class="title"><strong>Attention!</strong></p>
+
+                            <p class="details">Are you sure you want to mark vehicle MH12-123-12347 as arrived?</p>
+
+                            <a href="#closeVehicleAttention" class="btn">Cancel</a>
+                            <a href="#markVehicleArrived" data-id="mh12-123-12347" class="btn">Mark Arrived</a>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="title"><strong>MH12-123-12348</strong></p>
+                        <p class="details">Expected Arrival: June 10th, 2015 2:30 PM</p>
+
+                        <input type="checkbox" data-id="vehicleAttention-mh12-123-12348"> &nbsp; Arrived
+
+                        <div id="vehicleAttention-mh12-123-12348" class="vehicle_attention scheduled hidden">
+                            <div class="fix-overflow">
+                                <a href="#closeVehicleAttention" class="close-panel"><img src="images/close-panel.png"></a>
+                            </div>
+                            <p class="title"><strong>Attention!</strong></p>
+
+                            <p class="details">Are you sure you want to mark vehicle MH12-123-12348 as arrived?</p>
+
+                            <a href="#closeVehicleAttention" class="btn">Cancel</a>
+                            <a href="#markVehicleArrived" data-id="mh12-123-12348" class="btn">Mark Arrived</a>
+                        </div>
+                    </li>
+                </ul>*@
+            </div>
+        </div> <!-- #incomingVehicles -->
+
+        <div id="arrivedVehicles" class="arrived_vehicles">
+            <a href="#arrivedVehicles" class="tab-link">Arrived Vehicles</a>
+
+            <div id="arrivedVehiclesPanel" class="arrived_vehicles_panel hidden">
+                <div class="fix-overflow">
+                    <a href="#closeArrivedVehicles" class="close-panel"><img src="images/close-panel.png"></a>
+                </div>
+
+                <h2>Arrived Vehicles</h2>
+            
+                <ul id="arrivedVehiclesList" class="arrived_vehicles_list">
+                    <li>
+                        <p class="title"><strong>MH12-123-12345</strong></p>
+
+                        <p class="details">Expected Arrival: June 9th, 2015 9:30 PM</p>
+
+                        <p class="details">Arrived on June 9th, 2015 9:30 AM</p>
+                        <input type="checkbox" data-id="mh12-123-12345" class="mark_departed"> &nbsp; Departed
+
+                        <div id="vehicleDepartedAttention-mh12-123-12345" class="vehicle_attention arrived hidden">
+                            <div class="fix-overflow">
+                                <a href="#closeVehicleAttention" class="close-panel"><img src="images/close-panel.png"></a>
+                            </div>
+                            <p class="title"><strong>Attention!</strong></p>
+
+                            <p class="details">Are you sure you want to mark vehicle MH12-123-1234 as departed?</p>
+
+                            <a href="#closeVehicleAttention" class="btn">Cancel</a>
+                            <a href="#markVehicleDeparted" data-id="mh12-123-12345" class="btn">Mark Departed</a>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="title"><strong>MH12-123-12347</strong></p>
+
+                        <p class="details">Expected Arrival: June 9th, 2015 9:30 PM</p>
+
+                        <p class="details">Arrived on June 9th, 2015 9:30 AM</p>
+
+                        <input type="checkbox" data-id="mh12-123-12347" class="mark_departed"> &nbsp; Departed
+
+                        <div id="vehicleDepartedAttention-mh12-123-12347" class="vehicle_attention arrived hidden">
+                            <div class="fix-overflow">
+                                <a href="#closeVehicleAttention" class="close-panel"><img src="images/close-panel.png"></a>
+                            </div>
+                            <p class="title"><strong>Attention!</strong></p>
+
+                            <p class="details">Are you sure you want to mark vehicle MH12-123-12347 as departed?</p>
+
+                            <a href="#closeVehicleAttention" class="btn">Cancel</a>
+                            <a href="#markVehicleDeparted" data-id="mh12-123-12347" class="btn">Mark Departed</a>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="title"><strong>MH12-123-12348</strong></p>
+
+                        <p class="details">Expected Arrival: June 9th, 2015 9:30 PM</p>
+
+                        <p class="details">Arrived on June 9th, 2015 9:30 AM</p>
+
+                        <input type="checkbox" data-id="mh12-123-12348" class="mark_departed"> &nbsp; Departed
+
+                        <div id="vehicleDepartedAttention-mh12-123-12348" class="vehicle_attention arrived hidden">
+                            <div class="fix-overflow">
+                                <a href="#closeVehicleAttention" class="close-panel"><img src="images/close-panel.png"></a>
+                            </div>
+                            <p class="title"><strong>Attention!</strong></p>
+
+                            <p class="details">Are you sure you want to mark vehicle MH12-123-12348 as departed?</p>
+
+                            <a href="#closeVehicleAttention" class="btn">Cancel</a>
+                            <a href="#markVehicleDeparted" data-id="mh12-123-12348" class="btn">Mark Departed</a>
+                        </div>
+                    </li>
+                </ul>  
+            </div>
+        </div> <!-- #arrivedVehicles -->
+    </div> <!-- #dashboard -->
+

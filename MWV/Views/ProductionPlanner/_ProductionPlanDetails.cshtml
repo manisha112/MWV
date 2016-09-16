@@ -1,0 +1,102 @@
+﻿@model IEnumerable<dynamic>
+
+
+    <div class="fix-overflow">
+        <a href="#closePlanDetailsPanel" class="close-panel"><img src="/images/close-panel.png"></a>
+    </div>
+    <h2>Details For Production Plan</h2>
+
+    @if (ViewBag.NoRecordMsg != null)
+    {
+        <li><p class="error-msg"> @ViewBag.NoRecordMsg </p>  </li>
+    }
+    else
+    {
+        <div class="production_plans_details_full">
+
+            <div class="fix-overflow">
+                <p class="date_title title"><strong>Plan No: @ViewBag.SrNo | Assigned to @ViewBag.papermillName  </strong></p><br />
+                <a href="#downloadDetails" data-id="@ViewBag.SrNo" class="download_details"><img src="/images/download.png"></a>
+            </div>
+            <p class="details"> Est. Start Time: @ViewBag.estStartTime.ToString("dd MMM yyy hh:mm tt")  </p>
+            <p class="details"> Est. End Time: @ViewBag.estEndTime.ToString("dd MMM yyy hh:mm tt")  </p>
+            <p class="details">Total Est. RunTime: @ViewBag.EstimatedRunTime min</p>
+            <p class="details">Planned Qty: @ViewBag.estimatedPlannedQty MT</p>
+            <p class="details">Total No. of Jumbos: @ViewBag.jumboesNo</p>
+        
+            @foreach (var item in ViewBag.JumbosDetails)
+            {
+                <p class="title">
+                    <strong>
+                        Jumbo No.: @item.jumboNo
+                    </strong>
+                </p>
+                <p class="details">
+                    @item.BF BF @item.GSM GSM @item.shade<br>
+                    Planned Qty: @item.plannedQty.ToString("0.00") MT
+                </p>
+                {
+                    var item1 = ViewBag.LotsDetails;
+                    string size = "";
+                    string sizeWithName = "";
+                    decimal Decklesize = 0;
+                    decimal Qty = 0;
+                    int sequ = 0;
+                    for (var i = 0; i <= item1.Count - 1; i++)
+                    {
+
+                        if (item1[i].jumboNo == @item.jumboNo)
+                        {
+                            if (item1[i].Sequence == sequ || sequ == 0)
+                            {
+                                size = size + item1[i].Width.ToString("0.00") + " cm + ";
+                                sizeWithName = sizeWithName + item1[i].Width.ToString("0.00") + " cm, " + item1[i].DeckleQty.ToString("0.00") + " MT - " + @item1[i].CustomerName + "<br />";
+
+                                if (item1[i].order_product_id == null)
+                                    sizeWithName = sizeWithName.Remove(sizeWithName.Length - 6) + "side cut";
+                                else
+                                    sizeWithName = sizeWithName;
+
+                                Decklesize += item1[i].Width;
+                                Qty += item1[i].DeckleQty;
+
+                            }
+                            else if (sequ != 0)
+                            {
+                                <blockquote>
+                                    <p class="title"><strong>Lot. No: @sequ </strong></p>
+                                    <p class="details">
+
+                                        @size.Remove(size.Length - 2)  <br>
+                                        Deckle: @Decklesize.ToString("0.00") cm,  Qty: @Qty.ToString("0.00") MT <br>
+                                        @Html.Raw(@sizeWithName)
+                                    </p>
+                                </blockquote>
+                                size = "";
+                                sizeWithName = "";
+                                Decklesize = 0;
+                                Qty = 0;
+                                size = size + item1[i].Width.ToString("0.00") + " cm + ";
+                                sizeWithName = sizeWithName + item1[i].Width.ToString("0.00") + " cm, " + item1[i].DeckleQty.ToString("0.00") + " MT - " + @item1[i].CustomerName + "<br />";
+                                Decklesize += item1[i].Width;
+                                Qty += item1[i].DeckleQty;
+                            }
+                            sequ = item1[i].Sequence;
+                        }
+
+
+                    }
+                    <blockquote>
+                        <p class="title"><strong>Lot. No: @sequ </strong></p>
+                        <p class="details">
+                            @size.Remove(size.Length - 2)  <br>
+                            Deckle: @Decklesize.ToString("0.00") cm,  Qty: @Qty.ToString("0.00") MT<br>
+                            @Html.Raw(@sizeWithName)
+                        </p>
+                    </blockquote>
+                }
+
+            }
+
+        </div>
+    }

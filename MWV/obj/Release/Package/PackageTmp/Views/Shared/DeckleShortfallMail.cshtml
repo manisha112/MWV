@@ -1,0 +1,44 @@
+﻿
+@{
+    Layout = null;
+}
+
+<p>Dear Agent,</p>
+
+<p>The following Products are required to make up the Production plan</p>
+@{
+    <table>
+        <tr>
+            <th>Bf</th>
+            <td>Gsm</td>
+            <td>Shade</td>
+            <td>Size(CM)</td>
+            <td>Weight(MT)</td>
+        </tr>
+
+        @foreach (var items in ViewBag.DeckleData)
+        {
+            <tr>
+                <td>@items.bf_code</td>
+                <td>@items.gsm_code</td>
+                <td>@items.shade_code</td>
+                <td>@items.required_size</td>
+                <td>@items.required_weight</td>
+                 
+
+            </tr>
+
+
+        }
+
+         
+
+    </table>
+
+}
+  
+<p>If you have orders that can fill the slots, Please place the orders in the system</p>
+
+<p>regards</p>
+<p>Support Team</p>
+<p>Support@westrock.com</p>

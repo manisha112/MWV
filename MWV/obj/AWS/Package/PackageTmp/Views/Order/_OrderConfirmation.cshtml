@@ -1,0 +1,25 @@
+﻿@model IEnumerable<MWV.Repository.Implementation.OrderRepository.tempOrderProducts>
+
+    <p style="color:red">@ViewBag.message</p>
+    @*<h2>Order Confirmation</h2>*@
+    <p>Thank you for your order.</p>
+
+    <p>PO Confirmation:</p>
+    <strong>Order ID: @ViewBag.LastInsertedOrder_id</strong>
+    <p><strong>Customer Name</strong></p>
+    <p>Requested Delivery Date: @ViewBag.order_del_date</p>
+    @foreach (var item in Model)
+    {
+        <ul id="orderConfirmationProductList" class="product_list">
+            <li>
+                <p><strong>@item.product_code</strong></p>
+                <p>width: @item.width , qty: @item.qty</p>
+                <p>unit price: INR @item.unit_price</p>
+            </li>
+        </ul>
+    }
+    <div id="orderConfirmationTotals" class="totals">
+        @*<p id="orderConfirmationTotalPrice"><strong>Total: INR 29,335</strong></p>*@
+        <p id="orderConfirmationGrandTotal"><strong>Grand Total: @ViewBag.grandtotal</strong></p>
+    </div>
+

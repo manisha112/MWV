@@ -1,0 +1,89 @@
+﻿@model MWV.Models.Product
+@{
+
+}
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<br />
+
+<h2><b> Edit Product ->@Html.ActionLink("Goto Home", "Index")</b></h2>
+
+<br /><br />
+  &nbsp;<span id="ErrorMsgs"></span>
+<br />
+
+
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    @Html.ValidationSummary(true)
+
+    <input type="hidden" value="@Model.product_code" id="product_codeToEdit" />
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Product Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.product_code, new { @class = "text-input", id = "product_code", @placeholder = "Enter Product Code Code(upto 15 char)", @readonly = "readonly", disabled = "disabled", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Product Code Code(upto 15 char)'" })
+        </div>
+    </div>
+    @{
+        var listGsm = (ViewBag.Gsm_list as SelectList).ToList();
+        var listBf = (ViewBag.Bf_list as SelectList).ToList();
+    }
+    @for (int count = 0; count <= listGsm.Count; count++)
+    {
+        listGsm.ForEach(i => i.Selected = false);
+        listGsm.First(i => i.Value == Model.gsm_code).Selected = true;
+    }
+    @for (int count = 0; count <= listBf.Count; count++)
+    {
+        listBf.ForEach(i => i.Selected = false);
+        listBf.First(i => i.Value == Model.bf_code).Selected = true;
+    }
+
+    <p class="form-label">&nbsp;BF Code</p>
+    @Html.DropDownList("BFCode", listBf, "Select BF", new { @class = "select-input" })
+
+    <p class="form-label">&nbsp;Gsm Code</p>
+    @Html.DropDownList("GSMCode", listGsm, "Select Gsm", new { @class = "select-input" })
+   
+
+    <div class="form-group">
+        <p class="form-label">&nbsp; Product Description</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "ProductDescription", @placeholder = "Enter Product Description(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Product Description(upto 100 char)'" })
+        </div>
+    </div>
+    <br /><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" id="btnEditProduct" value="Save" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "ProductAdmin")'" />
+        </div>
+    </div>
+    <br />
+    <br />
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+
+

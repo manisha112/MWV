@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/jquery-1.11.3.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.11.4.min.js")"></script>
+
+
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @*@Styles.Render("~/Content/css")*@
+    @*@Scripts.Render("~/bundles/modernizr")*@
+
+</head>
+<body>
+
+    @using Microsoft.AspNet.Identity
+    @using MWV.Models
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @*@Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })*@
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Agent", "Index", "AgentAdmin")</li>
+                    <li>@Html.ActionLink("Customer", "Index", "CustomerAdmin")</li>
+                    <li>@Html.ActionLink("Users", "Index", "UsersAdmin")</li>
+                    <li>@Html.ActionLink("BF", "Index", "BfAdmin")</li>
+                    <li>@Html.ActionLink("GSM", "Index", "GsmAdmin")</li>
+                    <li>@Html.ActionLink("Shade", "Index", "ShadeAdmin")</li>
+                    <li>@Html.ActionLink("Core", "Index", "CoreAdmin")</li>
+                    @*<li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>*@
+                    <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+                    <li>@Html.ActionLink("Product", "Index", "ProductAdmin")</li>
+                    <li>@Html.ActionLink("ProductTimeLine", "Index", "ProductTimeLineAdmin")</li>
+                    <li>@Html.ActionLink("ProductPrice", "Index", "ProductPriceAdmin")</li>
+                    <li>@Html.ActionLink("Upload Navision files", "Index", "UploadFiles")</li>
+                    <li>@Html.ActionLink("Upload Order Excel Files", "UploadOrders", "UploadFiles")</li>
+                    <li>@*@Html.ActionLink("Changed Password", "Index", "AgentAdmin")*@</li>
+
+
+                    @if (Request.IsAuthenticated)
+                    {
+                        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <li>
+                                User.Identity.GetUserName() <a href="#" style="margin-left: 890px;" onclick="document.getElementById('logoutForm').submit()">Log Out</a>
+                            </li>
+
+                        }
+                    }
+                    else
+                    {
+
+                        <h2>
+                            Sorry, but your session has timed out. You'll be redirected to the Log On page in 5 seconds...
+                        </h2>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                        </ul>
+                        @RenderBody()
+                    }
+                </ul>
+                @*}*@
+
+                @*@Html.Partial("_LoginPartial")*@
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        @*<footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>*@
+    </div>
+
+    @*@Scripts.Render("~/bundles/jquery")*@
+    @*@Scripts.Render("~/bundles/bootstrap")*@
+  
+    @RenderSection("scripts", required: false)
+</body>
+</html>

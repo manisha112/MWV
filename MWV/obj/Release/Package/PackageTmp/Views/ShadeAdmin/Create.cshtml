@@ -1,0 +1,53 @@
+﻿@model MWV.Models.Shade
+@{
+
+}
+
+<style>
+    table, td, th {
+        border: 1px solid;
+    }
+
+    td {
+        padding: 15px;
+    }
+</style>
+<h2><b> Create New Shade -> @Html.ActionLink("Goto Home", "Index")</b></h2><br />
+ &nbsp;<span id="ErrorMsgs"></span><br />
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-error" })
+
+
+    <div class="form-group">
+        <p class="form-label">&nbsp;Shade Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.shade_code, new { @class = "text-input", id = "ShadeCode", @placeholder = "Enter Shade Code(upto 15 char)", @maxlength = "15", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Shade Code(upto 15 char)'" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp; Shade Description</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "ShadeDescription", @placeholder = "Enter Shade Description(upto 100 char)", @maxlength = "100", @onfocus = "this.placeholder = ''", @onblur = "this.placeholder = 'Enter Shade Description(upto 100 char)'" })
+        </div>
+    </div>
+    <br /><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" id="btnAddShade" value="Create" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-default"  title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "ShadeAdmin")'" />
+        </div>
+    </div><br /><br />
+   
+
+
+<br /><br />
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

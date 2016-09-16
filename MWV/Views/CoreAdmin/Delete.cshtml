@@ -1,0 +1,73 @@
+﻿@model MWV.Models.Core
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    
+    ViewBag.Title = "Delete";
+}
+
+<h2><b> Delete Core ->@Html.ActionLink("Goto Home", "Index")</b></h2>
+<br /><br />
+  &nbsp;<span id="ErrorMsgs"></span>
+<br />
+&nbsp;<h3 class="form-label">&nbsp; Are you sure you want to delete this Core?</h3>
+<div>
+    </br>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Core Code</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.core_code, new { @class = "text-input", id = "CoreCode", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <p class="form-label">&nbsp;Description</p>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.description, new { @class = "text-input", id = "description", @readonly = "readonly", disabled = "disabled" })
+        </div>
+    </div>
+    </br>
+
+    @Html.AntiForgeryToken()
+    <div class="form-actions no-color">
+        <input type="submit" value="Delete" class="btn btn-default" id="btnDeleteCore" />
+    </div><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-default" title="Cancel" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("Index", "CoreAdmin")'" />
+        </div>
+    </div><br /><br />
+
+</div>
+</br>
+<script type="text/javascript">
+    $('#btnDeleteCore').click(function () {
+        //
+
+        var CoreCode = $('#CoreCode').val();
+        var msg = "";
+
+        var datatosend = {
+            CoreCode: CoreCode
+        }
+
+        $.ajax({
+            url: "/CoreAdmin/DeleteCore/",
+            data: datatosend,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            dataType: 'html'
+        })
+                  .success(function (result) {
+                      if (result == "True") {
+                          msg = 'Core Deleted successfully.!';
+                          window.location.href = "/CoreAdmin/Index?msg=" + msg;
+                      }
+                      else {
+                          $("#ErrorMsgs").html("<p class='error-msg'>" + 'Can not delete.Core Code is already in use.!' + "</p>");
+                      }
+
+                  })
+                 .error(function (xhr, ajaxOptions, thrownError) {
+                 })
+
+    });
+</script>

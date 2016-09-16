@@ -1,0 +1,144 @@
+﻿ 
+<h2>Upload Navision Csv Files</h2>
+@using (Html.BeginForm("GetFile", "UploadFiles", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <head>
+        <title></title>
+        <style>
+            table, td, th {
+                border: 1px solid black;
+                border-collapse: collapse;
+                font-size: 12px;
+            }
+             
+        </style>
+
+    </head>
+
+    <br /><br />
+    <div>
+         
+        <center>
+            <b>Select File :</b>
+            <input type="file" name="file" />&nbsp;&nbsp;&nbsp;
+            <input type="submit" value="Upload Files" class="btn-default" name="Command" /><br /><br /><br />
+            &nbsp; @ViewBag.TotalRecords &nbsp; &nbsp;
+            &nbsp; @ViewBag.RowsUpdated &nbsp; &nbsp;
+            &nbsp; @ViewBag.NoUpdate &nbsp; &nbsp;
+            <br />
+            <p class="error-msg">
+                @ViewBag.errorMsg
+            </p>
+              
+            <br />
+            <b>* File size should not exceed more than 4 Mb.</b>
+            <br />
+
+             
+
+
+            @{
+    if (@ViewBag.UpdatedList != null)
+    {
+
+        <center><h3>Sucessful Updates</h3></center>
+                <table id="tblSucess" align="center">
+                    <tr>
+                        <th>Journal Template Name</th>
+                        <th>Journal Batch Name</th>
+                        <th>Posting Date</th>
+                        <th>Reel No</th>
+                        <th>Document No</th>
+                        <th>Item Category</th>
+                        <th>Product Group</th>
+                        <th>Quantity</th>
+                        <th>Variant Code</th>
+                        <th>Size</th>
+                        <th>Length</th>
+                        <th>Reel Barcode</th>
+                        <th>Operator</th>
+                        <th>Rewind Time Stamp</th>
+
+
+                    </tr>
+
+                    @foreach (var item in ViewBag.UpdatedList)
+                    {
+                        <tr>
+                            <td>@item.journalTemlNm</td>
+                            <td>@item.JrnlBatNo</td>
+                            <td>@item.postingDate</td>
+                            <td>@item.reelNo</td>
+                            <td>@item.Text</td>
+                            <td>@item.itemcat</td>
+                            <td>@item.productGrp</td>
+                            <td>@item.qty</td>
+                            <td>@item.variantCode</td>
+                            <td>@item.size</td>
+                            <td>@item.lenth</td>
+                            <td>@item.RealBarcodeNo</td>
+                            <td>@item.macOprate</td>
+                            <td>@item.atualStart</td>
+                        </tr>
+
+
+                    }
+                </table>
+
+    }
+
+            }
+
+            @{
+                <br /><br />
+    if (@ViewBag.unpdatedList != null)
+    {
+
+        <center><h3> Unsucessful Updates</h3></center>
+                <table id="tblSucess" align="center">
+                    <tr>
+                        <th>Journal Template Name</th>
+                        <th>Journal Batch Name</th>
+                        <th>Posting Date</th>
+                        <th>Reel No</th>
+                        <th>Document No</th>
+                        <th>Item Category</th>
+                        <th>Product Group</th>
+                        <th>Quantity</th>
+                        <th>Variant Code</th>
+                        <th>Size</th>
+                        <th>Length</th>
+                        <th>Reel Barcode</th>
+                        <th>Operator</th>
+                        <th>Rewind Time Stamp</th>
+                    </tr>
+
+                    @foreach (var item in ViewBag.unpdatedList)
+                    {
+                        <tr>
+                            <td>@item.journalTemlNm</td>
+                            <td>@item.JrnlBatNo</td>
+                            <td>@item.postingDate</td>
+                            <td>@item.reelNo</td>
+                            <td>@item.Text</td>
+                            <td>@item.itemcat</td>
+                            <td>@item.productGrp</td>
+                            <td>@item.qty</td>
+                            <td>@item.variantCode</td>
+                            <td>@item.size</td>
+                            <td>@item.lenth</td>
+                            <td>@item.RealBarcodeNo</td>
+                            <td>@item.macOprate</td>
+                            <td>@item.atualStart</td>
+                        </tr>
+                    }
+
+                </table>
+    }
+
+            }
+
+        </center>
+    </div>
+
+}

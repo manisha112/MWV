@@ -1,0 +1,37 @@
+﻿@model IEnumerable<MWV.Repository.Implementation.OrderRepository.tempOrderProducts>
+@ViewBag.message
+
+@if(Model.Count() !=0)
+{
+      <p class="details">PO Confirmation: <strong>@ViewBag.LastInsertedOrder_id</strong></p>
+@*<p class="title"><strong>@ViewBag.LastInsertedOrder_id</strong></p>*@
+@*<p class="title"><strong><span id="tmpCustNameOrderConfirm"></span></strong></p>*@
+<p class="title"><strong>@ViewBag.custname</strong></p>
+@*<p class="details">Requested Delivery Date: @ViewBag.req_del_date.ToString("dd MMM yyyy")</p>*@
+<p class="details">Customer PO: @ViewBag.customerpo</p>
+
+@*<p class="details">PO Confirmation:</p>*@
+<ul id="orderConfirmationProductList" class="product_list">
+
+    @foreach (var item in ViewBag.lstTempProds)
+    {
+        <li>
+            <p><strong>@item.product_code</strong></p>
+            <p>@string.Format("{0:#.00}", item.width) cm x @item.bf_code BF @item.gsm_code GSM @item.shade_code</p>
+            <p>Quantity: @string.Format("{0:#.0000}", item.qty) MT</p>
+            <p>Unit Price: INR @string.Format("{0:#.00}", item.unit_price)</p>
+            <p>Requested Delivery Date: @item.requested_delivery_date.ToShortDateString()</p>
+        </li>
+    }
+    </ul>
+    
+<div id="orderConfirmationTotals" class="order_confirmation_totals">
+    <p id="orderConfirmationTotalPrice"><strong>Total: INR @ViewBag.grandtotal</strong></p>
+    @*<p id="orderConfirmationGrandTotal"><strong>Grand Total: INR 32,335</strong></p>*@
+</div>
+    
+}
+else
+{
+@ViewBag.error
+}
